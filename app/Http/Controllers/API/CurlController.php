@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\APi;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CurlContorller extends Controller
+class CurlController extends Controller
 {
-    public function curlWa(Request $request)
+    public function curlWa()
     {
         $token = "M@h1JoXPN4WV12JrKv-g";
         $target = "082169376803";
@@ -24,7 +25,7 @@ class CurlContorller extends Controller
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array(
                 'target' => $target,
-                'message' => "$_POST[rfid] telah hadir di sekolah",
+                'message' => "panjul telah hadir di sekolah",
                 'countryCode' => '62'
             ),
             CURLOPT_HTTPHEADER => array(

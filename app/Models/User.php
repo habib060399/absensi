@@ -22,5 +22,7 @@ class User extends Authenticatable
         'username',
         'rfid_tag',
     ];
+
+    public $timestamps = false;
     
 }
