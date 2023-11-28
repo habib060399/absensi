@@ -18,17 +18,27 @@ class RfidController extends Controller
     
     public function store(Request $request)
     {
+        $user = new User();
         $curl = new CurlController();
-        $response = $curl->curlWa();
-       $data = User::create([
-        'rfid_tag' => $request->rfid_tag
-       ]);
 
-       return response()->json([
-        'status' => true,
-        'message' => 200,
-        'response' => $response
-       ]);
+        $getUser = $user->getUser($request->rfid_tag);
+
+        if($getUser){
+            return response()->json([
+                'status' => 'Name tag telah terdeteksi',
+                'message' => 200,                
+               ]);
+        }else{
+            $data = User::create([
+             'rfid_tag' => $request->rfid_tag
+            ]);
+     
+            return response()->json([
+             'status' => 'Name tag berhasil ditambahkan ke database',
+             'message' => 200,
+             'response' => $response
+            ]);
+        }        
     }
 
     /**
