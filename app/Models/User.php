@@ -24,5 +24,11 @@ class User extends Authenticatable
     ];
 
     public $timestamps = false;
+
+    public function getUser($rfid)
+    {
+        $user = User::where('rfid_tag', $rfid)->first();
+        return $user;
+    }
     
 }
