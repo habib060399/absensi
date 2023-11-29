@@ -30,5 +30,21 @@ class User extends Authenticatable
         $user = User::where('rfid_tag', $rfid)->first();
         return $user;
     }
+
+    public function setUser($name, $username)
+    {
+        User::create([
+            'name' => $name,
+            'username' => $username
+        ]);
+    }
+
+    public function updateUser($rfid, $username, $nama)
+    {
+        User::where('rfid_tag', $rfid)->update([
+            'username' => $username,
+            'name' => $nama
+        ]);
+    }
     
 }
