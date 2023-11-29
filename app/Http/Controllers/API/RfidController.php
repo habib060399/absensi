@@ -35,8 +35,7 @@ class RfidController extends Controller
      
             return response()->json([
              'status' => 'Name tag berhasil ditambahkan ke database',
-             'message' => 200,
-            //  'response' => $response
+             'message' => 200,            
             ]);
         }        
     }
