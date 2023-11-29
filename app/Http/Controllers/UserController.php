@@ -12,11 +12,8 @@ class UserController extends Controller
         $absen = new Absensi();
 
         $date = date("d-m-Y h:i:sa");
-        $absen->cekAbsensi($rfid, $date);
+        $absen->setAbsen($rfid, $date);
 
-        return response()->json([
-            'status' => 'Name tag telah terdeteksi',
-            'message' => 200,                
-           ]);
+        
     }
 }
