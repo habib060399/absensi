@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\API\CurlController;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -18,16 +19,15 @@ class RfidController extends Controller
     
     public function store(Request $request)
     {
-        $user = new User();
+        $modelUser = new User();
+        $controllerUser = new UserController();
         $curl = new CurlController();
 
-        $getUser = $user->getUser($request->rfid_tag);
+        $getUser = $modelUser->getUser($request->rfid_tag);
 
         if($getUser){
-            return response()->json([
-                'status' => 'Name tag telah terdeteksi',
-                'message' => 200,                
-               ]);
+            $controllerUser->cekAbsensi($request->rfid_tag);
+            
         }else{
             $data = User::create([
              'rfid_tag' => $request->rfid_tag
