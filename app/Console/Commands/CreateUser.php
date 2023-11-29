@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\User;
+use App\Http\Controllers\UserController;
 
 class CreateUser extends Command
 {
@@ -27,6 +28,8 @@ class CreateUser extends Command
     public function handle()
     {
         $user = new User();
+        $controllerUser = new UserController();
+        $controllerUser->cekAbsensi();
 
             while (true) {
                 $rfid = $this->ask('Masukkan RFID');
