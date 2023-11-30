@@ -26,4 +26,10 @@ class Absensi extends Model
             'tgl_waktu'=> $dateTime
         ]);
     }
+
+    public function getAbsen($rfid)
+    {
+        $absen = Absensi::where('rfid_tag', $rfid)->firts();
+        return $absen;
+    }
 }
