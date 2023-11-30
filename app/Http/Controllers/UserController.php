@@ -10,6 +10,7 @@ class UserController extends Controller
     public function cekAbsensi($rfid)
     {
         $absen = new Absensi();
+        // $absen->getAbsen($rfid);
 
         $date = date("d-m-Y h:i:sa");
         $absen->setAbsen($rfid, $date);
