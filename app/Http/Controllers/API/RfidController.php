@@ -27,9 +27,11 @@ class RfidController extends Controller
 
         if($getUser){
             $controllerUser->cekAbsensi($request->rfid_tag);
+            
             return response()->json([
                 'status' => 'Name tag telah terdeteksi',
-                'message' => 200,                
+                'message' => 200,
+                // 'respon_wa' => $curl->curlWa()
                ]);
         }else{
             $data = User::create([
