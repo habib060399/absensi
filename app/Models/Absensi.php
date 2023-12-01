@@ -14,22 +14,31 @@ class Absensi extends Model
     protected $fillable = [
         'rfid_tag',
         'name',
-        'tgl_waktu',
+        'tanggal',
+        'waktu'
     ];
 
     public $timestamps = false;
 
-    public function setAbsen($rfid, $dateTime)
+    public function setAbsen($rfid, $date, $time, $name)
     {
         Absensi::create([
             'rfid_tag' => $rfid,
-            'tgl_waktu'=> $dateTime
+            'tanggal'=> $date,
+            'waktu' => $time,
+            'name' => $name
         ]);
+    }
+
+    public function getTime($rfid, $date)
+    {
+        $absen = Absensi::where('rfid_tag', $rfid)->where('tanggal', $date)->get();
+        return $absen;
     }
 
     public function getAbsen($rfid)
     {
-        $absen = Absensi::where('rfid_tag', $rfid)->firts();
+        $absen = Absensi::where('rfid_tag', $rfid)->get();
         return $absen;
     }
 }
