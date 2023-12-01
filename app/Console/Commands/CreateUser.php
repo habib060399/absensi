@@ -29,7 +29,7 @@ class CreateUser extends Command
     {
         $user = new User();
         $controllerUser = new UserController();
-        $controllerUser->cekAbsensi();
+        // $controllerUser->cekAbsensi();
 
             while (true) {
                 $rfid = $this->ask('Masukkan RFID');
