@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('rfid_tag')->nullable(true);
             $table->string('name')->nullable(true);
-            $table->string('tgl_waktu')->nullable(true);
+            $table->string('tanggal')->nullable(true);
+            $table->string('waktu')->nullable(true);
         });
     }
 
