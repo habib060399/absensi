@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 
 class CurlController extends Controller
 {
-    public function curlWa()
+    public function curlWa($user)
     {
         $token = "M@h1JoXPN4WV12JrKv-g";
-        $target = "082169376803";
+        $target = $user->no_hp;
         // 0859106701927
 
         $curl = curl_init();
@@ -26,7 +26,7 @@ class CurlController extends Controller
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array(
                 'target' => $target,
-                'message' => "panjul telah hadir di sekolah",
+                'message' => "$user->name, telah hadir di sekolah",
                 'countryCode' => '62'
             ),
             CURLOPT_HTTPHEADER => array(
