@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('name')->nullable(true);
             $table->string('username')->nullable(true)->unique();
             $table->string('rfid_tag')->nullable(true);
+            $table->string('no_hp')->nullable(true);
             $table->string('password')->nullable(true);            
         });
     }
