@@ -35,12 +35,14 @@ class CreateUser extends Command
                 $rfid = $this->ask('Masukkan RFID');
                 $username = $this->ask('Masukkan username');
                 $name= $this->ask('Masukkan nama lengkap');
+                $no_hp= $this->ask('Masukkan no hp orang tua');
 
-                if($rfid == null && $username == null && $name == null){
+                if($rfid == null && $username == null && $name == null && $no_hp){
                     $this->info('data tidak boleh kosong');
                 }
                 
-                $getUser = $user->updateUser($rfid, $username, $name);
+                $getUser = $user->updateUser($rfid, $username, $name, $no_hp);
+                // dd($getUser);
             
                 if($getUser == null){
                     $this->info('data gagal ditambahkan');
