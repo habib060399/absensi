@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'username',
         'rfid_tag',
+        'no_hp'
     ];
 
     public $timestamps = false;
@@ -35,15 +36,16 @@ class User extends Authenticatable
     {
         User::create([
             'name' => $name,
-            'username' => $username
+            'username' => $username,            
         ]);
     }
 
-    public function updateUser($rfid, $username, $nama)
+    public function updateUser($rfid, $username, $nama, $no_hp)
     {
         User::where('rfid_tag', $rfid)->update([
             'username' => $username,
-            'name' => $nama
+            'name' => $nama,
+            'no_hp' => $no_hp
         ]);
     }
     
