@@ -31,7 +31,7 @@ class RfidController extends Controller
                 return response()->json([
                     'status' => 'Name tag telah terdeteksi',
                     'message' => 200,
-                    // 'respon_wa' => $curl->curlWa()
+                    'respon_wa' => $curl->curlWa($getUser)
                    ]);
             }elseif($get == 2){
                 return response()->json([
