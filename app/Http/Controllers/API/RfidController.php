@@ -7,13 +7,20 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\API\CurlController;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Absensi;
 
 class RfidController extends Controller
 {
     
     public function index()
     {
-        //
+        $modalAbsen = new Absensi();
+        $data = ['user' => $modalAbsen->getAll()];
+
+        return response()->json([
+            'status' => 200,
+            'message' => $data
+        ]);
     }
 
     
