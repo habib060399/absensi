@@ -30,6 +30,12 @@ class Absensi extends Model
         ]);
     }
 
+    public function getAll()
+    {
+        $absen = Absensi::all();
+        return $absen;
+    }
+    
     public function getTime($rfid, $date)
     {
         $absen = Absensi::where('rfid_tag', $rfid)->where('tanggal', $date)->get();
