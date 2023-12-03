@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('absensi', [RfidController::class, 'store']);
+Route::get('absensi', [RfidController::class, 'index']);
