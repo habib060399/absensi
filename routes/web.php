@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Events\SendPresence;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
+});
+
+Route::get('broadcast', function() {
+    $user = User::find(2);
+    // dd($user);
+    broadcast(new SendPresence($user));
+    // return 'Event Success sent';
 });

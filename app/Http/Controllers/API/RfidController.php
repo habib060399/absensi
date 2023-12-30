@@ -14,12 +14,11 @@ class RfidController extends Controller
     
     public function index()
     {
-        $modalAbsen = new Absensi();
-        $data = ['user' => $modalAbsen->getAll()];
+        $modalAbsen = new Absensi();        
 
         return response()->json([
             'status' => 200,
-            'message' => $data
+            'message' => $modalAbsen->getAll()
         ]);
     }
 
@@ -38,7 +37,7 @@ class RfidController extends Controller
                 return response()->json([
                     'status' => 'Name tag telah terdeteksi',
                     'message' => 200,
-                    'respon_wa' => $curl->curlWa($getUser)
+                    // 'respon_wa' => $curl->curlWa($getUser)
                    ]);
             }elseif($get == 2){
                 return response()->json([
