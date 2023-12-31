@@ -27,4 +27,24 @@ class AdminController extends Controller
 
         return redirect('/register-device');
     }
+
+    public function loginDeviceView()
+    {        
+        return view('login_device');
+    }
+
+    public function loginDevice(Request $request)
+    {
+        $request->validate([
+            'id_perangkat' => 'required|max:16'
+        ]);
+
+        $id_perangkat = $request->input('id_perangkat');
+        $get_perangkat = Perangkat::where('id_mesin', $id_perangkat)->first();
+
+        if ($get_perangkat) {
+            $token = $get_perangkat->createToken('token');
+            dd($token->plainTextToken);
+        }
+    }
 }

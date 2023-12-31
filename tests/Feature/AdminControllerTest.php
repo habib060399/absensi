@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Perangkat;
 
 class AdminControllerTest extends TestCase
 {
@@ -17,6 +18,11 @@ class AdminControllerTest extends TestCase
         $uniq_id = '1234567899876543';
         $response = $this->post('/register-device/create', ['nama_sekolah' => $nama_sekolah, 'id_perangkat' => $uniq_id]);
 
-        $response->assertStatus(302);
+        if($response->assertStatus(302)){
+            Perangkat::create([
+                'nama_sekolah' => $nama_sekolah,
+                'id_mesin' => $uniq_id
+            ]);
+        }
     }
 }

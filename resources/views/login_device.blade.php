@@ -9,19 +9,13 @@
 </head>
 
 <body>
-    <form action="{{ route('create_device') }}" method="post">
+    <form action="{{ route('login_device') }}" method="post">
         @csrf
         <div>
-            <label for="">Nama Sekolah</label>
-            <input type="text" id="nama_sekolah" name="nama_sekolah">
-        </div>
-        <br />
-        <div>
             <label for="">Id Perangkat</label>
-            <input type="text" id="id_perangkat" name="id_perangkat" value="{{ $uniqId }}">
-            <label for=""><button>Generate ID</button></label>
+            <input type="text" id="id_perangkat" name="id_perangkat">
         </div>
-        <button type="submit">Simpan</button>
+        <button type="submit">Login</button>
     </form>
     @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>

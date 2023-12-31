@@ -29,3 +29,5 @@ Route::get('broadcast', function() {
 
 Route::get('/register-device', [AdminController::class, 'registerView']);
 Route::post('/register-device/create', [AdminController::class, 'createDevice'])->name('create_device');
+Route::get('/login_device', [AdminController::class, 'loginDeviceView']);
+Route::post('/login_device/create', [AdminController::class, 'loginDevice'])->name('login_device');
