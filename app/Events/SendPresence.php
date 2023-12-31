@@ -15,13 +15,11 @@ use App\Models\User;
 class SendPresence implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    
 
-    public $user;
-
-    public function __construct($user)
+    public function __construct()
     {
-        $this->user = $user;        
-        // dd($this->user->id);
+      //
     }
 
     public function broadcastWith()
@@ -37,7 +35,7 @@ class SendPresence implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('Presence'. $this->user->id),
+            new Channel('Presence'),
         ];
     }
 }

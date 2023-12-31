@@ -18,5 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/absensi', [RfidController::class, 'store']);
-Route::get('/absensi', [RfidController::class, 'index'])->middleware('auth:sanctum');
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('/absensi', [RfidController::class, 'store']);
+    Route::get('/absensi', [RfidController::class, 'index']);
+});

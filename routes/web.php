@@ -22,6 +22,6 @@ Route::get('/', function () {
 Route::get('broadcast', function() {
     $user = User::find(2);
     // dd($user);
-    broadcast(new SendPresence($user));
+    broadcast(new SendPresence());
     // return 'Event Success sent';
 });

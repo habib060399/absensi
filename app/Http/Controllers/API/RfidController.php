@@ -8,6 +8,7 @@ use App\Http\Controllers\API\CurlController;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Absensi;
+use App\Events\SendPresence;
 
 class RfidController extends Controller
 {
@@ -34,6 +35,7 @@ class RfidController extends Controller
         if($getUser){
             $get = $controllerUser->cekAbsensi($request->rfid_tag);
             if($get == 1){
+                // broadcast(new SendPresence());
                 return response()->json([
                     'status' => 'Name tag telah terdeteksi',
                     'message' => 200,
