@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Events\SendPresence;
 use App\Models\User;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,6 @@ Route::get('broadcast', function() {
     broadcast(new SendPresence());
     // return 'Event Success sent';
 });
+
+Route::get('/register-device', [AdminController::class, 'registerView']);
+Route::post('/register-device/create', [AdminController::class, 'createDevice'])->name('create_device');
