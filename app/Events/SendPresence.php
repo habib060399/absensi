@@ -28,10 +28,8 @@ class SendPresence implements ShouldBroadcastNow
 
     public function broadcastWith()
     {   
-        $getCookie = Cookie::get('id_mesin');
-        if(strval($getCookie) == $this->id_mesin){
-            return ['welcome' => $this->rfid_tag];
-        }
+        // $getCookie = Cookie::get('id_mesin');
+            return ['id_mesin' => $this->id_mesin, 'rfid_tag' => $this->rfid_tag];
     }
 
     /**

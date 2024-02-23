@@ -14,6 +14,6 @@ class Helper
 
     public static function getCookie()
     {
-        return Cookie::get('id_mesin');
+        return "Ini Cookie";
     }
 }

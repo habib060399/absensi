@@ -119,7 +119,7 @@ class RfidController extends Controller
 
         if($get_id_perangkat){
             broadcast(new SendPresence($request->rfid_tag, $request->id_mesin));
-            Cookie::queue(Cookie::make('id_mesin', $request->id_mesin, 30));
+            // Cookie::queue(Cookie::make('id_mesin', $request->id_mesin, 30));
             return response()->json([
                 'id_mesin' => $request->id_mesin,
                 'rfid_tag' => $request->rfid_tag,

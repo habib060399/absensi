@@ -31,6 +31,6 @@ class UserViewController extends Controller
     public function addSiswa()
     {
         // return Helper::getCookie();
-        return view('user.tambah_siswa');
+        return view('user.tambah_siswa', ['cookies' => Cookie::get('id_mesin')]);
     }
 }

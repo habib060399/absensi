@@ -5,8 +5,7 @@
 					<div class="col-md-12 stretch-card">
 						<div class="card">
 							<div class="card-body">
-								<h6 class="card-title">Form Grid</h6>
-								
+								<h6 class="card-title">Form Grid</h6>								
 									<form action="" method="post">
 										@csrf
 										<div class="row">
@@ -113,7 +112,9 @@
             .listen('SendPresence', (e) => {
                 console.log('hallo ini event');
                 console.log(e);
-				rfid.value = e.welcome;
+				if(`{{$cookies}}` == e.id_mesin){
+					rfid.value = e.rfid_tag;
+				}				
                 // console.log(e.welcome);
                 // document.write("<h1>" + e.welcome + "</h1>")
             });
