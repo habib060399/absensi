@@ -6,14 +6,14 @@
 						<div class="card">
 							<div class="card-body">
 								<h6 class="card-title">Form Grid</h6>								
-									<form action="" method="post">
+									<form action="{{route('add_siswa')}}" method="post">
 										@csrf
 										<div class="row">
 											<div class="col-sm-6">
 												<div class="mb-3">
 													<label class="form-label">Nama Siswa</label>
-													<input type="text" class="form-control @error('nama_sekolah') is-invalid @enderror" name="nama_siswa" placeholder="Nama Siswa">
-													@error('nama_sekolah')
+													<input type="text" class="form-control @error('nama_siswa') is-invalid @enderror" name="nama_siswa" placeholder="Nama Siswa">
+													@error('nama_siswa')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -21,7 +21,7 @@
 											<div class="col-sm-6">
 												<div class="mb-3">
 													<label class="form-label">Email</label>
-													<input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email">
+													<input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email">
 													@error('email')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
@@ -32,13 +32,13 @@
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Jurusan</label>
-													<select class="form-select @error('id_mesin') is-invalid @enderror" id="exampleFormControlSelect1" name="jurusan">
-														<option selected disabled>Pilih Jurusan</option>
-														
-														<option value=""></option>								
-														
+													<select class="form-select @error('jurusan') is-invalid @enderror" id="jurusan" name="jurusan">
+														<option value="" selected disabled>Pilih Jurusan</option>
+														@foreach ($jurusan as $j)
+														<option value="{{$j->id}}">{{$j->nama_jurusan}}</option>																							
+														@endforeach														
 													</select>													
-													@error('id_mesin')
+													@error('jurusan')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -46,12 +46,10 @@
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Kelas</label>
-													<select class="form-select @error('pendidikan') is-invalid @enderror" id="exampleFormControlSelect2" name="kelas">
-														<option selected disabled>Pilih Kelas</option>
-														<option>SMA</option>
-														<option>SMK</option>
+													<select class="form-select @error('kelas') is-invalid @enderror" id="kelas" name="kelas">
+														<option selected disabled>Pilih Kelas</option>																												
 													</select>
-													@error('pendidikan')
+													@error('kelas')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -60,7 +58,7 @@
 												<div class="mb-3">
 													<label class="form-label">No HP</label>
 													<input type="text" class="form-control @error('npsn') is-invalid @enderror" placeholder="No HP" name="no_hp">
-													@error('npsn')
+													@error('no_hp')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -70,8 +68,8 @@
 											<div class="col-sm-6">
 												<div class="mb-3">
 													<label class="form-label">No HP Orangtua</label>
-													<input type="text" class="form-control @error('username') is-invalid @enderror" placeholder="No HP Orangtua" name="no_hp_ortu">
-													@error('username')
+													<input type="text" class="form-control @error('no_hp_ortu') is-invalid @enderror" placeholder="No HP Orangtua" name="no_hp_ortu">
+													@error('no_hp_ortu')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -79,8 +77,8 @@
 											<div class="col-sm-6">
 												<div class="mb-3">
 													<label class="form-label">RFID Tag</label>
-													<input type="text" class="form-control @error('password') is-invalid @enderror" autocomplete="off" name="password" id="rfid" readonly>
-													@error('password')
+													<input type="text" class="form-control @error('rfid') is-invalid @enderror" autocomplete="off" name="rfid" id="rfid" readonly>
+													@error('rfid')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -90,8 +88,8 @@
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Foto</label>
-													<input type="file" class="form-control @error('npsn') is-invalid @enderror" placeholder="Foto" name="foto">
-													@error('npsn')
+													<input type="file" class="form-control @error('foto') is-invalid @enderror" placeholder="Foto" name="foto">
+													@error('foto')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>
@@ -105,18 +103,42 @@
 				</div>
 </div>
 
-@vite('./resources/js/app.js')
-    <script type="module">
-		var rfid = document.getElementById('rfid');
-        Echo.channel(`Presence`)
-            .listen('SendPresence', (e) => {
-                console.log('hallo ini event');
-                console.log(e);
-				if(`{{$cookies}}` == e.id_mesin){
-					rfid.value = e.rfid_tag;
-				}				
-                // console.log(e.welcome);
-                // document.write("<h1>" + e.welcome + "</h1>")
-            });
+{{-- @vite('./resources/js/app.js') --}}
+<script type="module">
+	var rfid = document.getElementById('rfid');
+	Echo.channel(`Presence`)
+		 .listen('SendPresence', (e) => {
+			 console.log('hallo ini event');
+			 console.log(e);
+			 if(`{{$cookies}}` == e.id_mesin){
+				 rfid.value = e.rfid_tag;
+			 }				
+			 // console.log(e.welcome);
+			 // document.write("<h1>" + e.welcome + "</h1>")
+		 });
+</script>
+    <script type="text/javascript">
+	$('#jurusan').on('change', function getKelas(){
+		var value = $('#jurusan option:selected').val()
+		var data ={ id_jurusan: value }
+		
+			$('#jurusan').click(function(){
+				$.ajax({
+					url: `{{route('getkls')}}`,
+					type: 'POST',
+					data: data,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function(res){
+						console.log(res);
+						
+							$('#kelas').html(res)	
+						
+					}
+				})
+			});
+		
+	});
     </script>
 @endsection

@@ -7,6 +7,7 @@ use App\Models\Absensi;
 use App\Models\User;
 use App\Models\Jurusan;
 use App\Models\Kelas;
+use App\Models\Siswa;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,5 +72,44 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('kelas')->with('status', 'sadfasd');
+    }
+
+    public function registerSiswa(Request $request)
+    {
+        $request->validate([
+            'nama_siswa' => 'required',
+            'email' => 'required',
+            'jurusan' => 'required',
+            'kelas' => 'required',
+            'no_hp' => 'required',
+            'no_hp_ortu' => 'required',
+            'rfid' => 'required|unique:siswa,rfid',
+        ]);
+
+        $siswa = Siswa::create([
+            'id_sekolah' => $request->session()->get('id'),
+            'id_jurusan' => $request->input('jurusan'),
+            'id_kelas' => $request->input('kelas'),
+            'nama_siswa' => $request->input('nama_siswa'),
+            'rfid' => $request->input('rfid'),
+            'email' => $request->input('email'),
+            'no_hp' =>  $request->input('no_hp'),
+            'no_hp_ortu' => $request->input('no_hp_ortu')
+        ]);
+        
+        return redirect()->route('siswa_add')->with('status', 'asdfasdf');
+    }
+
+    public function getKelas(Request $request)
+    {
+        $kelas = Kelas::where('id_jurusan', $request->id_jurusan)->get();
+        echo '<option selected disabled>Pilih Kelas</option>';
+        if($kelas){
+            foreach ($kelas as $k) {
+                echo "<option value='$k->id'> $k->kelas</option>";
+            }
+        }else{
+            echo '<option selected disabled>Pilih Kelas</option>';
+        }
     }
 }

@@ -18,10 +18,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/check-device', [RfidController::class, 'checkIdDevice']);
-Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
-Route::post('/login', [RfidController::class, 'login']);
-Route::get('/absensi', [RfidController::class, 'index']);
+// Route::post('/check-device', [RfidController::class, 'checkIdDevice']);
+// Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
+// Route::post('/login', [RfidController::class, 'login']);
+// Route::get('/absensi', [RfidController::class, 'index']);
+Route::post('/absensi', [RfidController::class, 'store']);
 Route::middleware(['auth:sanctum'])->group(function(){
-    Route::post('/absensi', [RfidController::class, 'store']);
 });

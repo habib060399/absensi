@@ -12,7 +12,7 @@ class Absensi extends Model
     protected $table = 'absensi';
 
     protected $fillable = [
-        'rfid_tag',
+        'id_siswa',
         'name',
         'tanggal',
         'waktu'

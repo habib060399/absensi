@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Absensi;
 use App\Models\Mesin;
+use App\Models\Siswa;
 use App\Events\SendPresence;
 
 class RfidController extends Controller
@@ -60,40 +61,35 @@ class RfidController extends Controller
     }
     
     public function store(Request $request)
-    {        
-        $getUser = $modelUser->getUser($request->rfid_tag);
-
-        if($getUser){
-            $get = $controllerUser->cekAbsensi($request->rfid_tag);
-            if($get == 1){
-                // broadcast(new SendPresence());
+    {   
+        $time_now = date("h:i:s");
+        $date_now = date("d-m-Y");     
+        $get_siswa = Siswa::where('rfid', $request->rfid_tag)->first();
+        if($get_siswa){
+            $get_absen = Absensi::where('id_siswa', $get_siswa->id)->where('tanggal', $date_now)->first();
+            if($get_absen){
                 return response()->json([
-                    'status' => 'Name tag telah terdeteksi',
-                    'message' => 200,                    
-                    // 'respon_wa' => $curl->curlWa($getUser)
-                   ]);
-            }elseif($get == 2){
-                return response()->json([
-                    'status' => 'Anda Sudah Absen',
-                    'message' => 200,                    
-                   ]);
+                    'message' => 'Anda Sudah Melakukan Absen',
+                    'status' => 200
+                ]);
             }else{
+                Absensi::create([
+                    'id_siswa' => $get_siswa->id,
+                    'tanggal' => $date_now,
+                    'waktu' => $time_now
+                ]);
+    
                 return response()->json([
-                    'status' => 'Gagal Absen',
-                    'message' => 500,                    
-                   ]);
+                    'rfid' => $get_siswa->rfid,
+                    'status' => 200
+                ]);        
             }
-            
         }else{
-            $data = User::create([
-             'rfid_tag' => $request->rfid_tag
-            ]);
-     
             return response()->json([
-             'status' => 'Name tag berhasil ditambahkan ke database',
-             'message' => 200,            
+                'message' => 'Not Found',
+                'status' => 400
             ]);
-        }        
+        }
     }    
 
     // public function checkIdDevice(Request $request)

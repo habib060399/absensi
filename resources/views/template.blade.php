@@ -37,6 +37,8 @@
   <!-- End layout styles -->
 
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="main-wrapper">

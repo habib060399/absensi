@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('absensi', function (Blueprint $table) {
             $table->id();
-            $table->string('rfid_tag')->nullable(true);
-            $table->string('name')->nullable(true);
+            $table->string('id_siswa')->nullable(true);            
             $table->string('tanggal')->nullable(true);
             $table->string('waktu')->nullable(true);
         });
