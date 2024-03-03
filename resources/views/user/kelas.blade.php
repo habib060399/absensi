@@ -37,9 +37,9 @@
             <td>{{$k->nama_jurusan}}</td>
             <td>{{$k->kelas}}</td>
             <td>
-              <button type="button" class="btn btn-warning btn-icon btn-xs">
+              <a href="{{\App\Helpers\Helper::encryptUrl($k->id)}}" class="btn btn-warning btn-icon btn-xs">
                 <i data-feather="edit-3"></i>
-              </button>              
+              </a>              
               <button type="button" class="btn btn-danger btn-icon btn-xs">
                 <i data-feather="trash-2"></i>
               </button>

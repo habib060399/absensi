@@ -85,16 +85,23 @@ class AdminController extends Controller
 
         $id_mesin = $request->input('id_mesin');
 
-        $getIdLast = Sekolah::orderBy('id', 'desc')->first();
-        $id = $getIdLast->id + 1;
-
+        $sekolah = new Sekolah();
         $user = new User();
+        $id;
+        $getIdLast = Sekolah::orderBy('id', 'desc')->first();
+        
+        if($getIdLast){
+            $id = $getIdLast->id + 1;
+        }else{
+            $sekolah->id = 0;
+            $id = 1;
+        }
+        
         $user->id = $id;
         $user->username = $request->input('username');
         $user->password = Hash::make($request->input('password'));
         $user->save();
-
-        $sekolah = new Sekolah();
+ 
         $sekolah->nama_sekolah = $request->input('nama_sekolah');
         $sekolah->email = $request->input('email');
         $sekolah->id_mesin = $id_mesin;

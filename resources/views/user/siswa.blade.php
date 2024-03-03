@@ -33,15 +33,16 @@
           </tr>
         </thead>
         <tbody>
-          
+          @foreach ($siswa as $s)
           <tr>
             <td></td>
+            <td>{{$s->nama_siswa}}</td>
+            <td>{{$s->kelas}}</td>
+            <td>{{$s->nama_jurusan}}</td>
+            <td>{{$s->rfid}}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>        
+          </tr>                      
+          @endforeach
         </tbody>
       </table>
     </div>

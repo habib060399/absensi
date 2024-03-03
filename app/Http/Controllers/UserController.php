@@ -83,7 +83,7 @@ class UserController extends Controller
             'kelas' => 'required',
             'no_hp' => 'required',
             'no_hp_ortu' => 'required',
-            'rfid' => 'required|unique:siswa,rfid',
+            // 'rfid' => 'required|unique:siswa,rfid',
         ]);
 
         $siswa = Siswa::create([
