@@ -20,7 +20,17 @@ class UserViewController extends Controller
     {
         return view('user.kelas', [
             'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
-            'kelas' => Kelas::where('kelas.id_sekolah', Helper::getSession())->join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')->get()
+            'kelas' => Kelas::join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')->select('kelas.*', 'jurusan.nama_jurusan')->where('kelas.id_sekolah', Helper::getSession())->get()
+        ]);
+    }
+
+    public function editKelas($id)
+    {
+        Helper::decryptUrl($id);
+        
+        return view('user.edit_kelas', [
+            'kelas' => Kelas::where('id', Helper::decryptUrl($id))->first(),
+            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get()
         ]);
     }
 

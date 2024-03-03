@@ -37,7 +37,7 @@
             <td>{{$k->nama_jurusan}}</td>
             <td>{{$k->kelas}}</td>
             <td>
-              <a href="{{\App\Helpers\Helper::encryptUrl($k->id)}}" class="btn btn-warning btn-icon btn-xs">
+              <a href="{{route('editKelas', ['id' => \App\Helpers\Helper::encryptUrl($k->id)])}}" class="btn btn-warning btn-icon btn-xs">
                 <i data-feather="edit-3"></i>
               </a>              
               <button type="button" class="btn btn-danger btn-icon btn-xs">

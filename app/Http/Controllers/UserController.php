@@ -74,6 +74,13 @@ class UserController extends Controller
         return redirect()->route('kelas')->with('status', 'sadfasd');
     }
 
+    public function editKelas($id)
+    {
+        $get_jurusan = jurusan::where('id_sekolah', Helper::getSession())->get();
+        // $get_kelas = Kelas::where('id', Helper::decryptUrl($id))->first();
+        dd(Helper::decryptUrl($id), $get_jurusan);
+    }
+
     public function registerSiswa(Request $request)
     {
         $request->validate([
