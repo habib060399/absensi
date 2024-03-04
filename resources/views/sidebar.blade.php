@@ -14,7 +14,7 @@
         <li class="nav-item nav-category">Main</li>
         <li class="nav-item">
           <a href="dashboard.html" class="nav-link">
-            <i class="link-icon" data-feather="box"></i>
+            <i class="link-icon" data-feather="home"></i>
             <span class="link-title">Dashboard</span>
           </a>
         </li>
@@ -49,15 +49,14 @@
                 <a href="{{route('absen')}}" class="nav-link">Data Absen</a>
               </li>              
               <li class="nav-item">
-                <a href="pages/ui-components/tooltips.html" class="nav-link">Rekapitulasi Absen</a>
+                <a href="" class="nav-link">Rekapitulasi Absen</a>
               </li>
             </ul>
           </div>
         </li>
-        <li class="nav-item nav-category">Components</li>
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
-            <i class="link-icon" data-feather="anchor"></i>
+            <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Sekolah</span>
             <i class="link-arrow" data-feather="chevron-down"></i>
           </a>
@@ -76,6 +75,25 @@
           </div>
         </li>
         <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="link-icon" data-feather="mail"></i>
+            <span class="link-title">Kirim Pesan</span>
+          </a>
+        </li>
+        <li class="nav-item nav-category">Settings</li>
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="link-icon" data-feather="inbox"></i>
+            <span class="link-title">Pesan</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="link-icon" data-feather="user"></i>
+            <span class="link-title">Profile</span>
+          </a>
+        </li>
+        {{-- <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
             <i class="link-icon" data-feather="inbox"></i>
             <span class="link-title">Forms</span>
@@ -163,7 +181,7 @@
               </li>
             </ul>
           </div>
-        </li>        
+        </li>         --}}
       </ul>
     </div>
   </nav>
