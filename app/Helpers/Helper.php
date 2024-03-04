@@ -33,7 +33,7 @@ class Helper
 
         // enkripsi data
         $encryption = openssl_encrypt($string, $ciphering, $encryption_key, 0, $encryption_iv);
-        return strval($encryption);
+        return base64_encode(strval($encryption));
     }
 
     public static function decryptUrl($string)
@@ -48,7 +48,7 @@ class Helper
         $decryption_key = "W3docs";
 
         // Dekripsi data
-        $decryption = openssl_decrypt($string, $ciphering, $decryption_key, 0, $decryption_iv);
+        $decryption = openssl_decrypt(base64_decode($string), $ciphering, $decryption_key, 0, $decryption_iv);
         return $decryption;
     }
 }

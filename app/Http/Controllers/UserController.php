@@ -110,13 +110,21 @@ class UserController extends Controller
     public function getKelas(Request $request)
     {
         $kelas = Kelas::where('id_jurusan', $request->id_jurusan)->get();
-        echo '<option selected disabled>Pilih Kelas</option>';
+        $get_kelas = $request->id_kelas;
+
         if($kelas){
+                
+            // echo '<option selected disabled>Pilih Kelas</option>';
             foreach ($kelas as $k) {
+                if($k->id == $get_kelas){
+                    echo "<option value='$k->id' selected > $k->kelas</option>";
+                }
+
                 echo "<option value='$k->id'> $k->kelas</option>";
+                
             }
         }else{
             echo '<option selected disabled>Pilih Kelas</option>';
-        }
+        }      
     }
 }

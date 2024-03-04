@@ -35,12 +35,19 @@
         <tbody>
           @foreach ($siswa as $s)
           <tr>
-            <td></td>
+            <td>{{$s->id}}</td>
             <td>{{$s->nama_siswa}}</td>
             <td>{{$s->kelas}}</td>
             <td>{{$s->nama_jurusan}}</td>
             <td>{{$s->rfid}}</td>
-            <td></td>
+            <td>
+              <a href="{{route('editSiswa', ['id' => \App\Helpers\Helper::encryptUrl($s->id)])}}" class="btn btn-warning btn-icon btn-xs">
+                <i data-feather="edit-3"></i>
+              </a>              
+              <button type="button" class="btn btn-danger btn-icon btn-xs">
+                <i data-feather="trash-2"></i>
+              </button>
+            </td>
           </tr>                      
           @endforeach
         </tbody>
