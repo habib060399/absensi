@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="Responsive HTML Admin Dashboard Template based on Bootstrap 5">
+  	<meta name="description" content="Responsive HTML Admin Dashboard Template based on Bootstrap 5">
 	<meta name="author" content="NobleUI">
 	<meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
@@ -38,6 +38,7 @@
 
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <meta name="csrf-tokens" content="{{ csrf_token() }}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -317,6 +318,7 @@
 	<!-- Custom js for this page -->
 	<script src="{{asset('assets/js/fullcalendar.js')}}"></script>
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
+	<script src="{{asset('assets/js/sweet-alert.js')}}"></script>
 	@if (session('status'))
 	<script>
 	 Swal.fire({
@@ -333,6 +335,21 @@
                 title: "Oops...",
                 text: `{{session('error')}}`,                
             });
+	</script>
+	@elseif (session('hapus'))
+	<script>
+		const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger me-2",
+                },
+                buttonsStyling: false,
+            });
+		swalWithBootstrapButtons.fire(
+                              "Deleted!",
+                              "Your file has been deleted.",
+                              "success"
+                          );
 	</script>
 	@endif
 	<!-- End custom js for this page -->

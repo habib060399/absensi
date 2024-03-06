@@ -127,4 +127,12 @@ class UserController extends Controller
             echo '<option selected disabled>Pilih Kelas</option>';
         }      
     }
+
+    public function hapus($model, $id)
+    {
+        $get_model = "App\Models\\".$model;
+        $get_model::where('id', Helper::decryptUrl($id))->delete();
+
+        return redirect()->route('siswa')->with('hapus', 'asdfasd');
+    }
 }

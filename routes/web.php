@@ -49,6 +49,8 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');
     Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
+
+    Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
 });
 
 Route::get('broadcast', function() {
