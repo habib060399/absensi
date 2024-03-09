@@ -147,4 +147,15 @@ class UserController extends Controller
         }
         
     }
+
+    public function hapusJurusan($id)
+    {
+        $kelas = Kelas::where('id_jurusan', Helper::decryptUrl($id))->get();
+        if(empty($kelas[0])){
+            Jurusan::where('id', Helper::decryptUrl($id))->delete();
+            return redirect()->route('jurusan')->with('hapus', 'asfdas');
+        }else{
+            return redirect()->route('jurusan')->with('error', 'Data Jurusan Masih Ada!');
+        }
+    }
 }
