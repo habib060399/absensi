@@ -42,6 +42,7 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
     Route::get('/jurusan', [UserViewController::class, 'jurusan'])->name('jurusan');
     Route::post('/tambah-jurusan', [UserController::class, 'registerJurusan'])->name('add_jurusan');
     Route::get('/kelas', [UserViewController::class, 'kelas'])->name('kelas');
+    Route::get('/kelas/hapus/{id}', [UserController::class, 'hapusKelas'])->name('hapus_kelas');
     Route::get('/kelas/{id}', [UserViewController::class, 'editKelas'])->name('editKelas');
     Route::post('/tambah-kelas', [UserController::class, 'registerKelas'])->name('add_kelas');
     Route::get('/siswa', [UserViewController::class, 'siswa'])->name('siswa');

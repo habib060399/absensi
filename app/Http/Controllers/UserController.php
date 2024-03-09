@@ -135,4 +135,16 @@ class UserController extends Controller
 
         return redirect()->route('siswa')->with('hapus', 'asdfasd');
     }
+
+    public function hapusKelas($id)
+    {
+        $siswa = Siswa::where('id_kelas', Helper::decryptUrl($id))->get();
+        if(empty($siswa[0])){
+            Kelas::where('id', Helper::decryptUrl($id))->delete();
+            return redirect()->route('kelas')->with('hapus', 'asdfas');
+        }else{
+            return redirect()->route('kelas')->with('error', 'Data Siswa Masih Ada!');
+        }
+        
+    }
 }

@@ -40,9 +40,9 @@
               <a href="{{route('editKelas', ['id' => \App\Helpers\Helper::encryptUrl($k->id)])}}" class="btn btn-warning btn-icon btn-xs">
                 <i data-feather="edit-3"></i>
               </a>              
-              <button type="button" class="btn btn-danger btn-icon btn-xs">
+              <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="{{route('hapus_kelas', ['id' => \App\Helpers\Helper::encryptUrl($k->id)])}}">
                 <i data-feather="trash-2"></i>
-              </button>
+              </a>
             </td>
           </tr>                      
           @endforeach
@@ -89,4 +89,44 @@
     </div>
     </div>
   </div>
+  <script type="text/javascript">
+    $('.alert_notif').click(function (){
+      var getLink = $(this).data('href');
+      const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                      confirmButton: "btn btn-success",
+                      cancelButton: "btn btn-danger me-2",
+                  },
+                  buttonsStyling: false,
+              });
+  
+              swalWithBootstrapButtons
+                  .fire({
+                      title: "Are you sure?",
+                      text: "You won't be able to revert this!",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonClass: "me-2",
+                      confirmButtonText: "Yes, delete it!",
+                      cancelButtonText: "No, cancel!",
+                      reverseButtons: true,
+                  })
+                  .then((result) => {
+                    console.log(result);
+                      if (result.isConfirmed) {
+                        window.location.href = getLink
+                          
+                      } else if (
+                          // Read more about handling dismissals
+                          result.dismiss === Swal.DismissReason.cancel
+                      ) {
+                          swalWithBootstrapButtons.fire(
+                              "Cancelled",
+                              "Your imaginary file is safe :)",
+                              "error"
+                          );
+                      }
+                  });
+    });
+  </script>
 @endsection
