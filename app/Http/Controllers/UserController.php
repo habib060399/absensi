@@ -158,4 +158,10 @@ class UserController extends Controller
             return redirect()->route('jurusan')->with('error', 'Data Jurusan Masih Ada!');
         }
     }
+
+    public function editJurusan(Request $request)
+    {
+        Jurusan::where('id', $request->input('id_edit_jurusan'))->update(['nama_jurusan' => $request->input('edit_jurusan')]);
+        return redirect()->route('jurusan')->with('status', 'asadf');
+    }
 }

@@ -16,6 +16,12 @@ class UserViewController extends Controller
         return view('user.jurusan', ['jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get()]);
     }
 
+    public function editJurusan($id)
+    {
+        $get_jurusan = Jurusan::where('id', Helper::decryptUrl($id))->first();
+        return $get_jurusan;
+    }
+
     public function kelas()
     {
         return view('user.kelas', [

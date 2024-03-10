@@ -37,7 +37,7 @@
             <td>{{$j->nama_jurusan}}</td>
             <td>{{$j->id}}</td>
             <td>
-              <button type="button" class="btn btn-warning btn-icon btn-xs">
+              <button type="button" data-href="{{route('edit_jurusan', ['id' => \App\Helpers\Helper::encryptUrl($j->id)])}}" class="btn btn-warning btn-icon btn-xs edit_jurusan" data-bs-toggle="modal" data-bs-target="#modalEdit">
                 <i data-feather="edit-3"></i>
               </button>              
               <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="{{route('hapus_jurusan', ['id' => \App\Helpers\Helper::encryptUrl($j->id)])}}">
@@ -78,6 +78,43 @@
     </div>
     </div>
   </div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{route('edit_jurusan1')}}" method="post">
+          @csrf
+        <label class="form-label">Nama Jurusan</label>
+        <input type="text" id="edit_id_jurusan" type="hidden" name="id_edit_jurusan" hidden>
+        <input type="text" id="edit_jurusan" class="form-control" name="edit_jurusan">
+        </div>
+      <div class="modal-fo oter">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+    </div>
+    </div>
+  </div>
+  <script>
+    $('.edit_jurusan').click(function (){
+      var getLink = $(this).data('href');
+      $.ajax({
+        url: getLink,
+        type: 'GET',
+        success: function(res){
+          $('#edit_jurusan').val(res.nama_jurusan)
+          $('#edit_id_jurusan').val(res.id)
+        }
+      })
+    })
+  </script>
   <script type="text/javascript">
     $('.alert_notif').click(function (){
       var getLink = $(this).data('href');
