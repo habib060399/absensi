@@ -34,6 +34,7 @@
           </a>
         </li>
         @endrole
+        @role('sekolah')
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
             <i class="link-icon" data-feather="book"></i>
@@ -53,7 +54,7 @@
               </li>
             </ul>
           </div>
-        </li>
+        </li>        
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
             <i class="link-icon" data-feather="box"></i>
@@ -74,6 +75,7 @@
             </ul>
           </div>
         </li>
+        @endrole
         <li class="nav-item">
           <a href="dashboard.html" class="nav-link">
             <i class="link-icon" data-feather="mail"></i>
@@ -82,7 +84,7 @@
         </li>
         <li class="nav-item nav-category">Settings</li>
         <li class="nav-item">
-          <a href="dashboard.html" class="nav-link">
+          <a href="{{route('bc')}}" class="nav-link">
             <i class="link-icon" data-feather="inbox"></i>
             <span class="link-title">Pesan</span>
           </a>

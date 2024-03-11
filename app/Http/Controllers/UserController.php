@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Settings;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Validator;
 
@@ -163,5 +164,12 @@ class UserController extends Controller
     {
         Jurusan::where('id', $request->input('id_edit_jurusan'))->update(['nama_jurusan' => $request->input('edit_jurusan')]);
         return redirect()->route('jurusan')->with('status', 'asadf');
+    }
+
+    public function editBroadcast(Request $request)
+    {
+        $get_id = $request->input('id_sekolah');
+        Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);
+        return redirect()->route('bc')->with('status', 'asdfasd');
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\ControllerView;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserViewController;
+use App\Http\Controllers\AdminViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ use App\Http\Controllers\UserViewController;
 |
 */
 
-Route::get('/',[ControllerView::class, 'login'])->name('login');
+Route::get('/',[AuthController::class, 'login'])->name('login');
 Route::post('/auth-user',[AuthController::class, 'authUser']);
 Route::get('/logout',[AuthController::class, 'logout']);
 
@@ -31,10 +32,10 @@ Route::get('/live-absen', function () {
 Route::prefix('flockbase')->middleware(['auth'])->group(function(){
     Route::get('/home', [ControllerView::class, 'home'])->name('home');
     Route::get('/absen', [ControllerView::class, 'dataAbsen'])->name('absen');
-    Route::get('/sekolah', [ControllerView::class, 'dataSekolah'])->name('sekolah');
+    Route::get('/sekolah', [AdminViewController::class, 'sekolah'])->name('sekolah');
     Route::get('/sekolah/tambah', [ControllerView::class, 'addSekolah'])->name('sekolah-add');
     Route::post('/tambah-sekolah', [AdminController::class, 'registerSekolah'])->name('add_sekolah');
-    Route::get('/mesin', [ControllerView::class, 'dataMesin'])->name('mesin');
+    Route::get('/mesin', [AdminViewController::class, 'mesin'])->name('mesin');
     Route::post('/tambah-mesin', [AdminController::class, 'registerMesin'])->name('add_mesin');
 });
 
@@ -53,6 +54,8 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');
     Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
+    Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
+    Route::post('/broadcast/edit', [UserController::class, 'editBroadcast'])->name('edit_bc');
 
     Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
 });

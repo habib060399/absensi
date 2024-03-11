@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Settings;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Cookie;
 
@@ -58,5 +59,10 @@ class UserViewController extends Controller
     {
         // return Helper::getCookie();
         return view('user.tambah_siswa', ['cookies' => Cookie::get('id_mesin'), 'jurusan' => jurusan::where('id_sekolah', session('id'))->get()]);
+    }
+
+    public function broadcast()
+    {
+        return view('user.broadcast', ['broadcast' => Settings::where('id_sekolah',session('id'))->first(), 'id_sekolah' => session('id')]);
     }
 }

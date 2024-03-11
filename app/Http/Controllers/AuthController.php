@@ -10,6 +10,11 @@ use App\Models\Mesin;
 
 class AuthController extends Controller
 {
+    public function login()
+    {
+        return view('login');
+    }
+
     public function authUser(Request $request)
     {
         $credentials = $request->validate([
@@ -19,10 +24,6 @@ class AuthController extends Controller
 
         $username = $request->input('username');
         $password = $request->input('password');
-        $data = [
-            'username' => $request->input('username'),
-            'password' => $request->input('password')
-        ];
 
         if(Auth::attempt(['username' => $username, 'password' => $password])) {
             $get_user = User::where('username', $username)->first();            
@@ -31,11 +32,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
             if($sekolah){
                 $get_mesin = Mesin::where('id', $sekolah->id_mesin)->first();                
-                Cookie::queue(Cookie::make('id_mesin', $get_mesin->id_mesin, 30));
+                Cookie::queue(Cookie::make('id_mesin', $get_mesin->id_mesin));
 
                 $request->session()->put('id', $sekolah->id);
                 $request->session()->put('nama', $sekolah->nama_sekolah);
-                // $request->session()->put('id_mesin', $get_mesin->id_mesin);
             }else{                                          
                 $request->session()->put('id', $get_user->id);
             }
@@ -51,6 +51,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        Cookie::forget('id_mesin');
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
