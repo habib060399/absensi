@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 
 class CurlController extends Controller
 {
-    public function curlWa($user)
+    public function curlWa($no, $nama_siswa, $id_sekolah)
     {
-        $token = "M@h1JoXPN4WV12JrKv-g";
-        $target = $user->no_hp;
+        // $token = "G2QL_4v@aa!zSH7VHrSk";
+        $token = env("TOKEN_API_WA");
+        $getSekolah = Settings::where('id_sekolah', $id_sekolah)->first();
+        $bc = preg_replace("/{nama}/", "$nama_siswa", $getSekolah->bc);
         // 0859106701927
+
 
         $curl = curl_init();
 
@@ -25,8 +29,8 @@ class CurlController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array(
-                'target' => $target,
-                'message' => "$user->name, telah hadir di sekolah",
+                'target' => $no,
+                'message' => "$bc",
                 'countryCode' => '62'
             ),
             CURLOPT_HTTPHEADER => array(

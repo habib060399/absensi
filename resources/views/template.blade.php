@@ -39,7 +39,9 @@
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <meta name="csrf-tokens" content="{{ csrf_token() }}" />
+  <meta name="csrf-tokenss" content="{{ csrf_token() }}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>let get_siswa = null;</script>
 </head>
 <body>
     <div class="main-wrapper">
@@ -307,7 +309,7 @@
 	<script src="{{asset('assets/vendors/moment/moment.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/fullcalendar/main.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/datatables.net/jquery.dataTables.js')}}"></script>
-  <script src="{{asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js')}}"></script>
+  	<script src="{{asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js')}}"></script>
 	<!-- End plugin js for this page -->
 
 	<!-- inject:js -->
@@ -316,7 +318,8 @@
 	<!-- endinject -->
 
 	<!-- Custom js for this page -->
-	<script src="{{asset('assets/js/fullcalendar.js')}}"></script>
+	{{-- <script src="{{asset('assets/js/fullcalendar.js')}}"></script> --}}
+	<script src="{{asset('assets/js/absen-calendar.js')}}"></script>
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
 	<script src="{{asset('assets/js/sweet-alert.js')}}"></script>
 	@if (session('status'))
@@ -361,7 +364,6 @@
                 console.log(e);
                 // console.log(e.welcome);
                 // document.write("<h1>" + e.welcome + "</h1>")
-            }); --}}
-    </script>
+            });
 </body>
 </html>    

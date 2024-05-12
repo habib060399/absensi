@@ -31,7 +31,7 @@ Route::get('/live-absen', function () {
 
 Route::prefix('flockbase')->middleware(['auth'])->group(function(){
     Route::get('/home', [ControllerView::class, 'home'])->name('home');
-    Route::get('/absen', [ControllerView::class, 'dataAbsen'])->name('absen');
+    // Route::get('/absen', [ControllerView::class, 'dataAbsen'])->name('absen');
     Route::get('/sekolah', [AdminViewController::class, 'sekolah'])->name('sekolah');
     Route::get('/sekolah/tambah', [ControllerView::class, 'addSekolah'])->name('sekolah-add');
     Route::post('/tambah-sekolah', [AdminController::class, 'registerSekolah'])->name('add_sekolah');
@@ -56,6 +56,8 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
     Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
     Route::post('/broadcast/edit', [UserController::class, 'editBroadcast'])->name('edit_bc');
+    Route::get('/absen', [UserViewController::class, 'absen'])->name('absen');
+    Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
 
     Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
 });

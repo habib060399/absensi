@@ -65,4 +65,11 @@ class UserViewController extends Controller
     {
         return view('user.broadcast', ['broadcast' => Settings::where('id_sekolah',session('id'))->first(), 'id_sekolah' => session('id')]);
     }
+
+    public function absen()
+    {
+        return view('data_absen', [
+            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+        ]);
+    }
 }

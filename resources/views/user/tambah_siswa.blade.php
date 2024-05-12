@@ -103,7 +103,7 @@
 				</div>
 </div>
 
-{{-- @vite('./resources/js/app.js') --}}
+@vite('./resources/js/app.js')
 <script type="module">
 	var rfid = document.getElementById('rfid');
 	Echo.channel(`Presence`)
@@ -113,8 +113,6 @@
 			 if(`{{$cookies}}` == e.id_mesin){
 				 rfid.value = e.rfid_tag;
 			 }				
-			 // console.log(e.welcome);
-			 // document.write("<h1>" + e.welcome + "</h1>")
 		 });
 </script>
     <script type="text/javascript">

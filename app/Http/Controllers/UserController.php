@@ -91,7 +91,7 @@ class UserController extends Controller
             'kelas' => 'required',
             'no_hp' => 'required',
             'no_hp_ortu' => 'required',
-            // 'rfid' => 'required|unique:siswa,rfid',
+            'rfid' => 'required|unique:siswa,rfid',
         ]);
 
         $siswa = Siswa::create([
@@ -171,5 +171,20 @@ class UserController extends Controller
         $get_id = $request->input('id_sekolah');
         Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);
         return redirect()->route('bc')->with('status', 'asdfasd');
+    }
+
+    public function getAbsen(Request $request)
+    {
+        $siswa = Siswa::join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('id_kelas', $request->id_kelas)->select('absensi.*', 'siswa.nama_siswa')->get();
+        $data_array = array();
+        foreach ($siswa as $s) {
+            $data_array[] = array(
+                'id' => $s->id,
+                'title' => $s->nama_siswa,
+                'start' => $s->tanggal ." ".  $s->waktu
+            );
+        }
+
+        return json_encode($data_array);
     }
 }

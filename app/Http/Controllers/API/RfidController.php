@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Absensi;
 use App\Models\Mesin;
 use App\Models\Siswa;
+use App\Models\Settings;
 use App\Events\SendPresence;
 
 class RfidController extends Controller
@@ -63,7 +64,7 @@ class RfidController extends Controller
     public function store(Request $request)
     {   
         $time_now = date("h:i:s");
-        $date_now = date("d-m-Y");     
+        $date_now = date("Y-m-d");     
         $get_siswa = Siswa::where('rfid', $request->rfid_tag)->first();
         if($get_siswa){
             $get_absen = Absensi::where('id_siswa', $get_siswa->id)->where('tanggal', $date_now)->first();
@@ -72,15 +73,24 @@ class RfidController extends Controller
                     'message' => 'Anda Sudah Melakukan Absen',
                     'status' => 200
                 ]);
-            }else{
-                Absensi::create([
-                    'id_siswa' => $get_siswa->id,
-                    'tanggal' => $date_now,
-                    'waktu' => $time_now
-                ]);
-    
+            }else{                
+
+                $responseWa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                if($responseWa) {
+                    Absensi::create([
+                        'id_siswa' => $get_siswa->id,
+                        'tanggal' => $date_now,
+                        'waktu' => $time_now
+                    ]);
+
+                    return response()->json([
+                        'message' => "Pesan berhasil dikirim",                    
+                        'status' => 200
+                    ]); 
+                }
+
                 return response()->json([
-                    'rfid' => $get_siswa->rfid,
+                    'message' => "Gagal mengirim pesan",                    
                     'status' => 200
                 ]);        
             }

@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::post('/check-device', [RfidController::class, 'checkIdDevice']);
-// Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
+Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
 // Route::post('/login', [RfidController::class, 'login']);
 // Route::get('/absensi', [RfidController::class, 'index']);
 Route::post('/absensi', [RfidController::class, 'store']);

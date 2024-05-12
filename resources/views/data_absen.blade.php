@@ -11,6 +11,21 @@
                             <h6 class="card-title mb-4">Full calendar</h6>
         <div id='external-events' class='external-events'>
           <h6 class="mb-2 text-muted">Draggable Events</h6>
+          <div class="mb-3">
+            <label class="form-label">Jurusan</label>
+            <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
+                <option value="" selected disabled>Pilih Jurusan</option>
+                @foreach ($jurusan as $j)
+                <option value="{{$j->id}}">{{$j->nama_jurusan}}</option>  
+                {{-- <option value="{{\App\Helpers\Helper::encryptUrl($j->id)}}">{{$j->nama_jurusan}}</option>   --}}
+                @endforeach
+            </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Kelas</label>
+                <select type="text" class="form-select" id="get_kelas" name="get_kelas">
+                </select>
+                </div>
           <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
             <div class='fc-event-main'>Birth Day</div>
           </div>
@@ -82,5 +97,49 @@
                 </div>
             </div>
         </div>
-    </div>			
+    </div>
+    <script type="text/javascript">
+        $('#get_jurusan').on('change', function getKelas(){
+            var value = $('#get_jurusan option:selected').val()
+            var data ={ id_jurusan: value }
+            
+                $('#get_jurusan').click(function(){
+                    $.ajax({
+                        url: `{{route('getkls')}}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(res){
+                            console.log(res);
+                            
+                                $('#get_kelas').html(res)	
+                            
+                        }
+                    })
+                });
+            
+        });
+        </script>
+        <script>
+            $('#get_kelas').on('change', function() {
+            var kelas = $('#get_kelas option:selected').val()
+            var data = {id_kelas: kelas}
+
+                    $.ajax({
+                        url: `{{route('getAbsen')}}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(res){
+                            var data = JSON.parse(res);
+                            calendarAbsen(data);                    
+                        }
+                    });
+             
+            })
+        </script>            			
 @endsection
