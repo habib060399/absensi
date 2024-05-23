@@ -74,25 +74,26 @@ class RfidController extends Controller
                     'status' => 200
                 ]);
             }else{                
-
-                $responseWa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
-                if($responseWa) {
-                    Absensi::create([
-                        'id_siswa' => $get_siswa->id,
-                        'tanggal' => $date_now,
-                        'waktu' => $time_now
-                    ]);
+                broadcast(new SendPresence("Habib", "12-05-2024", "14:29:50", "7", "2"));
+                // $responseWa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                // if($responseWa) {
+                    
+                    // Absensi::create([
+                    //     'id_siswa' => $get_siswa->id,
+                    //     'tanggal' => $date_now,
+                    //     'waktu' => $time_now
+                    // ]);
 
                     return response()->json([
                         'message' => "Pesan berhasil dikirim",                    
                         'status' => 200
                     ]); 
-                }
+                // }
 
-                return response()->json([
-                    'message' => "Gagal mengirim pesan",                    
-                    'status' => 200
-                ]);        
+                // return response()->json([
+                //     'message' => "Gagal mengirim pesan",                    
+                //     'status' => 200
+                // ]);        
             }
         }else{
             return response()->json([
@@ -124,7 +125,7 @@ class RfidController extends Controller
         $get_id_perangkat = Mesin::where('id_mesin', $request->id_mesin)->first();
 
         if($get_id_perangkat){
-            broadcast(new SendPresence($request->rfid_tag, $request->id_mesin));
+            broadcast(new ScanRFID($request->rfid_tag, $request->id_mesin));
             // Cookie::queue(Cookie::make('id_mesin', $request->id_mesin, 30));
             return response()->json([
                 'id_mesin' => $request->id_mesin,

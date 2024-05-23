@@ -25,9 +25,7 @@ Route::get('/',[AuthController::class, 'login'])->name('login');
 Route::post('/auth-user',[AuthController::class, 'authUser']);
 Route::get('/logout',[AuthController::class, 'logout']);
 
-Route::get('/live-absen', function () {
-    return view('absensi_live');
-});
+Route::get('/live-absen', [UserViewController::class, 'liveAbsen']);
 
 Route::prefix('flockbase')->middleware(['auth'])->group(function(){
     Route::get('/home', [ControllerView::class, 'home'])->name('home');

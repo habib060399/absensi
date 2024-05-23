@@ -1,7 +1,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
       <a href="#" class="sidebar-brand">
-        Noble<span>UI</span>
+        Flockbase<span>ID</span>
       </a>
       <div class="sidebar-toggler not-active">
         <span></span>
@@ -64,10 +64,10 @@
           <div class="collapse" id="advancedUI">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <a href="{{route('jurusan')}}" class="nav-link">Jurusan</a>
+                <a href="{{route('jurusan')}}" class="nav-link" id="jurusan">Jurusan</a>
               </li>
               <li class="nav-item">
-                <a href="{{route('kelas')}}" class="nav-link">Kelas</a>
+                <a href="{{route('kelas')}}" class="nav-link" id="kelas">Kelas</a>
               </li>
               <li class="nav-item">
                 <a href="{{route('siswa')}}" class="nav-link">Siswa</a>

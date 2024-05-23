@@ -36,6 +36,7 @@ class AuthController extends Controller
 
                 $request->session()->put('id', $sekolah->id);
                 $request->session()->put('nama', $sekolah->nama_sekolah);
+                $request->session()->put('email', $sekolah->email);
             }else{                                          
                 $request->session()->put('id', $get_user->id);
             }

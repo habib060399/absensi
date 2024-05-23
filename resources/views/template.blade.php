@@ -254,7 +254,7 @@
 								</div>
 								<div class="text-center">
 									<p class="tx-16 fw-bolder">{{session('nama', 'Admin')}}</p>
-									<p class="tx-12 text-muted">amiahburton@gmail.com</p>
+									<p class="tx-12 text-muted">{{session('email', 'Admin')}}</p>
 								</div>
 							</div>
 			<ul class="list-unstyled p-1">
@@ -321,7 +321,7 @@
 	{{-- <script src="{{asset('assets/js/fullcalendar.js')}}"></script> --}}
 	<script src="{{asset('assets/js/absen-calendar.js')}}"></script>
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
-	<script src="{{asset('assets/js/sweet-alert.js')}}"></script>
+	<script src="{{asset('assets/js/sweet-alert.js')}}"></script> 
 	@if (session('status'))
 	<script>
 	 Swal.fire({
@@ -359,11 +359,12 @@
 	{{-- @vite('resources/js/app.js')
     <script type="module">
         Echo.channel(`Presence`)
-            .listen('SendPresence', (e) => {
+            .listen('ScanRFID', (e) => {
                 console.log('hallo ini event');
                 console.log(e);
                 // console.log(e.welcome);
                 // document.write("<h1>" + e.welcome + "</h1>")
             });
+
 </body>
 </html>    

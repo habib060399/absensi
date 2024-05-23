@@ -17,7 +17,7 @@ License: For each use you must have a valid license purchased only from above li
 	<meta name="author" content="NobleUI">
 	<meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
-	<title>NobleUI - HTML Bootstrap 5 Admin Dashboard Template</title>
+	<title>Flockbase</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +59,7 @@ License: For each use you must have a valid license purchased only from above li
                 </div>
                 <div class="col-md-8 ps-md-0">
                   <div class="auth-form-wrapper px-4 py-5">
-                    <a href="#" class="noble-ui-logo d-block mb-2">Noble<span>UI</span></a>
+                    <a href="#" class="noble-ui-logo d-block mb-2">Flockbase<span>ID</span></a>
                     <h5 class="text-muted fw-normal mb-4">Welcome back! Log in to your account.</h5>
                     <form class="forms-sample" action="{{url('/auth-user')}}" method="post">
 						@csrf

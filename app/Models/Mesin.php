@@ -9,7 +9,7 @@ class Mesin extends Model
 {
     use HasFactory;
 
-    protected $table = 'Mesin';
+    protected $table = 'mesin';
 
     protected $fillable = ['id_mesin'];
 

@@ -7,29 +7,32 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cookie;
-use App\Models\User;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use App\Models\Sekolah;
+use App\Models\Mesin;
 
 class SendPresence implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
+
+    public $name_student;
+    public $date;
+    public $time;
+    public $id_kelas;
     public $id_mesin;
-    public $rfid_tag;
 
-    public function __construct($rfid_tag, $id_mesin)
+    public function __construct($name_student, $date, $time, $id_kelas, $id_sekolah)
     {
-      $this->id_mesin = $id_mesin;
-      $this->rfid_tag = $rfid_tag;
-    }
+        $sekolah = Sekolah::where('id', $id_sekolah)->first();
+        $mesin = Mesin::where('id', $sekolah->id_mesin)->first();
 
-    public function broadcastWith()
-    {   
-        // $getCookie = Cookie::get('id_mesin');
-            return ['id_mesin' => $this->id_mesin, 'rfid_tag' => $this->rfid_tag];
+        $this->name_student = $name_student;
+        $this->date = $date;
+        $this->time = $time;
+        $this->id_kelas = $id_kelas;
+        $this->id_mesin = $mesin->id_mesin;
     }
 
     /**
@@ -40,7 +43,7 @@ class SendPresence implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('Presence'),
+            new Channel('live-presence'),
         ];
     }
 }
