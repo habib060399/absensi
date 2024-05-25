@@ -1,7 +1,5 @@
 @extends('template')
 @section('content')    
-<div class="page-content">
-
     <div class="row">
         <div class="col-md-12">
             <div class="row">
@@ -97,7 +95,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <script type="text/javascript">
         $('#get_jurusan').on('change', function getKelas(){
             var value = $('#get_jurusan option:selected').val()

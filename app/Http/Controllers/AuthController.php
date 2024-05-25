@@ -37,8 +37,12 @@ class AuthController extends Controller
                 $request->session()->put('id', $sekolah->id);
                 $request->session()->put('nama', $sekolah->nama_sekolah);
                 $request->session()->put('email', $sekolah->email);
+
+                return redirect()->intended('/user/home');
             }else{                                          
                 $request->session()->put('id', $get_user->id);
+
+                return redirect()->intended('/flockbase/home');
             }
 
             return redirect()->intended('/flockbase/home');

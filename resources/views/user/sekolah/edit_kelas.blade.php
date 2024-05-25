@@ -1,6 +1,5 @@
 @extends('template')
 @section('content')    
-<div class="page-content">
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Tables</a></li>
@@ -45,5 +44,4 @@
                             </div>
                         </div>
                     </div>
-    </div>
 @endsection

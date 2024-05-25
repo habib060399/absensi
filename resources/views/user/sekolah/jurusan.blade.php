@@ -1,7 +1,5 @@
 @extends('template')
 @section('content')    
-<div class="page-content">
-
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Tables</a></li>
@@ -101,7 +99,6 @@
     </form>
     </div>
     </div>
-  </div>
   <script>
     $('.edit_jurusan').click(function (){
       var getLink = $(this).data('href');

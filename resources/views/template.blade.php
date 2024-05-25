@@ -25,6 +25,8 @@
 	<link rel="stylesheet" href="{{asset('assets/vendors/fullcalendar/main.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/sweetalert2/sweetalert2.min.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/vendors/select2/select2.min.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/vendors/simplemde/simplemde.min.css')}}">
 	<!-- End plugin css for this page -->
 
 	<!-- inject:css -->
@@ -289,7 +291,9 @@
 			</div>
 		</nav>
 		<!-- partial -->
-		@yield('content')
+		<div class="page-content">
+			@yield('content')
+		</div>
 			<!-- partial:../../partials/_footer.html -->
 			<footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between px-4 py-3 border-top small">
 				<p class="text-muted mb-1 mb-md-0">Copyright © 2022 <a href="https://www.nobleui.com" target="_blank">NobleUI</a>.</p>
@@ -305,11 +309,13 @@
 	<!-- endinject -->
 
 	<!-- Plugin js for this page -->
+	<script src="{{asset('assets/vendors/select2/select2.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/sweetalert2/sweetalert2.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/moment/moment.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/fullcalendar/main.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/datatables.net/jquery.dataTables.js')}}"></script>
   	<script src="{{asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js')}}"></script>
+	<script src="{{asset('assets/vendors/simplemde/simplemde.min.js')}}"></script>
 	<!-- End plugin js for this page -->
 
 	<!-- inject:js -->
@@ -319,6 +325,7 @@
 
 	<!-- Custom js for this page -->
 	{{-- <script src="{{asset('assets/js/fullcalendar.js')}}"></script> --}}
+	<script src="{{asset('assets/js/select2.js')}}"></script> 
 	<script src="{{asset('assets/js/absen-calendar.js')}}"></script>
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
 	<script src="{{asset('assets/js/sweet-alert.js')}}"></script> 

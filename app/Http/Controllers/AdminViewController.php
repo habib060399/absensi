@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Sekolah;
+use App\Models\Siswa;
 use App\Models\Mesin;
+use App\Http\Controllers\API\CurlController;
 
 class AdminViewController extends Controller
 {
@@ -16,7 +18,14 @@ class AdminViewController extends Controller
 
     public function home()
     {
-        return view('home');
+        $getDeviceFonte= CurlController::getDevice();
+        $data = json_decode($getDeviceFonte);
+        
+        return view('admin.home', [
+            'quota' => $data->data[0]->quota,
+            'jml_sekolah' => Sekolah::count(),
+            'jml_siswa' => Siswa::count()
+        ]);
     }
 
     public function dataAbsen()

@@ -13,7 +13,12 @@
       <ul class="nav">
         <li class="nav-item nav-category">Main</li>
         <li class="nav-item">
-          <a href="dashboard.html" class="nav-link">
+          @role('admin')
+            <a href="{{route('homeAdmin')}}" class="nav-link">
+          @endrole
+          @role('sekolah')
+            <a href="{{route('homeSekolah')}}" class="nav-link">
+          @endrole
             <i class="link-icon" data-feather="home"></i>
             <span class="link-title">Dashboard</span>
           </a>
@@ -77,20 +82,20 @@
         </li>
         @endrole
         <li class="nav-item">
-          <a href="dashboard.html" class="nav-link">
+          <a href="{{route('bc')}}" class="nav-link">
             <i class="link-icon" data-feather="mail"></i>
             <span class="link-title">Kirim Pesan</span>
           </a>
         </li>
         <li class="nav-item nav-category">Settings</li>
         <li class="nav-item">
-          <a href="{{route('bc')}}" class="nav-link">
+          <a href="{{route('pesan')}}" class="nav-link">
             <i class="link-icon" data-feather="inbox"></i>
             <span class="link-title">Pesan</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="dashboard.html" class="nav-link">
+          <a href="{{route('profile')}}" class="nav-link">
             <i class="link-icon" data-feather="user"></i>
             <span class="link-title">Profile</span>
           </a>

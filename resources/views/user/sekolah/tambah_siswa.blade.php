@@ -1,6 +1,5 @@
 @extends('template')
 @section('content')
-<div class="page-content">
 <div class="row">
 					<div class="col-md-12 stretch-card">
 						<div class="card">
@@ -101,7 +100,6 @@
 						</div>
 					</div>
 				</div>
-</div>
 
 @vite('./resources/js/app.js')
 <script type="module">

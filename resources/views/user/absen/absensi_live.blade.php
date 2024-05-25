@@ -1,6 +1,5 @@
 @extends('template')
 @section('content')
-<div class="page-content">
 <div class="row">
     <div class="col-xl-10 main-content ps-xl-4 pe-xl-5">
         <h1 class="page-title">Media Object</h1>        
@@ -38,7 +37,6 @@
         </div>    
         <hr>                                                                               
     </div>
-</div>
 </div>
 
 @vite('./resources/js/app.js')

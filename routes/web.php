@@ -27,8 +27,8 @@ Route::get('/logout',[AuthController::class, 'logout']);
 
 Route::get('/live-absen', [UserViewController::class, 'liveAbsen']);
 
-Route::prefix('flockbase')->middleware(['auth'])->group(function(){
-    Route::get('/home', [ControllerView::class, 'home'])->name('home');
+Route::prefix('flockbase')->middleware(['auth', 'can:isAdmin'])->group(function(){
+    Route::get('/home', [AdminViewController::class, 'home'])->name('homeAdmin');
     // Route::get('/absen', [ControllerView::class, 'dataAbsen'])->name('absen');
     Route::get('/sekolah', [AdminViewController::class, 'sekolah'])->name('sekolah');
     Route::get('/sekolah/tambah', [ControllerView::class, 'addSekolah'])->name('sekolah-add');
@@ -37,7 +37,7 @@ Route::prefix('flockbase')->middleware(['auth'])->group(function(){
     Route::post('/tambah-mesin', [AdminController::class, 'registerMesin'])->name('add_mesin');
 });
 
-Route::prefix('user')->middleware(['auth'])->group(function(){
+Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::get('/jurusan', [UserViewController::class, 'jurusan'])->name('jurusan');
     Route::post('/tambah-jurusan', [UserController::class, 'registerJurusan'])->name('add_jurusan');
     Route::get('/jurusan/hapus/{id}', [UserController::class, 'hapusJurusan'])->name('hapus_jurusan');
@@ -52,12 +52,15 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');
     Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
-    Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
-    Route::post('/broadcast/edit', [UserController::class, 'editBroadcast'])->name('edit_bc');
+    Route::get('/pesan', [UserViewController::class, 'pesan'])->name('pesan');
+    Route::post('/pesan/edit', [UserController::class, 'editPesan'])->name('edit_bc');
     Route::get('/absen', [UserViewController::class, 'absen'])->name('absen');
     Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
 
     Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
+    Route::get('/profile', [UserViewController::class, 'profile'])->name('profile');
+    Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
+    Route::get('/home', [UserViewController::class, 'home'])->name('homeSekolah');
 });
 
 Route::get('broadcast', function() {

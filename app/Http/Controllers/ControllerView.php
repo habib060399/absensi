@@ -23,27 +23,27 @@ class ControllerView extends Controller
 
     public function home()
     {
-        return view('home');
+        return view('admin.home');
     }
 
-    public function dataAbsen()
-    {
-        return view('data_absen');
-    }
+    // public function dataAbsen()
+    // {
+    //     return view('data_absen');
+    // }
 
     public function dataMesin()
     {        
-        return view('data_mesin', ['uniqId' => Str::random(16), 'mesin' => $this->mesin->get()]);
+        return view('admin.mesin.data_mesin', ['uniqId' => Str::random(16), 'mesin' => $this->mesin->get()]);
     }
 
     public function dataSekolah()
     {
-        return view('daftar_sekolah', ['sekolah' => Sekolah::get()]);
+        return view('admin.sekolah.daftar_sekolah', ['sekolah' => Sekolah::get()]);
     }
     
     public function registerView()
     {        
-        return view('register_perangkat', ['uniqId' => Str::random(16)]);
+        return view('mesin.register_perangkat', ['uniqId' => Str::random(16)]);
     }
 
     public function loginDeviceView()
@@ -53,6 +53,6 @@ class ControllerView extends Controller
 
     public function addSekolah()
     {
-        return view('tambah_sekolah', ['mesin' => $this->mesin->where('status', 'Not Used')->get()]);
+        return view('admin.sekolah.tambah_sekolah', ['mesin' => $this->mesin->where('status', 'Not Used')->get()]);
     }
 }

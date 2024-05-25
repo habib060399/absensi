@@ -166,7 +166,7 @@ class UserController extends Controller
         return redirect()->route('jurusan')->with('status', 'asadf');
     }
 
-    public function editBroadcast(Request $request)
+    public function editPesan(Request $request)
     {
         $get_id = $request->input('id_sekolah');
         Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);

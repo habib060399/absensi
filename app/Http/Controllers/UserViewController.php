@@ -49,7 +49,7 @@ class UserViewController extends Controller
 
     public function editSiswa($id)
     {
-        return view('user.absen.edit_siswa',[
+        return view('user.sekolah.edit_siswa',[
             'siswa' => Siswa::where('id', Helper::decryptUrl($id))->first(),
             'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),            
         ]);
@@ -57,11 +57,10 @@ class UserViewController extends Controller
 
     public function addSiswa()
     {
-        // return Helper::getCookie();
-        return view('user.absen.tambah_siswa', ['cookies' => Cookie::get('id_mesin'), 'jurusan' => jurusan::where('id_sekolah', session('id'))->get()]);
+        return view('user.sekolah.tambah_siswa', ['cookies' => Cookie::get('id_mesin'), 'jurusan' => jurusan::where('id_sekolah', session('id'))->get()]);
     }
 
-    public function broadcast()
+    public function pesan()
     {
         return view('user.broadcast', ['broadcast' => Settings::where('id_sekolah',session('id'))->first(), 'id_sekolah' => session('id')]);
     }
@@ -79,5 +78,21 @@ class UserViewController extends Controller
             'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
             'cookies' => Cookie::get('id_mesin')
         ]);
+    }
+
+    public function profile() {
+        return view('user.pengaturan.profile');
+    }
+
+    public function kirimPesan() {
+        return view('user.kirim_pesan');
+    }
+
+    public function broadcast() {
+        return view('user.kirim_pesan');
+    }
+
+    public function home() {
+        return view('user.index');
     }
 }
