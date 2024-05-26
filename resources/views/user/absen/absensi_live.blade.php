@@ -68,15 +68,13 @@
         var currentKelas;
         $('#get_kelas').on('change', function() {
         var kelas = $('#get_kelas option:selected').val()
-        var element = document.querySelector('.live-absen');
+        var element = document.querySelector('.live-absen');  
         
-        console.log(currentKelas)
-        if(kelas != currentKelas){
-            currentKelas = kelas;
-            if(kelas != currentKelas)
+        if(currentKelas >= 0) {
             location.reload()
         }
-
+        currentKelas = kelas;
+    
 	    Echo.channel(`live-presence`)
 		 .listen('SendPresence', (e) => {
 			 console.log('hallo ini event');
