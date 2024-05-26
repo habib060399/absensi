@@ -39,7 +39,7 @@
     </div>
 </div>
 
-@vite('./resources/js/app.js')
+@vite('resources/js/app.js')
 <script type="text/javascript">
     $('#get_jurusan').on('change', function getKelas(){
         var value = $('#get_jurusan option:selected').val()
