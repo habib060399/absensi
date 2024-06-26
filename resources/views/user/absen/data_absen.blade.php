@@ -24,21 +24,6 @@
                 <select type="text" class="form-select" id="get_kelas" name="get_kelas">
                 </select>
                 </div>
-          <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-            <div class='fc-event-main'>Birth Day</div>
-          </div>
-          <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-            <div class='fc-event-main'>New Project</div>
-          </div>
-          <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-            <div class='fc-event-main'>Anniversary</div>
-          </div>
-          <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-            <div class='fc-event-main'>Clent Meeting</div>
-          </div>
-          <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event hii'>
-            <div class='fc-event-main'>Office Trip</div>
-          </div>
         </div>
                         </div>
                     </div>
@@ -80,8 +65,9 @@
                 <div id="modalBody2" class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Example label</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                            <label for="formGroupExampleInput" class="form-label">Nama Siswa</label>
+                            <input type="text" class="form-control" id="nama" placeholder="Nama Siswa" autocomplete="off">
+                            <div id="result" class="result"></div>
                         </div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput2" class="form-label">Another label</label>
@@ -95,6 +81,23 @@
                 </div>
             </div>
         </div>
+
+        {{-- <div id="fullCalModal" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="modalTitle1" class="modal-title"></h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"><span class="visually-hidden">close</span></button>
+                    </div>
+                    <div id="modalBody1" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-primary">Event Page</button>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
     <script type="text/javascript">
         $('#get_jurusan').on('change', function getKelas(){
             var value = $('#get_jurusan option:selected').val()
@@ -136,5 +139,47 @@
                     });
              
             })
+        </script>
+        <script>
+            var result = document.getElementById("result");
+            var id_jurusan;
+            var count_siswa;
+	        result.innerHTML="";
+	        result.style.border="0px";
+            $('#get_jurusan').on('change', function getKelas(){
+               id_jurusan = $('#get_jurusan option:selected').val();
+            })
+	
+            $('#nama').on('keyup', function() {
+                result.innerHTML="";
+                $val = $(this).val();
+                if($val == ""){
+                    $val = null;
+                }
+
+                $.ajax({
+                    url: `{{route('search_nama_siswa')}}`,
+                    type: 'GET',
+                    data: {'search':$val, 'id_sekolah':{{session('id')}}, 'id_jurusan':id_jurusan},
+                    headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+                    success: function(data) {
+                        count_siswa = data.length;
+                        if(data.length == 0){
+                            result.innerHTML = "Empty";
+                        }
+                        result.innerHTML = data;
+                        console.log(data);
+                    }
+                })
+            })
+
+            function namaSiswa(no){                            
+                var nama_siswa = $('.selection_'+no).val();
+                $('#nama').val(nama_siswa);
+                console.log(nama_siswa)
+                
+            }
         </script>            			
 @endsection
