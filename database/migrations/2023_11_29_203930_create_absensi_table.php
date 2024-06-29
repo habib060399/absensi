@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('id_siswa')->nullable(true);            
             $table->string('tanggal')->nullable(true);
             $table->string('waktu')->nullable(true);
+            $table->string('status')->nullable(true);
         });
     }
 
