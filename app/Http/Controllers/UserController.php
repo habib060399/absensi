@@ -87,8 +87,8 @@ class UserController extends Controller
         $request->validate([
             'nama_siswa' => 'required',
             'email' => 'required',
-            'jurusan' => 'required',
-            'kelas' => 'required',
+            'jurusan_sekolah' => 'required',
+            'kelas_sekolah' => 'required',
             'no_hp' => 'required',
             'no_hp_ortu' => 'required',
             'rfid' => 'required|unique:siswa,rfid',
@@ -96,8 +96,8 @@ class UserController extends Controller
 
         $siswa = Siswa::create([
             'id_sekolah' => $request->session()->get('id'),
-            'id_jurusan' => $request->input('jurusan'),
-            'id_kelas' => $request->input('kelas'),
+            'id_jurusan' => $request->input('jurusan_sekolah'),
+            'id_kelas' => $request->input('kelas_sekolah'),
             'nama_siswa' => $request->input('nama_siswa'),
             'rfid' => $request->input('rfid'),
             'email' => $request->input('email'),

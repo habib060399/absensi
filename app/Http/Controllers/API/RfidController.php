@@ -13,6 +13,7 @@ use App\Models\Mesin;
 use App\Models\Siswa;
 use App\Models\Settings;
 use App\Events\SendPresence;
+use App\Events\ScanRFID;
 
 class RfidController extends Controller
 {

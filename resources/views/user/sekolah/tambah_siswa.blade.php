@@ -31,7 +31,7 @@
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Jurusan</label>
-													<select class="form-select @error('jurusan') is-invalid @enderror" id="jurusan" name="jurusan">
+													<select class="form-select @error('jurusan') is-invalid @enderror" id="jurusan_sekolah" name="jurusan_sekolah">
 														<option value="" selected disabled>Pilih Jurusan</option>
 														@foreach ($jurusan as $j)
 														<option value="{{$j->id}}">{{$j->nama_jurusan}}</option>																							
@@ -45,7 +45,7 @@
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Kelas</label>
-													<select class="form-select @error('kelas') is-invalid @enderror" id="kelas" name="kelas">
+													<select class="form-select @error('kelas') is-invalid @enderror" id="kelas_sekolah" name="kelas_sekolah">
 														<option selected disabled>Pilih Kelas</option>																												
 													</select>
 													@error('kelas')
@@ -101,6 +101,30 @@
 					</div>
 				</div>
 
+				<script type="text/javascript">
+					$('#jurusan_sekolah').on('change', function(){
+						var value = $('#jurusan_sekolah option:selected').val()
+						var data ={ id_jurusan: value }
+						
+							$('#jurusan_sekolah').click(function(){
+								$.ajax({
+									url: `{{route('getkls')}}`,
+									type: 'POST',
+									data: data,
+									headers: {
+										'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+									},
+									success: function(res){
+										console.log(res);
+										
+											$('#kelas_sekolah').html(res)	
+										
+									}
+								})
+							});
+						
+					});
+					</script>
 @vite('./resources/js/app.js')
 <script type="module">
 	var rfid = document.getElementById('rfid');
@@ -113,28 +137,4 @@
 			 }				
 		 });
 </script>
-    <script type="text/javascript">
-	$('#jurusan').on('change', function getKelas(){
-		var value = $('#jurusan option:selected').val()
-		var data ={ id_jurusan: value }
-		
-			$('#jurusan').click(function(){
-				$.ajax({
-					url: `{{route('getkls')}}`,
-					type: 'POST',
-					data: data,
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					success: function(res){
-						console.log(res);
-						
-							$('#kelas').html(res)	
-						
-					}
-				})
-			});
-		
-	});
-    </script>
 @endsection
