@@ -187,4 +187,18 @@ class UserController extends Controller
 
         return json_encode($data_array);
     }
+
+    public function insertAbsenManual(Request $request){
+        $time_now = date("h:i:s");
+        $date_now = date("Y-m-d");  
+        
+        $id_siswa = $request->input('id_siswa');
+        // dd($id_siswa);
+        Absensi::create([
+            'id_siswa' => $id_siswa,
+            'tanggal' => $date_now,
+            'waktu' => $time_now
+        ]);
+        return redirect()->route('absen')->with('status', 'Data berhasil ditambahkan');
+    }
 }
