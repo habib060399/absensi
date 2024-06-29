@@ -13,17 +13,13 @@ class ApiController extends Controller
         if($request->search == ""){
             return null;
         }
-        $siswa = Siswa::where('id_sekolah', $request->id_sekolah)->where('id_jurusan', $request->id_jurusan)->where('nama_siswa', 'LIKE', '%'.$request->search.'%')->get();
+        $siswa = Siswa::where('id_sekolah', $request->id_sekolah)->where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->where('nama_siswa', 'LIKE', '%'.$request->search.'%')->get();
         
         $no=0;
         foreach ($siswa as $s) {
             $no +=1;
             $count_siswa = $siswa->count();
-            echo "<option class='selection_$no' id='nama_siswa' value='$s->nama_siswa' data-siswa='$count_siswa' onclick='namaSiswa($no)'>$s->nama_siswa</option>";
+            echo "<option class='selection_$no' id='nama_siswa' value='$s->nama_siswa' data-id-siswa='$s->id' onclick='namaSiswa($no)'>$s->nama_siswa</option>";
         }
-        // return response()->json([
-        //     'siswa' => $this->a(),
-        //     ''
-        // ]);
     }
 }

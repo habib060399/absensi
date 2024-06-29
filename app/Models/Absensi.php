@@ -15,7 +15,8 @@ class Absensi extends Model
         'id_siswa',
         'name',
         'tanggal',
-        'waktu'
+        'waktu',
+        'status'
     ];
 
     public $timestamps = false;
