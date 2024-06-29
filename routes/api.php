@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\RfidController;
+use App\Http\Controllers\API\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
@@ -23,5 +24,6 @@ Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
 // Route::post('/login', [RfidController::class, 'login']);
 // Route::get('/absensi', [RfidController::class, 'index']);
 Route::post('/absensi', [RfidController::class, 'store']);
+Route::get('search/name', [ApiController::class, 'searchNamaSiswa'])->name('search_nama_siswa');
 Route::middleware(['auth:sanctum'])->group(function(){
 });
