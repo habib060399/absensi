@@ -61,6 +61,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::get('/profile', [UserViewController::class, 'profile'])->name('profile');
     Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
     Route::get('/home', [UserViewController::class, 'home'])->name('homeSekolah');
+    Route::post('/absen/insert', [UserController::class, 'insertAbsenManual'])->name('input_absen');
 });
 
 Route::get('broadcast', function() {
