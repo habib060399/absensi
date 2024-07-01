@@ -134,11 +134,5 @@ class RfidController extends Controller
                 'status' => 200
             ]);
         }
-        // return response()->json([
-        //     'id_mesin' => $request->id_mesin,
-        //     'rfid_tag' => $request->rfid_tag,
-        //     'status' => 200
-        // ]);
-
     }
 }
