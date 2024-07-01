@@ -372,6 +372,7 @@
                 // console.log(e.welcome);
                 // document.write("<h1>" + e.welcome + "</h1>")
             });
+	</script>
 
 </body>
 </html>    
