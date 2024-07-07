@@ -47,8 +47,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"><span class="visually-hidden">close</span></button>
                 </div>
                 <div id="modalBody1" class="modal-body">
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Edit</button>
-                    <a type="button" class="btn btn-danger hapus_absen" id="hapus_absen" data-href="" data-bs-dismiss="modal">Hapus</a>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditAbsen" id="edit_absen">Edit</button>
+                    <a type="button" class="btn btn-danger hapus_absen" id="hapus_absen" data-href="" data-id="" data-tanggal="" data-bs-dismiss="modal">Hapus</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
@@ -57,6 +57,29 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalEditAbsen" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+            </div>
+            <form action="{{route('simpan_edit_absen')}}" action="post">
+                @csrf
+            <div class="modal-body">
+                <label class="form-label">status kehadiran</label>
+                <select type="text" class="form-select" id="get_status_absen" name="get_edit_absen">
+                </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+          </div>
+        </div>
+      </div>
 
     <div id="createEventModal" class="modal fade">
         <div class="modal-dialog modal-dialog-centered">
@@ -70,6 +93,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Nama Siswa</label>
+                            <input type="text" id="id_siswa" name="id_siswa" hidden>
                             <input type="text" class="form-control" id="nama" placeholder="Nama Siswa" name="nama_siswa" autocomplete="off">
                             <div id="result" class="result"></div>
                         </div>
@@ -93,9 +117,10 @@
         </div>
 
     <script type="text/javascript">
+        var get_id_jurusan;
         $('#get_jurusan').on('change', function getKelas(){
-            var value = $('#get_jurusan option:selected').val()
-            var data ={ id_jurusan: value }
+            get_id_jurusan = $('#get_jurusan option:selected').val()
+            var data ={ id_jurusan: get_id_jurusan }
             
                 $('#get_jurusan').click(function(){
                     $.ajax({
@@ -113,11 +138,10 @@
                 });
             
         });
-        </script>
-        <script>
+
             $('#get_kelas').on('change', function() {
             var kelas = $('#get_kelas option:selected').val()
-            var data = {id_kelas: kelas}
+            var data = {id_jurusan: get_id_jurusan, id_kelas: kelas}
 
                     $.ajax({
                         url: `{{route('getAbsen')}}`,
@@ -128,6 +152,7 @@
                         },
                         success: function(res){
                             var data = JSON.parse(res);
+                            // console.log(data);
                             calendarAbsen(data);                    
                         }
                     });
@@ -181,43 +206,5 @@
                 
             }
 
-            $('.hapus_absen').click(function (){
-                var getLink = $(this).data('href');
-                const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: "btn btn-success",
-                    cancelButton: "btn btn-danger me-2",
-                },
-                buttonsStyling: false,
-            });
-
-            swalWithBootstrapButtons
-                .fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "me-2",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel!",
-                    reverseButtons: true,
-                })
-                .then((result) => {
-                  console.log(result);
-                    if (result.isConfirmed) {
-                      window.location.href = getLink
-                        
-                    } else if (
-                        // Read more about handling dismissals
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        swalWithBootstrapButtons.fire(
-                            "Cancelled",
-                            "Your imaginary file is safe :)",
-                            "error"
-                        );
-                    }
-                });
-  });
         </script>            			
 @endsection
