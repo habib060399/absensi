@@ -43,7 +43,10 @@
   <meta name="csrf-tokens" content="{{ csrf_token() }}" />
   <meta name="csrf-tokenss" content="{{ csrf_token() }}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>let get_siswa = null;</script>
+  <script>
+  let get_siswa = null;
+var url = "{{url('/')}}";
+  </script>
 </head>
 <body>
     <div class="main-wrapper">
