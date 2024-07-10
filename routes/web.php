@@ -58,10 +58,13 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
 
     Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
+    Route::get('/absen/hapus/{id}/{tanggal}', [UserController::class, 'delAbsen'])->name('hapus_absen');
     Route::get('/profile', [UserViewController::class, 'profile'])->name('profile');
     Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
     Route::get('/home', [UserViewController::class, 'home'])->name('homeSekolah');
     Route::post('/absen/insert', [UserController::class, 'insertAbsenManual'])->name('input_absen');
+    Route::get('/absen/edit', [UserController::class, 'editAbsen'])->name('edit_absen');
+    Route::get('/absen/edit/simpan', [UserController::class, 'insertEditAbsen'])->name('simpan_edit_absen');
 });
 
 Route::get('broadcast', function() {

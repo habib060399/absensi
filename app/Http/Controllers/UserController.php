@@ -114,8 +114,6 @@ class UserController extends Controller
         $get_kelas = $request->id_kelas;
 
         if($kelas){
-                
-            // echo '<option selected disabled>Pilih Kelas</option>';
             foreach ($kelas as $k) {
                 if($k->id == $get_kelas){
                     echo "<option value='$k->id' selected > $k->kelas</option>";
@@ -175,12 +173,12 @@ class UserController extends Controller
 
     public function getAbsen(Request $request)
     {
-        $siswa = Siswa::join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('id_kelas', $request->id_kelas)->select('absensi.*', 'siswa.nama_siswa')->get();
+        $siswa = Siswa::join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('absensi.*', 'siswa.nama_siswa')->get();
         $data_array = array();
         foreach ($siswa as $s) {
             $data_array[] = array(
-                'id' => $s->id,
-                'title' => $s->nama_siswa,
+                'id' => $s->id_siswa,
+                'title' => $s->nama_siswa ." - ". $s->status,
                 'start' => $s->tanggal ." ".  $s->waktu
             );
         }
@@ -193,12 +191,39 @@ class UserController extends Controller
         $date_now = date("Y-m-d");  
         
         $id_siswa = $request->input('id_siswa');
-        // dd($id_siswa);
+        $status = $request->input('status_kehadiran');
+        
         Absensi::create([
             'id_siswa' => $id_siswa,
             'tanggal' => $date_now,
-            'waktu' => $time_now
+            'waktu' => $time_now,
+            'status' => $status
         ]);
         return redirect()->route('absen')->with('status', 'Data berhasil ditambahkan');
+    }
+
+    public function delAbsen($id, $tanggal){
+        // dd($id, $tanggal);
+        Absensi::where('id_siswa', $id)->where('tanggal', $tanggal)->delete();
+
+        return redirect()->route('absen')->with('hapus', 'asdf');
+    }
+
+    public function editAbsen(Request $request){
+        $absen = Absensi::where('id_siswa', $request->id_siswa)->where('tanggal', $request->tanggal)->first();
+        $status = ["hadir", "izin", "sakit"];
+        $string ="";
+        // dd($absenn);
+
+        foreach($status as $s) {
+         if($s == $absen->status){
+            echo "<option selected disabled>$s</option>";
+         }
+         echo "<option value='$s'>$s</option>";
+        }
+    }
+
+    public function insertEditAbsen(Request $request){
+        $request->input('');
     }
 }
