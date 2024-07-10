@@ -38,6 +38,7 @@ Route::prefix('flockbase')->middleware(['auth', 'can:isAdmin'])->group(function(
 });
 
 Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
+    Route::get('/live-absen', [UserViewController::class, 'liveAbsen'])->name('live_absen');
     Route::get('/jurusan', [UserViewController::class, 'jurusan'])->name('jurusan');
     Route::post('/tambah-jurusan', [UserController::class, 'registerJurusan'])->name('add_jurusan');
     Route::get('/jurusan/hapus/{id}', [UserController::class, 'hapusJurusan'])->name('hapus_jurusan');
@@ -54,7 +55,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
     Route::get('/pesan', [UserViewController::class, 'pesan'])->name('pesan');
     Route::post('/pesan/edit', [UserController::class, 'editPesan'])->name('edit_bc');
-    Route::get('/absen', [UserViewController::class, 'absen'])->name('absen');
+    Route::get('/absensi', [UserViewController::class, 'absen'])->name('absen');
     Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
 
     Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
@@ -64,7 +65,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::get('/home', [UserViewController::class, 'home'])->name('homeSekolah');
     Route::post('/absen/insert', [UserController::class, 'insertAbsenManual'])->name('input_absen');
     Route::get('/absen/edit', [UserController::class, 'editAbsen'])->name('edit_absen');
-    Route::get('/absen/edit/simpan', [UserController::class, 'insertEditAbsen'])->name('simpan_edit_absen');
+    Route::post('/absen/edit/simpan', [UserController::class, 'insertEditAbsen'])->name('simpan_edit_absen');
 });
 
 Route::get('broadcast', function() {
