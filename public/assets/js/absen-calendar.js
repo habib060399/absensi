@@ -1,4 +1,7 @@
 var calendarEl = document.getElementById("fullcalendar");
+var id_siswa;
+var tanggal_absen;
+
 var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
         left: "prev,today,next",
@@ -103,9 +106,9 @@ function hapus(id, tanggal) {
 }
 
 function editAbsen(id, tanggal) {
-    // console.log(id, tanngal);
+    id_siswa = id;
     var get_tanggal = new Date(tanggal);
-    var format_tanggal =
+    tanggal_absen =
         get_tanggal.getFullYear() +
         "-" +
         ("0" + (get_tanggal.getMonth() + 1)).slice(-2) +
@@ -115,10 +118,34 @@ function editAbsen(id, tanggal) {
     $.ajax({
         url: url + "/user/absen/edit",
         type: "Get",
-        data: { id_siswa: id, tanggal: format_tanggal },
+        data: { id_siswa: id, tanggal: tanggal_absen },
         success: function (res) {
             console.log(res);
             $("#get_status_absen").html(res);
+        },
+    });
+}
+
+function simpanEditAbsen() {
+    console.log("ini tombol save");
+
+    var status_absen = $("#get_status_absen option:selected").val();
+    // console.log(status_absen);
+    // console.log(tanggal_absen, id_siswa);
+
+    $.ajax({
+        url: url + "/user/absen/edit/simpan",
+        type: "Post",
+        data: { id: id_siswa, tanggal: tanggal_absen, status: status_absen },
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (res) {
+            console.log(res);
+            window.location.href = res.url;
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr, status, error);
         },
     });
 }
