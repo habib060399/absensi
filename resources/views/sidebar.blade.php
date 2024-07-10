@@ -49,13 +49,13 @@
           <div class="collapse" id="uiComponents">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <a href="{{url('/live-absen')}}" class="nav-link">Absensi Live</a>
+                <a href="{{route('live_absen')}}" class="nav-link" id="absensi_live">Absensi Live</a>
               </li>
               <li class="nav-item">
-                <a href="{{route('absen')}}" class="nav-link">Data Absen</a>
+                <a href="{{route('absen')}}" class="nav-link" id="data_absen">Data Absen</a>
               </li>              
               <li class="nav-item">
-                <a href="" class="nav-link">Rekapitulasi Absen</a>
+                <a href="" class="nav-link" id="rekap">Rekapitulasi Absen</a>
               </li>
             </ul>
           </div>
