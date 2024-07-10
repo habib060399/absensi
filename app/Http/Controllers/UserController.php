@@ -224,6 +224,14 @@ class UserController extends Controller
     }
 
     public function insertEditAbsen(Request $request){
-        $request->input('');
+
+        Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+
+        session(['status' => 'data berhasil ditambahkan']);
+        return response()->json([
+            'url' => route('absen'),
+            'status' => 200,
+            'message' => 'data berhasil ditambahkan'
+        ]);
     }
 }
