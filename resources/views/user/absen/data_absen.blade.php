@@ -65,7 +65,7 @@
               <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
             </div>
-            <form action="{{route('simpan_edit_absen')}}" action="post">
+            {{-- <form action="" action="post"> --}}
                 @csrf
             <div class="modal-body">
                 <label class="form-label">status kehadiran</label>
@@ -74,9 +74,9 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-primary" id="simpan_edit_absen" onclick="simpanEditAbsen()">Save changes</button>
             </div>
-        </form>
+        {{-- </form> --}}
           </div>
         </div>
       </div>
