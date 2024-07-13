@@ -21,7 +21,7 @@
                                                             \App\Helpers\Helper::encryptUrl($k->id)
                                                             @foreach ($jurusan as $j)                                        
                                                             <option value="{{\App\Helpers\Helper::encryptUrl($j->id)}}" {{($kelas->id_jurusan == $j->id) ? 'selected' : ''}}>{{$j->nama_jurusan}}</option>
-                                                             @endforeach									
+                                                            @endforeach									
                                                         </select>
                                                         @error('nama_siswa')
                                                             <div class="error invalid-feedback">{{$message}}</div>

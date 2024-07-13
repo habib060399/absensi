@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2024 at 04:31 PM
+-- Generation Time: Jul 10, 2024 at 12:37 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.5
 
@@ -25,23 +25,38 @@ CREATE TABLE `absensi` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_siswa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tanggal` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `waktu` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `waktu` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `absensi`
 --
 
-INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`) VALUES
-(1, '5nan2kqtv9wckg4g', '2024-03-11', '02:16:52'),
-(2, '6dcfy7awxcsgggss', '2024-03-11', '02:17:00'),
-(3, '6echmz2ytmw4goco', '2024-03-11', '02:17:04'),
-(4, '5nan2kqtv9wckg4g', '2024-05-10', '10:11:57'),
-(5, '6dcfy7awxcsgggss', '2024-05-10', '10:13:48'),
-(6, '6echmz2ytmw4goco', '2024-05-10', '10:14:09'),
-(7, 'bhshrn1gni800w4g', '2024-05-10', '10:15:19'),
-(21, 'qyfqdgfbgwgc0cgk', '2024-05-11', '11:05:26'),
-(22, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34');
+INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`, `status`) VALUES
+(1, '5nan2kqtv9wckg4g', '2024-03-11', '02:16:52', NULL),
+(2, '6dcfy7awxcsgggss', '2024-03-11', '02:17:00', NULL),
+(3, '6echmz2ytmw4goco', '2024-03-11', '02:17:04', NULL),
+(4, '5nan2kqtv9wckg4g', '2024-05-10', '10:11:57', NULL),
+(5, '6dcfy7awxcsgggss', '2024-05-10', '10:13:48', NULL),
+(6, '6echmz2ytmw4goco', '2024-05-10', '10:14:09', NULL),
+(7, 'bhshrn1gni800w4g', '2024-05-10', '10:15:19', NULL),
+(21, 'qyfqdgfbgwgc0cgk', '2024-05-11', '11:05:26', NULL),
+(22, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(25, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(26, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(27, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(28, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(29, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(30, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(31, '8p6psjyj3oo4owgc', '2024-05-11', '11:05:34', NULL),
+(32, 'qyfqdgfbgwgc0cgk', '2024-06-27', '08:31:19', 'sakit'),
+(33, '8p6psjyj3oo4owgc', '2024-06-27', '08:31:37', 'hadir'),
+(34, NULL, '2024-07-02', '06:58:56', 'hadir'),
+(37, 'qyfqdgfbgwgc0cgk', '2024-07-06', '08:03:55', 'hadir'),
+(38, '8p6psjyj3oo4owgc', '2024-07-06', '08:04:21', 'hadir'),
+(40, '8p6psjyj3oo4owgc', '2024-07-07', '05:12:14', 'izin'),
+(41, 'qyfqdgfbgwgc0cgk', '2024-07-07', '05:12:42', 'hadir');
 
 -- --------------------------------------------------------
 
@@ -109,7 +124,8 @@ INSERT INTO `kelas` (`id`, `id_sekolah`, `id_jurusan`, `kelas`, `created_at`, `u
 (4, '1', '2', 'X', NULL, NULL),
 (5, '2', '3', 'X', NULL, NULL),
 (6, '2', '3', 'XI', NULL, NULL),
-(7, '2', '3', 'XII', NULL, NULL);
+(7, '2', '3', 'XII', NULL, NULL),
+(9, '2', '4', 'X', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -363,7 +379,9 @@ CREATE TABLE `siswa` (
 
 INSERT INTO `siswa` (`id`, `id_sekolah`, `id_jurusan`, `id_kelas`, `nama_siswa`, `email`, `foto`, `rfid`, `no_hp`, `no_hp_ortu`, `created_at`, `updated_at`) VALUES
 ('8p6psjyj3oo4owgc', '2', '3', '7', 'panjul', 'habibsh180@gmail.com', NULL, '9c6db889', '082169376803', '03124123', '2024-05-11 13:51:53', '2024-05-11 13:51:53'),
+('9cdcnf5ozk008og0', '2', '4', '9', 'naila', 'habibqwerty26@gmail.com', NULL, 'qwerty', '0823456789', '082169376803', '2024-06-23 11:14:41', '2024-06-23 11:14:41'),
 ('ezaz5943a20o8sw4', '1', '1', '1', 'panjil', 'habibsh180@gmail.com', NULL, '1234567', '082169376803', '082169376803', '2024-03-05 11:22:39', '2024-03-05 11:22:39'),
+('pnqtckfahxcwkooc', '2', '4', '9', 'panjil', 'habibqwerty26@gmail.com', NULL, 'sdfsdfsadfasd', '0823456789', '082169376803', '2024-06-23 11:13:43', '2024-06-23 11:13:43'),
 ('qyfqdgfbgwgc0cgk', '2', '3', '7', 'habib', 'habibqwerty26@gmail.com', NULL, 'f3ad2e11', '081263372219', '081263372219', '2024-05-11 13:53:07', '2024-05-11 13:53:07');
 
 -- --------------------------------------------------------
@@ -1357,7 +1375,7 @@ ALTER TABLE `websockets_statistics_entries`
 -- AUTO_INCREMENT for table `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1375,7 +1393,7 @@ ALTER TABLE `jurusan`
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `mesin`

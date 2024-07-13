@@ -10,6 +10,8 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Settings;
 use App\Helpers\Helper;
+use Maatwebsite\Excel\facades\Excel;
+use App\Exports\TemplateDaftarSiswa;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -233,5 +235,9 @@ class UserController extends Controller
             'status' => 200,
             'message' => 'data berhasil ditambahkan'
         ]);
+    }
+
+    public function exportTemplateSiswa() {
+        return Excel::download(new TemplateDaftarSiswa, "template-daftar-siswa.xlsx");
     }
 }
