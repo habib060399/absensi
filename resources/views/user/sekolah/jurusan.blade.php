@@ -105,6 +105,12 @@
       $.ajax({
         url: getLink,
         type: 'GET',
+        beforeSend: function(){
+                            show_loading()
+                        },
+                        complete: function(){
+                            hide_loading()
+                        },
         success: function(res){
           $('#edit_jurusan').val(res.nama_jurusan)
           $('#edit_id_jurusan').val(res.id)

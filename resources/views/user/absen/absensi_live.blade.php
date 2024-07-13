@@ -40,6 +40,12 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
+                    beforeSend: function(){
+                            show_loading()
+                        },
+                        complete: function(){
+                            hide_loading()
+                        },
                     success: function(res){
                         console.log(res);
                         

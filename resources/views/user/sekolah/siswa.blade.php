@@ -15,6 +15,7 @@
         <br>
         <div>
         <a href="{{route('siswa_add')}}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
+        <a href="{{route('template_siswa')}}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a>
         <hr>
         </div>
       <br>

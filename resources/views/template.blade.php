@@ -27,6 +27,7 @@
 	<link rel="stylesheet" href="{{asset('assets/vendors/sweetalert2/sweetalert2.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/select2/select2.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/simplemde/simplemde.min.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/vendors/prismjs/themes/prism.css')}}"/>
 	<!-- End plugin css for this page -->
 
 	<!-- inject:css -->
@@ -48,8 +49,13 @@
 var url = "{{url('/')}}";
   </script>
 </head>
-<body>
+<body onload="hide_loading()">	
     <div class="main-wrapper">
+		<div class="loading overlay" id="loading">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			  </div>
+			</div>
 	@include('sidebar')
 	<div class="page-wrapper">
 				
@@ -293,9 +299,9 @@ var url = "{{url('/')}}";
 				</ul>
 			</div>
 		</nav>
-		<!-- partial -->
+		<!-- partial -->		
 		<div class="page-content">
-			@yield('content')
+			@yield('content')			
 		</div>
 			<!-- partial:../../partials/_footer.html -->
 			<footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between px-4 py-3 border-top small">
@@ -319,6 +325,8 @@ var url = "{{url('/')}}";
 	<script src="{{asset('assets/vendors/datatables.net/jquery.dataTables.js')}}"></script>
   	<script src="{{asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js')}}"></script>
 	<script src="{{asset('assets/vendors/simplemde/simplemde.min.js')}}"></script>
+	<script src="{{asset('assets/vendors/prismjs/prism.js')}}"></script>
+	<script src="{{asset('assets/vendors/clipboard/clipboard.min.js')}}"></script>
 	<!-- End plugin js for this page -->
 
 	<!-- inject:js -->
@@ -331,7 +339,8 @@ var url = "{{url('/')}}";
 	<script src="{{asset('assets/js/select2.js')}}"></script> 
 	<script src="{{asset('assets/js/absen-calendar.js')}}"></script>
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
-	<script src="{{asset('assets/js/sweet-alert.js')}}"></script> 
+	<script src="{{asset('assets/js/sweet-alert.js')}}"></script>
+	<script src="{{asset('assets/js/spinner.js')}}"></script>  
 	@if (session('status'))
 	<script>
 	 Swal.fire({
