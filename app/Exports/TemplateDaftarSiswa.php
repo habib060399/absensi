@@ -5,11 +5,10 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithColumns;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Columns\Column;
 
-class TemplateDaftarSiswa implements WithHeadings, WithStyles, WithColumns
+class TemplateDaftarSiswa implements WithHeadings, WithStyles
 {
     /**
     * @return \Illuminate\Support\Collection
