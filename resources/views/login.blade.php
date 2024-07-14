@@ -38,7 +38,7 @@ License: For each use you must have a valid license purchased only from above li
 	<!-- endinject -->
 
   <!-- Layout styles -->  
-	<link rel="stylesheet" href="{{asset('assets/css/demo1/style.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
   <!-- End layout styles -->
 
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" />
