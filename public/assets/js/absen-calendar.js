@@ -119,8 +119,13 @@ function editAbsen(id, tanggal) {
         url: url + "/user/absen/edit",
         type: "Get",
         data: { id_siswa: id, tanggal: tanggal_absen },
+        beforeSend: function () {
+            show_loading();
+        },
+        complete: function () {
+            hide_loading();
+        },
         success: function (res) {
-            console.log(res);
             $("#get_status_absen").html(res);
         },
     });
@@ -130,8 +135,6 @@ function simpanEditAbsen() {
     console.log("ini tombol save");
 
     var status_absen = $("#get_status_absen option:selected").val();
-    // console.log(status_absen);
-    // console.log(tanggal_absen, id_siswa);
 
     $.ajax({
         url: url + "/user/absen/edit/simpan",
