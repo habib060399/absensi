@@ -132,8 +132,6 @@ function editAbsen(id, tanggal) {
 }
 
 function simpanEditAbsen() {
-    console.log("ini tombol save");
-
     var status_absen = $("#get_status_absen option:selected").val();
 
     $.ajax({
