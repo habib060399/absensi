@@ -16,8 +16,16 @@
         <div>
         <a href="{{route('siswa_add')}}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
         <a href="{{route('template_siswa')}}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a>
-        <hr>
         </div>
+        <br>
+        <div>
+          <form action="{{route('import_siswa')}}" enctype="multipart/form-data" method="post">
+            @csrf
+          <input type="file" name="file" class="form-control-sm">
+          <button type="submit" class="btn btn-inverse-success btn-icon"><i data-feather="upload"></i></button>
+        </form>
+        </div>
+        <hr>
       <br>
     <div class="table-responsive">
       <table id="dataTableExample" class="table">

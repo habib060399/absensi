@@ -28,6 +28,7 @@
 	<link rel="stylesheet" href="{{asset('assets/vendors/select2/select2.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/simplemde/simplemde.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/prismjs/themes/prism.css')}}"/>
+	<link rel="stylesheet" href="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}"/>
 	<!-- End plugin css for this page -->
 
 	<!-- inject:css -->
@@ -36,7 +37,7 @@
 	<!-- endinject -->
 
   <!-- Layout styles -->  
-	<link rel="stylesheet" href="{{asset('assets/css/demo1/style.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
   <!-- End layout styles -->
 
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" />
@@ -327,6 +328,7 @@ var url = "{{url('/')}}";
 	<script src="{{asset('assets/vendors/simplemde/simplemde.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/prismjs/prism.js')}}"></script>
 	<script src="{{asset('assets/vendors/clipboard/clipboard.min.js')}}"></script>
+	<script src="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
 	<!-- End plugin js for this page -->
 
 	<!-- inject:js -->
@@ -341,26 +343,32 @@ var url = "{{url('/')}}";
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
 	<script src="{{asset('assets/js/sweet-alert.js')}}"></script>
 	<script src="{{asset('assets/js/spinner.js')}}"></script>  
+	<script src="{{asset('assets/js/datepicker.js')}}"></script>
 	@if (session('status'))
 	<script>
-	 Swal.fire({
+		$(document).ready(() => {
+			Swal.fire({
                 icon: "success",
                 title: "Your work has been saved",
                 showConfirmButton: false,
                 timer: 2000,
             });
+		})
 	</script>   
    @elseif (session('error'))
 	<script>
-		Swal.fire({
+		$(document).ready(() => {
+			Swal.fire({
 				icon: "error",
                 title: "Oops...",
                 text: `{{session('error')}}`,                
             });
+		})
 	</script>
 	@elseif (session('hapus'))
 	<script>
-		const swalWithBootstrapButtons = Swal.mixin({
+		$(document).ready(() => {
+			const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: "btn btn-success",
                     cancelButton: "btn btn-danger me-2",
@@ -372,6 +380,7 @@ var url = "{{url('/')}}";
                               "Your file has been deleted.",
                               "success"
                           );
+		})
 	</script>
 	@endif
 	<!-- End custom js for this page -->
@@ -381,10 +390,9 @@ var url = "{{url('/')}}";
             .listen('ScanRFID', (e) => {
                 console.log('hallo ini event');
                 console.log(e);
-                // console.log(e.welcome);
-                // document.write("<h1>" + e.welcome + "</h1>")
-            });
-	</script>
+                console.log(e.welcome);
+                document.write("<h1>" + e.welcome + "</h1>")
+            }); --}}
 
 </body>
 </html>    
