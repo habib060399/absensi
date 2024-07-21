@@ -12,6 +12,7 @@ use App\Models\Settings;
 use App\Helpers\Helper;
 use Maatwebsite\Excel\facades\Excel;
 use App\Exports\TemplateDaftarSiswa;
+use App\Imports\SiswaImport;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -239,5 +240,15 @@ class UserController extends Controller
 
     public function exportTemplateSiswa() {
         return Excel::download(new TemplateDaftarSiswa, "template-daftar-siswa.xlsx");
+    }
+
+    public function importSiswa(Request $request) {
+        $request->validate([
+            'file' => 'required|max:2048'
+        ]);
+
+        Excel::import(new SiswaImport, $request->file('file'));
+
+        return back()->with('status', 'asfgfsdgd');
     }
 }
