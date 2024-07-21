@@ -28,6 +28,7 @@
 	<link rel="stylesheet" href="{{asset('assets/vendors/select2/select2.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/simplemde/simplemde.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/vendors/prismjs/themes/prism.css')}}"/>
+	<link rel="stylesheet" href="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}"/>
 	<!-- End plugin css for this page -->
 
 	<!-- inject:css -->
@@ -327,6 +328,7 @@ var url = "{{url('/')}}";
 	<script src="{{asset('assets/vendors/simplemde/simplemde.min.js')}}"></script>
 	<script src="{{asset('assets/vendors/prismjs/prism.js')}}"></script>
 	<script src="{{asset('assets/vendors/clipboard/clipboard.min.js')}}"></script>
+	<script src="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
 	<!-- End plugin js for this page -->
 
 	<!-- inject:js -->
@@ -341,6 +343,7 @@ var url = "{{url('/')}}";
 	<script src="{{asset('assets/js/data-table.js')}}"></script>
 	<script src="{{asset('assets/js/sweet-alert.js')}}"></script>
 	<script src="{{asset('assets/js/spinner.js')}}"></script>  
+	<script src="{{asset('assets/js/datepicker.js')}}"></script>
 	@if (session('status'))
 	<script>
 		$(document).ready(() => {
