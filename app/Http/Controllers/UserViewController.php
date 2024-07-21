@@ -95,4 +95,10 @@ class UserViewController extends Controller
     public function home() {
         return view('user.index');
     }
+
+    public function rekapAbsen() {
+        return view('user.absen.rekap_absen', [
+            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+        ]);
+    }
 }
