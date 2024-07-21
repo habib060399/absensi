@@ -55,7 +55,7 @@
                 <a href="{{route('absen')}}" class="nav-link" id="data_absen">Data Absen</a>
               </li>              
               <li class="nav-item">
-                <a href="" class="nav-link" id="rekap">Rekapitulasi Absen</a>
+                <a href="{{route('rekap')}}" class="nav-link" id="rekap">Rekapitulasi Absen</a>
               </li>
             </ul>
           </div>
