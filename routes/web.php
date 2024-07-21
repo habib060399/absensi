@@ -67,6 +67,9 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::get('/absen/edit', [UserController::class, 'editAbsen'])->name('edit_absen');
     Route::post('/absen/edit/simpan', [UserController::class, 'insertEditAbsen'])->name('simpan_edit_absen');
     Route::get('/siswa/download-template', [UserController::class, 'exportTemplateSiswa'])->name('template_siswa');
+    Route::post('/siswa/import', [UserController::class, 'importSiswa'])->name('import_siswa');
+
+    Route::get('/rekap', [UserViewController::class, 'rekapAbsen'])->name('rekap');
 });
 
 Route::get('broadcast', function() {
