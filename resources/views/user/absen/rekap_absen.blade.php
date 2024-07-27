@@ -13,36 +13,41 @@
                 <div class="card-body">
                     <h6 class="card-title">Rekapitulasi Absen</h6>
                     <br>
-                    <div class="mb-3">
-                        <label class="form-label">Nama Jurusan</label>
-                        <select class="form-select" id="get_jurusan" name="get_jurusan">
-                            <option value="" selected disabled>Pilih Jurusan</option>
-                            @foreach ($jurusan as $j)
-                                <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
-                                {{-- <option value="{{\App\Helpers\Helper::encryptUrl($j->id)}}">{{$j->nama_jurusan}}</option>   --}}
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kelas</label>
-                        <select class="form-select" id="get_kelas" name="get_kelas">
-                            <option selected disabled>Pilih Kelas</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tanggal Mulai</label>
-                        <div class="input-group date datepicker" id="datePickerExample">
-                            <input type="text" class="form-control" />
-                            <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
+                    <form action="{{ route('download_rekap') }}" method="post">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Nama Jurusan</label>
+                            <select class="form-select" id="get_jurusan" name="get_jurusan">
+                                <option value="" selected disabled>Pilih Jurusan</option>
+                                @foreach ($jurusan as $j)
+                                    <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
+                                    {{-- <option value="{{\App\Helpers\Helper::encryptUrl($j->id)}}">{{$j->nama_jurusan}}</option>   --}}
+                                @endforeach
+                            </select>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tanggal Selesai</label>
-                        <div class="input-group date datepicker" id="datePickerExample2">
-                            <input type="text" class="form-control" />
-                            <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
+                        <div class="mb-3">
+                            <label class="form-label">Kelas</label>
+                            <select class="form-select" id="get_kelas" name="get_kelas">
+                                <option selected disabled>Pilih Kelas</option>
+                            </select>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Mulai</label>
+                            <div class="input-group date datepicker" id="datePickerExample">
+                                <input type="text" class="form-control" name="tgl_mulai" />
+                                <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Selesai</label>
+                            <div class="input-group date datepicker" id="datePickerExample2">
+                                <input type="text" class="form-control" name="tgl_selesai" />
+                                <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Download Rekap</button>
+                    </form>
                     <br>
                     <hr>
                     <br>
@@ -109,24 +114,24 @@
                 id_kelas: kelas
             }
 
-            $.ajax({
-                url: `{{ route('getAbsen') }}`,
-                type: 'POST',
-                data: data,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                beforeSend: function() {
-                    show_loading()
-                },
-                complete: function() {
-                    hide_loading()
-                },
-                success: function(res) {
-                    var data = JSON.parse(res);
-                    calendarAbsen(data);
-                }
-            });
+            // $.ajax({
+            //     url: `{{ route('getAbsen') }}`,
+            //     type: 'POST',
+            //     data: data,
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     },
+            //     beforeSend: function() {
+            //         show_loading()
+            //     },
+            //     complete: function() {
+            //         hide_loading()
+            //     },
+            //     success: function(res) {
+            //         var data = JSON.parse(res);
+            //         calendarAbsen(data);
+            //     }
+            // });
 
         })
     </script>

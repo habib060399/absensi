@@ -70,6 +70,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::post('/siswa/import', [UserController::class, 'importSiswa'])->name('import_siswa');
 
     Route::get('/rekap', [UserViewController::class, 'rekapAbsen'])->name('rekap');
+    Route::post('/rekap/download', [UserController::class, 'rekapAbsen'])->name('download_rekap');
 });
 
 Route::get('broadcast', function() {
