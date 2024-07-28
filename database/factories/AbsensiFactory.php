@@ -44,8 +44,8 @@ class AbsensiFactory extends Factory
         while ($a < $count) {
             Absensi::create([
                 'id_siswa' => $siswa[$a]['id'],
-                'tanggal' => date('Y-m-d'),
-                'waktu' => $this->faker->time('H_i_s'),
+                'tanggal' => "2024-07-05",
+                'waktu' => $this->faker->time('H:i:s'),
                 'status' => 'Hadir'
             ]);
             $a++;
