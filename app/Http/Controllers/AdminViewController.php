@@ -22,7 +22,7 @@ class AdminViewController extends Controller
         $data = json_decode($getDeviceFonte);
         
         return view('admin.home', [
-            'quota' => $data->data[0]->quota,
+            'quota' => ($data->status) ? $data->data[0]->quota : 0,
             'jml_sekolah' => Sekolah::count(),
             'jml_siswa' => Siswa::count()
         ]);

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('absensi', function (Blueprint $table) {
             $table->id();
-            $table->string('id_siswa')->nullable(true);            
+            $table->string('id_siswa', 32)->nullable(false);            
             $table->string('tanggal')->nullable(true);
             $table->string('waktu')->nullable(true);
             $table->string('status')->nullable(true);

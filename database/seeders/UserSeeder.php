@@ -29,22 +29,14 @@ class UserSeeder extends Seeder
         $admin->username = 'admin';
         $admin->password = Hash::make(123);
         $admin->save();
-
-        // $admin = User::create([
-        //     'id' => 0,
-        //     'name' => 'admin',
-        //     'username' => 'admin',
-        //     'password' => Hash::make(123)
-        // ]);
-
-        // Sekolah::create([
-        //     'id_mesin' => 'wertw',
-        //     'nama_sekolah' => 'gdfhfgdh',
-        //     'email' => 'fdgsdf',
-        //     'pendidikan' => 'sadfsd',
-        //     'npsn' => 'sadf',
-        // ]);
-
         $admin->assignRole('admin');
+
+        $admin1 = new User();
+        $admin1->id = 1;
+        $admin1->name = '123';
+        $admin1->username = '123';
+        $admin1->password = Hash::make(123);
+        $admin1->save();
+        $admin1->assignRole('sekolah');
     }
 }

@@ -12,6 +12,7 @@ use App\Models\Settings;
 use App\Helpers\Helper;
 use Maatwebsite\Excel\facades\Excel;
 use App\Exports\TemplateDaftarSiswa;
+use App\Exports\RekapAbsen;
 use App\Imports\SiswaImport;
 use Illuminate\Support\Facades\Validator;
 
@@ -250,5 +251,22 @@ class UserController extends Controller
         Excel::import(new SiswaImport, $request->file('file'));
 
         return back()->with('status', 'asfgfsdgd');
+    }
+
+    public function rekapAbsen(Request $request) {
+        $data = [
+            $request->input('get_jurusan'),
+            $request->input('get_kelas'),
+            $request->input('tgl_mulai'),
+            $request->input('tgl_selesai'),
+            session('id')
+        ];
+
+        // $absen = Siswa::join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('id_jurusan', $request->input('get_jurusan'))->where('id_kelas', $request->input('get_kelas'))->select('absensi.*','nama_siswa')->get();
+        // $date = date('F', strtotime($request->input('tgl_mulai')));
+        $rekap = new RekapAbsen($request->input('get_jurusan'), $request->input('get_kelas'));
+        // $rekap = new RekapAbsen( $request->input('get_jurusan'), $request->input('get_kelas'), $request->input('tgl_mulai'), $request->input('tgl_selesai'));
+        return Excel::download($rekap, "Absen-siswa.xlsx");
+        // dd($date, date('F'), $request->input('tgl_mulai'), (int)$request->input('tgl_mulai'));
     }
 }
