@@ -10,7 +10,7 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Settings;
 use App\Helpers\Helper;
-use Maatwebsite\Excel\facades\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TemplateDaftarSiswa;
 use App\Exports\RekapAbsen;
 use App\Imports\SiswaImport;
