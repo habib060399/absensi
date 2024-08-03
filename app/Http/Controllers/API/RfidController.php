@@ -75,15 +75,17 @@ class RfidController extends Controller
                     'status' => 200
                 ]);
             }else{                
-                // broadcast(new SendPresence("Habib", "12-05-2024", "14:29:50", "7", "2"));
                 // $responseWa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
                 // if($responseWa) {
-                    
-                    Absensi::create([
-                        'id_siswa' => $get_siswa->id,
-                        'tanggal' => $date_now,
-                        'waktu' => $time_now
-                    ]);
+                    // $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                    // dd($responseWa);s
+                    // Absensi::create([
+                    //     'id_siswa' => $get_siswa->id,
+                    //     'tanggal' => $date_now,
+                    //     'waktu' => $time_now
+                    // ]);
+
+                    broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah));
 
                     return response()->json([
                         'message' => "Pesan berhasil dikirim",                    
