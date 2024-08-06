@@ -108,6 +108,7 @@
                             <select type="text" class="form-select" id="status_kehadiran" name="status_kehadiran">
                                 <option value="" selected disabled>Pilih Status</option>
                                 <option value="hadir">Hadir</option>
+                                <option value="absen">Absen</option>
                                 <option value="izin">Izin</option>
                                 <option value="sakit">Sakit</option>
                             </select>
