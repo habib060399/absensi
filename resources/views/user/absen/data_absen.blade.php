@@ -99,6 +99,7 @@
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Nama Siswa</label>
                             <input type="text" id="id_siswa" name="id_siswa" hidden>
+                            <input type="text" id="tanggal" name="tanggal" hidden>
                             <input type="text" class="form-control" id="nama" placeholder="Nama Siswa"
                                 name="nama_siswa" autocomplete="off">
                             <div id="result" class="result"></div>
@@ -108,6 +109,7 @@
                             <select type="text" class="form-select" id="status_kehadiran" name="status_kehadiran">
                                 <option value="" selected disabled>Pilih Status</option>
                                 <option value="hadir">Hadir</option>
+                                <option value="absen">Absen</option>
                                 <option value="izin">Izin</option>
                                 <option value="sakit">Sakit</option>
                             </select>

@@ -118,11 +118,11 @@ class UserController extends Controller
         $get_kelas = $request->id_kelas;
 
         if($kelas){
+            echo "<option selected disabled>Pilih Kelas</option>";
             foreach ($kelas as $k) {
                 if($k->id == $get_kelas){
                     echo "<option value='$k->id' selected > $k->kelas</option>";
                 }
-
                 echo "<option value='$k->id'> $k->kelas</option>";
                 
             }
@@ -171,7 +171,17 @@ class UserController extends Controller
     public function editPesan(Request $request)
     {
         $get_id = $request->input('id_sekolah');
-        Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);
+        $settings = Settings::where('id_sekolah', Helper::decryptUrl($get_id))->first();
+        if($settings){
+            Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);
+        }else{
+            // dd(Helper::decryptUrl($get_id));
+            Settings::create([
+                'id_sekolah' => Helper::decryptUrl($get_id),
+                'bc' => $request->input('broadcast')
+            ]);
+            // dd('data baru dimasukkan');
+        }
         return redirect()->route('bc')->with('status', 'asdfasd');
     }
 
@@ -192,14 +202,14 @@ class UserController extends Controller
 
     public function insertAbsenManual(Request $request){
         $time_now = date("h:i:s");
-        $date_now = date("Y-m-d");  
         
         $id_siswa = $request->input('id_siswa');
         $status = $request->input('status_kehadiran');
+        $tanggal = $request->input('tanggal');
         
         Absensi::create([
             'id_siswa' => $id_siswa,
-            'tanggal' => $date_now,
+            'tanggal' => $tanggal,
             'waktu' => $time_now,
             'status' => $status
         ]);
