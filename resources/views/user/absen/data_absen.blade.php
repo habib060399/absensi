@@ -99,6 +99,7 @@
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Nama Siswa</label>
                             <input type="text" id="id_siswa" name="id_siswa" hidden>
+                            <input type="text" id="tanggal" name="tanggal" hidden>
                             <input type="text" class="form-control" id="nama" placeholder="Nama Siswa"
                                 name="nama_siswa" autocomplete="off">
                             <div id="result" class="result"></div>
