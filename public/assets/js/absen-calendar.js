@@ -31,11 +31,12 @@ function calendarAbsen(data) {
         editable: true,
         dateClick: function (info) {
             $("#createEventModal").modal("show");
-            // console.log(info.event.title);
+            $("#tanggal").val(info.dateStr);
         },
         eventClick: function (info) {
             var eventObj = info.event;
-            // var tanggal = eventObj._instance.range.start;
+            var tanggal = eventObj._instance.range.start;
+            console.log(tanggal);
 
             $("#modalTitle1").html(eventObj.title);
             $("#modalBody1").html(eventObj._def.extendedProps.description);
