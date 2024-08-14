@@ -75,53 +75,38 @@ class RfidController extends Controller
                     'status' => 200
                 ]);
             }else{                
-                // $responseWa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
-                // if($responseWa) {
-                    // $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
-                    // dd($responseWa);s
-                    // Absensi::create([
-                    //     'id_siswa' => $get_siswa->id,
-                    //     'tanggal' => $date_now,
-                    //     'waktu' => $time_now
-                    // ]);
+                $responseWa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                if($responseWa) {
+                    
+                    Absensi::create([
+                        'id_siswa' => $get_siswa->id,
+                        'tanggal' => $date_now,
+                        'waktu' => $time_now,
+                        'status' => 'hadir'
+                    ]);
 
                     broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah));
 
                     return response()->json([
-                        'message' => "Pesan berhasil dikirim",                    
+                        'message' => "Pesan berhasil dikirim",
+                        'message2' => "Absensi Berhasil",                   
                         'status' => 200
                     ]); 
-                // }
-
-                // return response()->json([
-                //     'message' => "Gagal mengirim pesan",                    
-                //     'status' => 200
-                // ]);        
+                } else {
+                    return response()->json([
+                        'message' => "Gagal Mengirim Pesan",                    
+                        'status' => 200
+                    ]);
+                }
+      
             }
         }else{
             return response()->json([
-                'message' => 'Not Found',
+                'message' => "RFID belum terdaftar",
                 'status' => 400
             ]);
         }
     }    
-
-    // public function checkIdDevice(Request $request)
-    // {
-    //     $getIdPerangkat = Perangkat::where('id_mesin', $request->id_mesin)->first();
-
-    //     if($getIdPerangkat){
-    //         return response()->json([
-    //             'id_perangkat' => $getIdPerangkat->id_mesin,
-    //             'status' => 200
-    //         ]);
-    //     } else{
-    //         return response()->json([
-    //             'id_perangkat' => null,
-    //             'status' => 200
-    //         ]);
-    //     }
-    // }
 
     public function scan(Request $request)
     {
