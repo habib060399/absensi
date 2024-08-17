@@ -8,12 +8,8 @@ use Illuminate\Http\Request;
 
 class CurlController extends Controller
 {
-    public function curlWa($no, $nama_siswa, $id_sekolah)
-    {
+    public function setApiWa(array $param) {
         $token = env("TOKEN_API_WA");
-        $getSekolah = Settings::where('id_sekolah', $id_sekolah)->first();
-        $bc = preg_replace("/{nama}/", "$nama_siswa", $getSekolah->bc);
-
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -25,11 +21,7 @@ class CurlController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array(
-                'target' => $no,
-                'message' => "$bc",
-                'countryCode' => '62'
-            ),
+            CURLOPT_POSTFIELDS => $param,
             CURLOPT_HTTPHEADER => array(
                 "Authorization: $token"
             )
@@ -39,6 +31,29 @@ class CurlController extends Controller
         curl_close($curl);
 
         return $responseWa;
+    }
+
+    public function curlWa($no, $nama_siswa, $id_sekolah)
+    {
+        $getSekolah = Settings::where('id_sekolah', $id_sekolah)->first();
+        $bc = preg_replace("/{nama}/", "$nama_siswa", $getSekolah->bc);
+
+        $data = array(
+            'target' => $no,
+            'message' => "$bc",
+            'countryCode' => "62"
+        );
+
+        $status = $this->setApiWa($data);
+    }
+
+    public function bcWa($no, $pesan){
+        $data = array(
+            'target' => $no,
+            'message' => "$pesan",
+            'countryCode' => "62"
+        );
+        $this->setApiWa($data);
     }
 
     public static function getDevice()
