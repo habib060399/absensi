@@ -92,12 +92,13 @@ class RfidController extends Controller
                         'message2' => "Absensi Berhasil",                   
                         'status' => 200
                     ]); 
-                } else {
-                    return response()->json([
-                        'message' => "Gagal Mengirim Pesan",                    
-                        'status' => 200
-                    ]);
-                }
+                } 
+                // else {
+                //     return response()->json([
+                //         'message' => "Gagal Mengirim Pesan",                    
+                //         'status' => 200
+                //     ]);
+                // }
       
             }
         }else{
