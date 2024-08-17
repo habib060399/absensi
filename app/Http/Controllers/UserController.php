@@ -15,6 +15,7 @@ use App\Exports\TemplateDaftarSiswa;
 use App\Exports\RekapAbsen;
 use App\Imports\SiswaImport;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\API\CurlController;
 
 class UserController extends Controller
 {
@@ -278,5 +279,39 @@ class UserController extends Controller
         // $rekap = new RekapAbsen( $request->input('get_jurusan'), $request->input('get_kelas'), $request->input('tgl_mulai'), $request->input('tgl_selesai'));
         return Excel::download($rekap, "Absen-siswa.xlsx");
         // dd($date, date('F'), $request->input('tgl_mulai'), (int)$request->input('tgl_mulai'));
+    }
+
+    public function getSiswa(Request $request){
+        $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->get();
+        if($siswa){
+            if($request->selected == "ortu"){
+                foreach ($siswa as $s) {
+                    
+                    echo "<option value=".Helper::encryptUrl($s->no_hp_ortu)." selected> Ortu $s->nama_siswa</option>";                    
+                }
+            }elseif ($request->selected == "siswa") {
+                foreach ($siswa as $s) {
+                    echo "<option value=".Helper::encryptUrl($s->no_hp)." selected> $s->nama_siswa</option>";  
+                }            
+            }else {
+                foreach ($siswa as $s) {
+                    echo "<option value=".Helper::encryptUrl($s->no_hp)."> $s->nama_siswa</option>";  
+                }            
+            }
+        }else{
+            echo "No Result Found";
+        }
+    }
+
+    public function sendBc(Request $request){
+        $wa = new CurlController();
+        $to = $request->input('to_siswa');
+        $pesan = $request->input('pesan');
+
+        for ($i=0; $i < count($to); $i++) { 
+            $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan);
+        }
+
+        return redirect()->to('bc')->with('status', 'success');
     }
 }
