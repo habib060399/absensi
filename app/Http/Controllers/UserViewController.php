@@ -62,7 +62,8 @@ class UserViewController extends Controller
 
     public function pesan()
     {
-        return view('user.broadcast', ['broadcast' => Settings::where('id_sekolah',session('id'))->first(), 'id_sekolah' => session('id')]);
+        $setting = Settings::where('id_sekolah',session('id'))->first();
+        return view('user.broadcast', ['broadcast' => ($setting) ? $setting->bc : "", 'id_sekolah' => session('id')]);
     }
 
     public function absen()
@@ -85,11 +86,15 @@ class UserViewController extends Controller
     }
 
     public function kirimPesan() {
-        return view('user.kirim_pesan');
+        return view('user.kirim_pesan', [
+            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+        ]);
     }
 
     public function broadcast() {
-        return view('user.kirim_pesan');
+        return view('user.kirim_pesan', [
+            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+        ]);
     }
 
     public function home() {
