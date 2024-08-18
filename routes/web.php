@@ -49,7 +49,8 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::get('/kelas/{id}', [UserViewController::class, 'editKelas'])->name('editKelas');
     Route::post('/tambah-kelas', [UserController::class, 'registerKelas'])->name('add_kelas');
     Route::get('/siswa', [UserViewController::class, 'siswa'])->name('siswa');
-    Route::get('/siswa/tambah/{id}', [UserViewController::class, 'editSiswa'])->name('editSiswa');
+    Route::get('/siswa/edit/{id}', [UserViewController::class, 'editSiswa'])->name('editSiswa');
+    Route::post('/siswa/edit/send/{id}', [UserController::class, 'editSiswa'])->name('edit_siswa');
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');
     Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
