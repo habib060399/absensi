@@ -20,3 +20,4 @@ jobs:
         remote_user: ${{ secrets.DEPLOY_USER }}
         remote_key: ${{ secrets.DEPLOY_KEY }}
         remote_port: 2223
+        remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
