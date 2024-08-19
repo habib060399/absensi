@@ -17,7 +17,7 @@ jobs:
         path: /
         remote_path: ${{ secrets.DEPLOY_PATH }}
         remote_host: ${{ secrets.DEPLOY_HOST }}
+        remote_port: 2223
         remote_user: ${{ secrets.DEPLOY_USER }}
         remote_key: ${{ secrets.DEPLOY_KEY }}
-        remote_port: 2223
         remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
