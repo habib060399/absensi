@@ -17,7 +17,7 @@ jobs:
         legacy_allow_rsa_hostkeys: "true"
         path: /
         remote_path: /home/flox6311/public_html/tkjpab12
-        remote_host: 103.247.11.107
+        remote_host: tkjpab12.my.id
         remote_port: 2223
         remote_user: ${{ secrets.DEPLOY_USER }}
         remote_key: ${{ secrets.DEPLOY_KEY }}
