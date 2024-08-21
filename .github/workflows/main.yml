@@ -8,15 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 📂 Sync files
-      uses: burnett01/rsync-deployments@7.0.1
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        switches: -avzr --delete
-        path: /
-        remote_path: /home/flox6311/public_html/tkjpab12
-        remote_host: tkjpab12.my.id
-        remote_port: 2223
-        remote_user: ${{ secrets.DEPLOY_USER }}
-        remote_key: ${{ secrets.DEPLOY_KEY }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASS }}
+        protocol: ftps
+        port: ${{ secrets.FTP_PORT }}
+        exclude: .git*
+          - .git*/**
+          - .github
