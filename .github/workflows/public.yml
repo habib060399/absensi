@@ -17,29 +17,4 @@ jobs:
         username: ${{ secrets.FTP_USER_PUBLIC }}
         password: ${{ secrets.FTP_PASS }}
         port: ${{ secrets.FTP_PORT }}
-        exclude: |
-          **/app/**
-          **/bootstrap/**
-          **/config/**
-          **/database/**
-          **/resources/**
-          **/routes/**
-          **/storage/**
-          **/stubs/**
-          **/test/**
-          **/vendor/**
-          .editorconfig
-          .env.example
-          .gitattributes
-          .gitignore
-          .htaccess
-          README.md
-          absensi.sql
-          artisan
-          composer.json
-          composer.lock
-          index.php
-          package-lock.json
-          package.json
-          phpunit.xml
-          vite.config.js
+        local-dir: ./public/
