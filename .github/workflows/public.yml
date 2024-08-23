@@ -42,3 +42,4 @@ jobs:
           package-lock.json
           package.json
           phpunit.xml
+          vite.config.js
