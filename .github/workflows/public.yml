@@ -1,0 +1,45 @@
+on:
+  push:
+    branches: [ server ]
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Auto Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER_PUBLIC }}
+        password: ${{ secrets.FTP_PASS }}
+        port: ${{ secrets.FTP_PORT }}
+        exclude: |
+          **/app/**
+          **/bootstrap/**
+          **/config/**
+          **/database/**
+          **/resources/**
+          **/routes/**
+          **/storage/**
+          **/stubs/**
+          **/test/**
+          **/vendor/**
+          .editorconfig
+          .env.example
+          .gitattributes
+          .gitignore
+          .htaccess
+          README.md
+          absensi.sql
+          artisan
+          composer.json
+          composer.lock
+          index.php
+          package-lock.json
+          package.json
+          phpunit.xml
+          vite.config.js
