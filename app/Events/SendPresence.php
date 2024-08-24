@@ -22,8 +22,9 @@ class SendPresence implements ShouldBroadcastNow
     public $time;
     public $id_kelas;
     public $id_mesin;
+    public $foto;
 
-    public function __construct($name_student, $date, $time, $id_kelas, $id_sekolah)
+    public function __construct($name_student, $date, $time, $id_kelas, $id_sekolah, $foto)
     {
         $sekolah = Sekolah::where('id', $id_sekolah)->first();
         $mesin = Mesin::where('id', $sekolah->id_mesin)->first();
@@ -33,6 +34,7 @@ class SendPresence implements ShouldBroadcastNow
         $this->time = $time;
         $this->id_kelas = $id_kelas;
         $this->id_mesin = $mesin->id_mesin;
+        $this->foto = $foto;
     }
 
     /**
