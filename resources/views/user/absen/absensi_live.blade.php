@@ -23,6 +23,16 @@
 
             <hr>
             <div class="live-absen"></div>
+            <div class="example" id="example">
+                <div class="d-flex align-items-start">
+                    <img src="{{ asset('storage/foto/20240824183933.png') }}" class="wd-100 wd-sm-200 me-3" alt="...">
+                    <div class="data" id="data">
+                        <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
+                        <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
+                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
+                    </div>
+                </div>
+            </div>
             <hr>
         </div>
     </div>
@@ -75,13 +85,13 @@
             Echo.channel(`live-presence`)
                 .listen('SendPresence', (e) => {
                     console.log('hallo ini event');
-                    //  console.log(kelas);
+                    console.log(e);
                     if (e.id_kelas == kelas && `{{ $cookies }}` == e.id_mesin) {
                         console.log(e);
                         element.insertAdjacentHTML("beforeBegin", `
             <div class="example" id="example">
                 <div class="d-flex align-items-start">
-                    <img src="../../../assets/images/others/placeholder.jpg" class="wd-100 wd-sm-200 me-3" alt="...">
+                    <img src="{{ asset('storage/foto/${e.foto}') }}" class="wd-100 wd-sm-200 me-3" alt="...">
                     <div class="data" id="data">
                         <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
                         <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>

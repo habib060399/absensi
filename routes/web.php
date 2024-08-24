@@ -60,7 +60,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
     Route::post('/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
 
-    Route::get('/siswa/hapus/{model}/{id}', [UserController::class, 'hapus'])->name('hapus');
+    Route::get('/siswa/hapus/{id}', [UserController::class, 'hapusSiswa'])->name('hapus');
     Route::get('/absen/hapus/{id}/{tanggal}', [UserController::class, 'delAbsen'])->name('hapus_absen');
     Route::get('/profile', [UserViewController::class, 'profile'])->name('profile');
     Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');

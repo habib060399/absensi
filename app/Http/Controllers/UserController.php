@@ -15,7 +15,9 @@ use App\Exports\TemplateDaftarSiswa;
 use App\Exports\RekapAbsen;
 use App\Imports\SiswaImport;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\CurlController;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -97,8 +99,13 @@ class UserController extends Controller
             'no_hp' => 'required',
             'no_hp_ortu' => 'required',
             'rfid' => 'required|unique:siswa,rfid',
+            'foto' => 'image|max:2000'
         ]);
 
+        $foto = $request->file('foto');
+        $filename = Carbon::now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
+
+        
         $siswa = Siswa::create([
             'id_sekolah' => $request->session()->get('id'),
             'id_jurusan' => $request->input('jurusan_sekolah'),
@@ -107,8 +114,10 @@ class UserController extends Controller
             'rfid' => $request->input('rfid'),
             'email' => $request->input('email'),
             'no_hp' =>  $request->input('no_hp'),
-            'no_hp_ortu' => $request->input('no_hp_ortu')
+            'no_hp_ortu' => $request->input('no_hp_ortu'),
+            'foto' => $filename
         ]);
+        $foto->storePubliclyAs('foto', $filename);
         
         return redirect()->route('siswa_add')->with('status', 'asdfasdf');
     }
@@ -122,18 +131,44 @@ class UserController extends Controller
             'kelas' => 'required',
             'no_hp' => 'required',
             'no_hp_ortu' => 'required',
-            // 'rfid' => 'required|unique:siswa,rfid',
         ]);
 
-        Siswa::where('id', Helper::decryptUrl($id))->update([
-            'nama_siswa' => $request->input('nama_siswa'),
-            'email' => $request->input('email'),
-            'id_jurusan' => $request->input('jurusan'),
-            'id_kelas' => $request->input('kelas'),
-            'no_hp' => $request->input('no_hp'),
-            'no_hp_ortu' => $request->input('no_hp_ortu')
-        ]);
-        return redirect()->route('siswa')->with('status', 'asdfasdf');
+        $foto = $request->file('foto');
+
+        if($foto != null){
+            $request->validate([
+                'foto' => 'image|max:2000'
+            ]);
+
+            $get_siswa = Siswa::where('id', Helper::decryptUrl($id))->first();
+            Storage::delete('foto/'.$get_siswa->foto);
+            $filename = Carbon::now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
+
+            Siswa::where('id', Helper::decryptUrl($id))->update([
+                'nama_siswa' => $request->input('nama_siswa'),
+                'email' => $request->input('email'),
+                'id_jurusan' => $request->input('jurusan'),
+                'id_kelas' => $request->input('kelas'),
+                'no_hp' => $request->input('no_hp'),
+                'no_hp_ortu' => $request->input('no_hp_ortu'),
+                'foto' => $filename
+            ]);
+            $foto->storePubliclyAs('foto', $filename);
+    
+            return redirect()->route('siswa')->with('status', 'asdfasdf');
+        }else{
+            Siswa::where('id', Helper::decryptUrl($id))->update([
+                'nama_siswa' => $request->input('nama_siswa'),
+                'email' => $request->input('email'),
+                'id_jurusan' => $request->input('jurusan'),
+                'id_kelas' => $request->input('kelas'),
+                'no_hp' => $request->input('no_hp'),
+                'no_hp_ortu' => $request->input('no_hp_ortu')
+            ]);
+    
+            return redirect()->route('siswa')->with('status', 'asdfasdf');
+        }
+
     }
 
     public function getKelas(Request $request)
@@ -157,10 +192,12 @@ class UserController extends Controller
         }      
     }
 
-    public function hapus($model, $id)
+    public function hapusSiswa($id)
     {
-        $get_model = "App\Models\\".$model;
-        $get_model::where('id', Helper::decryptUrl($id))->delete();
+        $get_siswa = Siswa::where('id', Helper::decryptUrl($id))->first();
+
+        Storage::delete('foto/'.$get_siswa->foto);
+        Siswa::where('id', Helper::decryptUrl($id))->delete();
 
         return redirect()->route('siswa')->with('hapus', 'asdfasd');
     }
