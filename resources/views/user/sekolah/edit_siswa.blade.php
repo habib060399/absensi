@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Form Grid</h6>
-                    <form action="{{ route('edit_siswa', ['id' => \App\Helpers\Helper::encryptUrl($siswa->id)]) }}" method="post">
+                    <form action="{{ route('edit_siswa', ['id' => \App\Helpers\Helper::encryptUrl($siswa->id)]) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-sm-6">
