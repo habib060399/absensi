@@ -13,8 +13,12 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        server: ftp.flockbase.my.id
-        username: flox6311@tkjpab12.my.id
-        password: p8by8CHY-JmO
-        port: 21
-        
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER_MAIN }}
+        password: ${{ secrets.FTP_PASS }}
+        port: ${{ secrets.FTP_PORT }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/public/build/**
+          .env.example
