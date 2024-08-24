@@ -11,6 +11,6 @@ class Settings extends Model
 
     protected $table = 'settings';
 
-    protected $fillable = ['bc'];
+    protected $fillable = ['bc', 'id_sekolah'];
     public $timestamps = false;
 }
