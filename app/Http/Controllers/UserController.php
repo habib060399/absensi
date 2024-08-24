@@ -113,18 +113,43 @@ class UserController extends Controller
         return redirect()->route('siswa_add')->with('status', 'asdfasdf');
     }
 
+    public function editSiswa($id, Request $request)
+    {
+        $request->validate([
+            'nama_siswa' => 'required',
+            'email' => 'required',
+            'jurusan' => 'required',
+            'kelas' => 'required',
+            'no_hp' => 'required',
+            'no_hp_ortu' => 'required',
+            // 'rfid' => 'required|unique:siswa,rfid',
+        ]);
+
+        Siswa::where('id', Helper::decryptUrl($id))->update([
+            'nama_siswa' => $request->input('nama_siswa'),
+            'email' => $request->input('email'),
+            'id_jurusan' => $request->input('jurusan'),
+            'id_kelas' => $request->input('kelas'),
+            'no_hp' => $request->input('no_hp'),
+            'no_hp_ortu' => $request->input('no_hp_ortu')
+        ]);
+        return redirect()->route('siswa')->with('status', 'asdfasdf');
+    }
+
     public function getKelas(Request $request)
     {
         $kelas = Kelas::where('id_jurusan', $request->id_jurusan)->get();
         $get_kelas = $request->id_kelas;
+        $selected = '';
 
         if($kelas){
             echo "<option selected disabled>Pilih Kelas</option>";
             foreach ($kelas as $k) {
                 if($k->id == $get_kelas){
-                    echo "<option value='$k->id' selected > $k->kelas</option>";
+                    $selected = 'selected';
                 }
-                echo "<option value='$k->id'> $k->kelas</option>";
+                echo "<option value='$k->id' $selected> $k->kelas</option>";
+                $selected = '';
                 
             }
         }else{

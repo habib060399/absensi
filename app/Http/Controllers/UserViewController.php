@@ -49,8 +49,11 @@ class UserViewController extends Controller
 
     public function editSiswa($id)
     {
+        $siswa = Siswa::where('id', Helper::decryptUrl($id))->first();
+        $kelas = Kelas::where('id', $siswa->id_kelas)->first();
         return view('user.sekolah.edit_siswa',[
-            'siswa' => Siswa::where('id', Helper::decryptUrl($id))->first(),
+            'siswa' => $siswa,
+            'kelas' => $kelas,
             'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),            
         ]);
     }
