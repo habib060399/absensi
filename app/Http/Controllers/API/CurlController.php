@@ -44,7 +44,7 @@ class CurlController extends Controller
             'countryCode' => "62"
         );
 
-        $status = $this->setApiWa($data);
+        return $status = $this->setApiWa($data);
     }
 
     public function bcWa($no, $pesan){
@@ -53,7 +53,7 @@ class CurlController extends Controller
             'message' => "$pesan",
             'countryCode' => "62"
         );
-        $this->setApiWa($data);
+        return $status = $this->setApiWa($data);
     }
 
     public static function getDevice()
