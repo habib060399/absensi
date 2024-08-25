@@ -12,16 +12,22 @@ class RekapAbsen implements WithMultipleSheets
     use Exportable;
     public $jurusan;
     public $kelas;
+    public $tgl_mulai;
+    public $tgl_selesai;
 
-    public function __construct($jurusan, $kelas){
+    public function __construct($jurusan, $kelas, $tgl_mulai, $tgl_selesai){
         $this->jurusan = $jurusan;
         $this->kelas = $kelas;
+        $this->tgl_mulai = $tgl_mulai;
+        $this->tgl_selesai = $tgl_selesai;
     }
 
     public function sheets(): array {
         $sheet = [];
-        $start = Carbon::create(2024, 07, 1);  // 1 Januari 2024
-        $end = Carbon::create(2025, 07, 31); // 31 Desember 2024
+        // $start = Carbon::create(2024, 07, 1);  // 1 Januari 2024
+        // $end = Carbon::create(2025, 07, 31); // 31 Desember 2024
+        $start = Carbon::create($this->tgl_mulai);
+        $end = Carbon::create($this->tgl_selesai); // 31 Desember 2024
         $intervalInMonths = $start->diffInMonths($end);
 
         $date_interval = [];
@@ -40,7 +46,7 @@ class RekapAbsen implements WithMultipleSheets
             $bulan = $d['bulan'];
             $bulan_int = $d['bulan_in_int'];
             $date = $tahun . "-" . $bulan;
-            // dd($bulan_int);
+
             $sheet[] = new RekapAbsenPerSheet($tahun, $bulan, $bulan_int, $this->jurusan, $this->kelas);
         }
 

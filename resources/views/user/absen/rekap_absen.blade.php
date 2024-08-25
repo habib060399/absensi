@@ -17,32 +17,44 @@
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Nama Jurusan</label>
-                            <select class="form-select" id="get_jurusan" name="get_jurusan">
+                            <select class="form-select @error('get_jurusan') is-invalid @enderror" id="get_jurusan" name="get_jurusan">
                                 <option value="" selected disabled>Pilih Jurusan</option>
                                 @foreach ($jurusan as $j)
                                     <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
                                     {{-- <option value="{{\App\Helpers\Helper::encryptUrl($j->id)}}">{{$j->nama_jurusan}}</option>   --}}
                                 @endforeach
                             </select>
+                            @error('get_jurusan')
+                            <div class="error invalid-feedback">{{ $message }}</div>
+                        @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Kelas</label>
-                            <select class="form-select" id="get_kelas" name="get_kelas">
+                            <select class="form-select @error('get_kelas') is-invalid @enderror" id="get_kelas" name="get_kelas">
                                 <option selected disabled>Pilih Kelas</option>
                             </select>
+                            @error('get_kelas')
+                            <div class="error invalid-feedback">{{ $message }}</div>
+                        @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tanggal Mulai</label>
                             <div class="input-group date datepicker" id="datePickerExample">
-                                <input type="text" class="form-control" name="tgl_mulai" />
+                                <input type="text" class="form-control @error('tgl_mulai') is-invalid @enderror" name="tgl_mulai" />
                                 <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
+                                @error('tgl_mulai')
+                                <div class="error invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tanggal Selesai</label>
                             <div class="input-group date datepicker" id="datePickerExample2">
-                                <input type="text" class="form-control" name="tgl_selesai" />
+                                <input type="text" class="form-control @error('tgl_selesai') is-invalid @enderror" name="tgl_selesai" />
                                 <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
+                                @error('tgl_selesai')
+                                <div class="error invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <br>
