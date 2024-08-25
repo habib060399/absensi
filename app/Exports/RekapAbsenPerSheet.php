@@ -30,12 +30,6 @@ class RekapAbsenPerSheet implements FromArray, WithTitle, WithHeadings
         $this->kelas = $kelas;
     }
 
-    // public function __construct($jurusan, $kelas, $tgl_mulai, $tgl_selesai) {
-    //     $this->jurusan = $jurusan;
-    //     $this->kelas = $kelas;
-    //     $this->tgl_mulai = $tgl_mulai;
-    //     $this->tgl_selesai = $tgl_selesai;  
-    // }
 
     public function array(): array {
         $siswa = Siswa::where('id_jurusan', $this->jurusan)->where('id_kelas', $this->kelas)->select('*')->get();
@@ -58,35 +52,19 @@ class RekapAbsenPerSheet implements FromArray, WithTitle, WithHeadings
                     $get_tahun =  date('Y', strtotime($n['tanggal']));
                     $hari_in_int = date('d', strtotime($n['tanggal']));
                     $bulan_in_string = date('F', strtotime($n['tanggal']));
-                    // dd($get_tahun, $bulan_in_string, $this->bulan, $hari_in_int);
 
                     if($get_tahun == $this->tahun && $this->bulan == $bulan_in_string){
                         $this->b[$i][$hari_in_int]= $n['status'];
                     }
                 }
-           
-        //     for ($j=0; $j < (count($absen)); $j++) {
-        //         $date = date('d', strtotime($absen[$j]['tanggal']));
-                
-        //             $this->b[$i][$date]= $absen[$j]['tanggal'];
-                
-            
-        // }
-    
         }
         sort($this->b);
-        // dd($this->b);
         return [
             $this->b,
             // [$absen[0]['nama_siswa'], 'hadir'],
             // [$absen[1]['nama_siswa'], 'hadir'],
         ];
     }
-
-    // public function getNama($id_siswa){
-    //     $nama = Siswa::where('id', $id_siswa)->select('nama_siswa')->first();
-    //     return $nama;
-    // }
 
     public function headings(): array {
         $tanggal = cal_days_in_month(CAL_GREGORIAN, $this->bulan_int, $this->tahun);
@@ -96,10 +74,6 @@ class RekapAbsenPerSheet implements FromArray, WithTitle, WithHeadings
         }
         return $heading;
     }
-
-    // public function styles(Worksheet $sheet) {
-    //     // $sheet->mergeCells('M2:R20');
-    // }
 
     public function title(): string
     {
