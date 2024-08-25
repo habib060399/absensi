@@ -327,17 +327,25 @@ class UserController extends Controller
     }
 
     public function rekapAbsen(Request $request) {
-        $data = [
-            $request->input('get_jurusan'),
-            $request->input('get_kelas'),
-            $request->input('tgl_mulai'),
-            $request->input('tgl_selesai'),
-            session('id')
-        ];
+        $request->validate([
+            'get_jurusan' => 'required',
+            'get_kelas' => 'required',
+            'tgl_mulai' => 'required|date|before_or_equal:tgl_selesai',
+            'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai'
+        ]);
 
+        // $data = [
+        //     $request->input('get_jurusan'),
+        //     $request->input('get_kelas'),
+        //     $request->input('tgl_mulai'),
+        //     $request->input('tgl_selesai'),
+        //     session('id')
+        // ];
+
+        // dd($data);
         // $absen = Siswa::join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('id_jurusan', $request->input('get_jurusan'))->where('id_kelas', $request->input('get_kelas'))->select('absensi.*','nama_siswa')->get();
         // $date = date('F', strtotime($request->input('tgl_mulai')));
-        $rekap = new RekapAbsen($request->input('get_jurusan'), $request->input('get_kelas'));
+        $rekap = new RekapAbsen($request->input('get_jurusan'), $request->input('get_kelas'), $request->input('tgl_mulai'), $request->input('tgl_selesai'));
         // $rekap = new RekapAbsen( $request->input('get_jurusan'), $request->input('get_kelas'), $request->input('tgl_mulai'), $request->input('tgl_selesai'));
         return Excel::download($rekap, "Absen-siswa.xlsx");
         // dd($date, date('F'), $request->input('tgl_mulai'), (int)$request->input('tgl_mulai'));
