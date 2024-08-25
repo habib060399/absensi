@@ -84,19 +84,13 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Foto</label>
-                                    
-                                        @if ($siswa->foto)
-                                            
-                                        
+                                    <label class="form-label">Foto</label>                          
+                                        @if ($siswa->foto)  
                                                 <div class="card">
                                                     <img src="{{asset('storage/foto/'.$siswa->foto)}}" class="card-img-top" alt="..."/>                                                    
                                                 </div>
                                                 <br>
                                                 @endif
-                                        
-                                            
-                                       
                                     <input type="file" class="form-control @error('foto') is-invalid @enderror" placeholder="Foto" name="foto">
                                     @error('foto')
                                         <div class="error invalid-feedback">{{ $message }}</div>
