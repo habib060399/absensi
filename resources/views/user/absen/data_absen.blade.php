@@ -14,11 +14,10 @@
                                     <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
                                         <option value="" selected disabled>Pilih Jurusan</option>
                                         @foreach ($jurusan as $j)
-                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
-                                            {{-- <option value="{{\App\Helpers\Helper::encryptUrl($j->id)}}">{{$j->nama_jurusan}}</option>   --}}
+                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>                                            
                                         @endforeach
                                     </select>
-                                </div>
+                                </div>                                
                                 <div class="mb-3">
                                     <label class="form-label">Kelas</label>
                                     <select type="text" class="form-select" id="get_kelas" name="get_kelas">
@@ -68,7 +67,6 @@
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
                 </div>
-                {{-- <form action="" action="post"> --}}
                 @csrf
                 <div class="modal-body">
                     <label class="form-label">status kehadiran</label>
@@ -80,30 +78,30 @@
                     <button type="button" class="btn btn-primary" id="simpan_edit_absen" onclick="simpanEditAbsen()">Save
                         changes</button>
                 </div>
-                {{-- </form> --}}
             </div>
         </div>
     </div>
 
-    <div id="createEventModal" class="modal fade">
+    <div id="createEventModal" class="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="modalTitle2" class="modal-title">Add event</h4>
+                    <h4 id="modalTitle2" class="modal-title">Tambah Absen</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"><span
                             class="visually-hidden">close</span></button>
                 </div>
-                <div id="modalBody2" class="modal-body">
+                <div id="modalBody2" class="">
                     <form action="{{ route('input_absen') }}" method="post">
                         @csrf
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Nama Siswa</label>
                             <input type="text" id="id_siswa" name="id_siswa" hidden>
                             <input type="text" id="tanggal" name="tanggal" hidden>
-                            <input type="text" class="form-control" id="nama" placeholder="Nama Siswa"
-                                name="nama_siswa" autocomplete="off">
+                                <select class="compose-multiple-select form-select" multiple id="nama" name="nama[]">
+                                    <option value="hadir">Hadir</option>
+                                </select>
                             <div id="result" class="result"></div>
-                        </div>
+                        </div>                       
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Status Kehadiran</label>
                             <select type="text" class="form-select" id="status_kehadiran" name="status_kehadiran">
@@ -123,6 +121,7 @@
                 </form>
             </div>
         </div>
+    </div>
 
         <script type="text/javascript">
             var get_id_jurusan;
@@ -146,8 +145,7 @@
                         complete: function() {
                             hide_loading()
                         },
-                        success: function(res) {
-                            console.log(res)
+                        success: function(res) {                            
                             $('#get_kelas').html(res)
 
                         }
@@ -177,65 +175,49 @@
                         hide_loading()
                     },
                     success: function(res) {
-                        var data = JSON.parse(res);
-                        console.log(res);
-                        console.log($('#loading'));
+                        var data = JSON.parse(res);                        
                         calendarAbsen(data);
                     }
                 });
 
             })
         </script>
-        <script>
-            var result = document.getElementById("result");
-            var id_jurusan;
-            var id_kelas;
-            var count_siswa;
-            result.innerHTML = "";
-            result.style.border = "0px";
+        <script type="text/javascript">
+            var get_id_jurusan;
+            var get_id_kelas;
+
             $('#get_jurusan').on('change', function getKelas() {
-                id_jurusan = $('#get_jurusan option:selected').val();
+                get_id_jurusan = $('#get_jurusan option:selected').val();
             })
             $('#get_kelas').on('change', function getKelas() {
-                id_kelas = $('#get_kelas option:selected').val();
+                get_id_kelas = $('#get_kelas option:selected').val();
             })
 
-            $('#nama').on('keyup', function() {
-                result.innerHTML = "";
-                $val = $(this).val();
-                if ($val == "") {
-                    $val = null;
+            $( document ).ready(function() {
+                if ($(".compose-multiple-select").length) {
+                    $(".compose-multiple-select").select2({                        
+                        ajax: {
+                            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            url: `{{ route('search_nama_siswa') }}`,
+                            dataType: 'json',
+                            data: function(params) {
+                                return {
+                                 search: params.term,
+                                 id_sekolah: {{ session('id') }},
+                                 id_jurusan: get_id_jurusan,
+                                 id_kelas: get_id_kelas
+                                }
+                            },
+                            processResults: function(data){                                
+                                return {
+                                    results: data
+                                }
+                            }
+                        },
+                        width: '100%',
+                        dropdownParent: $('#createEventModal'),
+                    })
                 }
-
-                $.ajax({
-                    url: `{{ route('search_nama_siswa') }}`,
-                    type: 'GET',
-                    data: {
-                        'search': $val,
-                        'id_sekolah': {{ session('id') }},
-                        'id_jurusan': id_jurusan,
-                        'id_kelas': id_kelas
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(data) {
-                        count_siswa = data.length;
-                        if (data.length == 0) {
-                            result.innerHTML = "Empty";
-                        }
-                        result.innerHTML = data;
-                        console.log(data);
-                    }
-                })
-            })
-
-            function namaSiswa(no) {
-                var nama_siswa = $('.selection_' + no).val();
-                var id_siswa = $('.selection_' + no).data('id-siswa');
-                $('#nama').val(nama_siswa);
-                $('#id_siswa').val(id_siswa);
-
-            }
+});
         </script>
     @endsection

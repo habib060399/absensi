@@ -384,8 +384,6 @@
     <!-- endinject -->
 
     <!-- Custom js for this page -->
-    {{-- <script src="{{asset('assets/js/fullcalendar.js')}}"></script> --}}
-    <script src="{{ asset('assets/js/select2.js') }}"></script>
     <script src="{{ asset('assets/js/absen-calendar.js') }}"></script>
     <script src="{{ asset('assets/js/data-table.js') }}"></script>
     <script src="{{ asset('assets/js/sweet-alert.js') }}"></script>
