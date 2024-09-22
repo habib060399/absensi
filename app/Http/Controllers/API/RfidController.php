@@ -91,13 +91,14 @@ class RfidController extends Controller
 
                     return response()->json([
                         'message' => "Pesan berhasil dikirim",
-                        'message2' => "Absensi Berhasil",                   
+                        'message2' => "Absensi Berhasil", 
+                        'name' => $get_siswa->nama_siswa,                  
                         'status' => 200
                     ]); 
                 } else {
                     return response()->json([
                         'message' => "Gagal Mengirim Pesan",                    
-                        'status' => 200
+                        'status' => 500
                     ]);
                 }
       
