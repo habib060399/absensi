@@ -19,6 +19,9 @@
           @role('sekolah')
             <a href="{{route('homeSekolah')}}" class="nav-link">
           @endrole
+          @role('kelas')
+            <a href="{{route('homeSekolah')}}" class="nav-link">
+          @endrole
             <i class="link-icon" data-feather="home"></i>
             <span class="link-title">Dashboard</span>
           </a>
@@ -39,7 +42,7 @@
           </a>
         </li>
         @endrole
-        @role('sekolah')
+       
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
             <i class="link-icon" data-feather="book"></i>
@@ -59,7 +62,8 @@
               </li>
             </ul>
           </div>
-        </li>        
+        </li>   
+        @role('sekolah')     
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
             <i class="link-icon" data-feather="box"></i>
@@ -76,11 +80,27 @@
               </li>
               <li class="nav-item">
                 <a href="{{route('siswa')}}" class="nav-link">Siswa</a>
-              </li>              
+              </li> 
             </ul>
           </div>
         </li>
-        @endrole
+        @endrole   
+        @role('kelas')     
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
+            <i class="link-icon" data-feather="box"></i>
+            <span class="link-title">Sekolah</span>
+            <i class="link-arrow" data-feather="chevron-down"></i>
+          </a>
+          <div class="collapse" id="advancedUI">
+            <ul class="nav sub-menu">                            
+              <li class="nav-item">
+                <a href="{{route('siswa')}}" class="nav-link">Siswa</a>
+              </li> 
+            </ul>
+          </div>
+        </li>
+        @endrole   
         <li class="nav-item">
           <a href="{{route('bc')}}" class="nav-link">
             <i class="link-icon" data-feather="mail"></i>
@@ -94,12 +114,14 @@
             <span class="link-title">Pesan</span>
           </a>
         </li>
+        @role('sekolah')
         <li class="nav-item">
           <a href="{{route('profile')}}" class="nav-link">
             <i class="link-icon" data-feather="user"></i>
-            <span class="link-title">Profile</span>
+            <span class="link-title">Users</span>
           </a>
         </li>
+        @endrole
         {{-- <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
             <i class="link-icon" data-feather="inbox"></i>

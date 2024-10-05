@@ -386,7 +386,7 @@
     <!-- Custom js for this page -->
     <script src="{{ asset('assets/js/absen-calendar.js') }}"></script>
     <script src="{{ asset('assets/js/data-table.js') }}"></script>
-    <script src="{{ asset('assets/js/sweet-alert.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/sweet-alert.js') }}"></script> --}}
     <script src="{{ asset('assets/js/spinner.js') }}"></script>
     <script src="{{ asset('assets/js/datepicker.js') }}"></script>
     @if (session('status'))

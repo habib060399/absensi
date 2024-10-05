@@ -77,11 +77,19 @@
 							</select>
         </div>
         <div class="mb-3">
-        <label class="form-label">Kelas</label>
-        <input type="text" class="form-control" name="kelas">        
+          <label class="form-label">Kelas</label>
+          <input type="text" class="form-control" name="kelas">        
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" name="username">        
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" name="password">        
         </div>
         </div>
-      <div class="modal-fo oter">
+      <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save changes</button>
       </div>

@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mesin_tables');
+        Schema::dropIfExists('mesin');
     }
 };

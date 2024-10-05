@@ -3,12 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Sekolah;
+use App\Models\Kelas;
 
 class User extends Authenticatable
 {
@@ -33,6 +35,11 @@ class User extends Authenticatable
     public function sekolah()
     {
         return $this->hasOne(Sekolah::class, 'id_user', 'id');
+    }
+
+    public function kelas()
+    {
+        return $this->hasOne(Kelas::class, 'id_user', 'id');
     }
 
     public function getUser($rfid)

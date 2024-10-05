@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('id_user')->nullable(false);
             $table->string('id_sekolah', 100);
             $table->string('id_jurusan', 100);
             $table->string('kelas', 50);
             $table->timestamps();
+            $table->foreign('id_user')->on('users')->references('id');
         });
     }
 

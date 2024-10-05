@@ -37,7 +37,7 @@ Route::prefix('flockbase')->middleware(['auth', 'can:isAdmin'])->group(function(
     Route::post('/tambah-mesin', [AdminController::class, 'registerMesin'])->name('add_mesin');
 });
 
-Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
+Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas'])->group(function(){
     Route::get('/live-absen', [UserViewController::class, 'liveAbsen'])->name('live_absen');
     Route::get('/jurusan', [UserViewController::class, 'jurusan'])->name('jurusan');
     Route::post('/tambah-jurusan', [UserController::class, 'registerJurusan'])->name('add_jurusan');
@@ -47,6 +47,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
     Route::get('/kelas', [UserViewController::class, 'kelas'])->name('kelas');
     Route::get('/kelas/hapus/{id}', [UserController::class, 'hapusKelas'])->name('hapus_kelas');
     Route::get('/kelas/{id}', [UserViewController::class, 'editKelas'])->name('editKelas');
+    Route::post('/kelas/edit/{id}', [UserController::class, 'editKelas'])->name('e.kelas');
     Route::post('/tambah-kelas', [UserController::class, 'registerKelas'])->name('add_kelas');
     Route::get('/siswa', [UserViewController::class, 'siswa'])->name('siswa');
     Route::get('/siswa/edit/{id}', [UserViewController::class, 'editSiswa'])->name('editSiswa');
@@ -74,6 +75,7 @@ Route::prefix('user')->middleware(['auth', 'can:isSekolah'])->group(function(){
 
     Route::get('/rekap', [UserViewController::class, 'rekapAbsen'])->name('rekap');
     Route::post('/rekap/download', [UserController::class, 'rekapAbsen'])->name('download_rekap');
+    Route::post('/profile/tambah', [UserController::class, 'registerUser'])->name('tambah_user');
 });
 
 Route::get('broadcast', function() {

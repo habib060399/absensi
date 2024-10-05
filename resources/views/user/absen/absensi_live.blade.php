@@ -4,6 +4,15 @@
         <div class="col-xl-10 main-content ps-xl-4 pe-xl-5">
             <h1 class="page-title">Media Object</h1>
             <hr>
+            @can('only class')
+            <div class="mb-3">
+                <label class="form-label">Jurusan</label>
+                <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
+                    <option value="" selected>{{$jurusan->nama_jurusan}}</option>
+                </select>
+            </div>
+            @endcan
+            @can('admin sekolah')
             <div class="mb-3">
                 <label class="form-label">Jurusan</label>
                 <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
@@ -14,12 +23,23 @@
                     @endforeach
                 </select>
             </div>
+            @endcan
+            @can('only class')
+            <div class="mb-3">
+                <label class="form-label">Kelas</label>
+                <select type="text" class="form-select" id="get_kelas" name="get_kelas">
+                    <option value="{{$kelas->id}}" selected>{{$kelas->kelas}}</option>
+                </select>
+            </div>
+            @endcan
+            @can('admin sekolah')
             <div class="mb-3">
                 <label class="form-label">Kelas</label>
                 <select type="text" class="form-select" id="get_kelas" name="get_kelas">
                     <option value="" selected disabled>Pilih Kelas</option>
                 </select>
             </div>
+            @endcan
 
             <hr>
             <div class="live-absen"></div>
@@ -38,6 +58,7 @@
     </div>
 
     @vite('resources/js/app.js')
+    @can('admin sekolah')
     <script type="text/javascript">
         $('#get_jurusan').on('change', function getKelas() {
             var value = $('#get_jurusan option:selected').val()
@@ -70,7 +91,9 @@
 
         });
     </script>
+    @endcan
     @vite('resources/js/app.js')
+    @can('admin sekolah')
     <script type="module">
         var currentKelas;
         $('#get_kelas').on('change', function() {
@@ -105,4 +128,39 @@
                 });
         });
     </script>
+    @endcan
+    @can('only class')
+    <script>
+        var currentKelas;
+        var kelas = $('#get_kelas option:selected').val()
+        var element = document.querySelector('.live-absen');
+        
+        if (currentKelas >= 0) {
+                window.location.reload();
+            }
+            currentKelas = kelas;
+
+        Echo.channel(`live-presence`)
+                .listen('SendPresence', (e) => {
+                    console.log('hallo ini event');
+                    console.log(e);
+                    if (e.id_kelas == kelas && `{{ $cookies }}` == e.id_mesin) {
+                        console.log(e);
+                        element.insertAdjacentHTML("beforeBegin", `
+            <div class="example" id="example">
+                <div class="d-flex align-items-start">
+                    <img src="{{ asset('storage/foto/${e.foto}') }}" class="wd-100 wd-sm-200 me-3" alt="...">
+                    <div class="data" id="data">
+                        <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
+                        <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
+                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>         
+                    </div>
+                </div>
+            </div>
+            `);
+                    }
+
+                });
+    </script>
+    @endcan
 @endsection
