@@ -87,17 +87,9 @@ class AdminController extends Controller
 
         $sekolah = new Sekolah();
         $user = new User();
-        $id;
-        $getIdLast = Sekolah::orderBy('id', 'desc')->first();
+        $id = date('dmyHis');
         
-        if($getIdLast){
-            $id = $getIdLast->id + 1;
-        }else{
-            $sekolah->id = 0;
-            $id = 1;
-        }
-        
-        $user->id = $id;
+        $user->id = intVal($id);
         $user->username = $request->input('username');
         $user->password = Hash::make($request->input('password'));
         $user->save();
@@ -110,6 +102,7 @@ class AdminController extends Controller
         $user->sekolah()->save($sekolah);
         
         $user->assignRole('sekolah');
+        $user->givePermissionTo('admin sekolah');
 
         Mesin::where('id', $id_mesin)
         ->update(['status' => 'Used']);

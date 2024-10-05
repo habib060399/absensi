@@ -27,7 +27,9 @@ class AuthController extends Controller
 
         if(Auth::attempt(['username' => $username, 'password' => $password])) {
             $get_user = User::where('username', $username)->first();            
-            $sekolah = $get_user->sekolah;           
+            $sekolah = $get_user->sekolah;  
+            $kelas = $get_user->kelas;  
+            $role = $get_user->getRoleNames();
             
             $request->session()->regenerate();
             if($sekolah){
@@ -39,7 +41,14 @@ class AuthController extends Controller
                 $request->session()->put('email', $sekolah->email);
 
                 return redirect()->intended('/user/home');
-            }else{                                          
+            } elseif ($role[0] == 'kelas') {
+                $request->session()->put('id', $kelas->id_sekolah);
+                $request->session()->put('id_user', $kelas->id_user);
+                $request->session()->put('id_kelas', $kelas->id);
+                $request->session()->put('nama', 'Kelas : '.$kelas->kelas);
+
+                return redirect()->intended('/user/home');
+            } else{                                          
                 $request->session()->put('id', $get_user->id);
 
                 return redirect()->intended('/flockbase/home');

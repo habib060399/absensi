@@ -9,6 +9,7 @@
                             <h6 class="card-title mb-4">Full calendar</h6>
                             <div id='external-events' class='external-events'>
                                 <h6 class="mb-2 text-muted">Draggable Events</h6>
+                                @can('admin sekolah')
                                 <div class="mb-3">
                                     <label class="form-label">Jurusan</label>
                                     <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
@@ -17,12 +18,30 @@
                                             <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>                                            
                                         @endforeach
                                     </select>
-                                </div>                                
+                                </div>                                                                
                                 <div class="mb-3">
                                     <label class="form-label">Kelas</label>
                                     <select type="text" class="form-select" id="get_kelas" name="get_kelas">
                                     </select>
                                 </div>
+                                @endcan
+                                @can('only class')
+                                <div class="mb-3">
+                                    <label class="form-label">Jurusan</label>
+                                    <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
+                                        <option value="{{$kelas->id_jurusan}}" selected>{{$jurusan->nama_jurusan}}</option>
+                                        {{-- @foreach ($jurusan as $j)
+                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>                                            
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Kelas</label>
+                                    <select type="text" class="form-select" id="get_kelas" name="get_kelas">
+                                        <option value="{{ $kelas->id }}" selected>{{ $kelas->kelas }}</option>
+                                    </select>
+                                </div>
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -122,7 +141,58 @@
             </div>
         </div>
     </div>
+    @can('only class')
+    <script>
+        var get_jurusan = $('#get_jurusan option:selected').val();
+        var get_kelas = $('#get_kelas option:selected').val();
+        $( document ).ready(function() {
+        var data = {
+                    id_jurusan: get_jurusan,
+                    id_kelas: get_kelas
+                }
+                                
+                $.ajax({
+                    url: `{{ route('getAbsen') }}`,
+                    type: 'POST',
+                    data: data,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        var data = JSON.parse(res);                        
+                        calendarAbsen(data);
+                    }
+                });
+        
+                if ($(".compose-multiple-select").length) {
+                    $(".compose-multiple-select").select2({                        
+                        ajax: {
+                            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            url: `{{ route('search_nama_siswa') }}`,
+                            dataType: 'json',
+                            data: function(params) {
+                                return {
+                                 search: params.term,
+                                 id_sekolah: {{ session('id') }},
+                                 id_jurusan: get_jurusan,
+                                 id_kelas: get_kelas
+                                }
+                            },
+                            processResults: function(data){                                
+                                return {
+                                    results: data
+                                }
+                            }
+                        },
+                        width: '100%',
+                        dropdownParent: $('#createEventModal'),
+                    })
+                }
+});
+    </script>
+    @endcan
 
+    @can('admin sekolah')
         <script type="text/javascript">
             var get_id_jurusan;
             $('#get_jurusan').on('change', function getKelas() {
@@ -220,4 +290,5 @@
                 }
 });
         </script>
+        @endcan
     @endsection

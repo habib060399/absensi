@@ -9,6 +9,7 @@
                             <div class="subject">
                                 <div class="row mb-3">
                                     <label class="col-md-2 col-form-label">Jurusan</label>
+                                    @can('admin sekolah')
                                     <div class="col-md-10">
                                         <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
                                             <option value="" selected disabled>Pilih Jurusan</option>
@@ -17,8 +18,17 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    @endcan
+                                    @can('only class')
+                                    <div class="col-md-10">
+                                        <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
+                                            <option value="{{$kelas->id_jurusan}}" selected>{{$jurusan->nama_jurusan}}</option>                                        
+                                        </select>
+                                    </div>
+                                    @endcan
                                 </div>
                             </div>
+                            @can('admin sekolah')
                             <div class="subject">
                                 <div class="row mb-3">
                                     <label class="col-md-2 col-form-label">Kelas</label>
@@ -29,6 +39,19 @@
                                     </div>
                                 </div>
                             </div>
+                            @endcan
+                            @can('only class')
+                            <div class="subject">
+                                <div class="row mb-3">
+                                    <label class="col-md-2 col-form-label">Kelas</label>
+                                    <div class="col-md-10">
+                                        <select type="text" class="form-select" id="get_kelas" name="get_kelas">
+                                            <option value="{{$kelas->id}}" selected disabled>{{$kelas->kelas}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
                             <form action="{{ route('send_bc') }}" method="post">
                                 @csrf
                                 <div class="to">
@@ -75,6 +98,56 @@
                     </div>
                 </div>
             </div>
+            @can('only class')
+            <script>               
+                var get_id_jurusan = $('#get_jurusan option:selected').val()
+                $('#no_ortu').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(get_id_jurusan, kelas, "ortu")
+                })
+
+                $('#no_siswa').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(get_id_jurusan, kelas, "siswa")
+                })
+
+                $('#get_kelas').on('change', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    $('#no_ortu').prop('checked', false)
+                    $('#no_siswa').prop('checked', false)
+                    getSiswa(get_id_jurusan, kelas)
+
+                })
+
+                function getSiswa(id_jurusan, id_kelas, selected = null) {
+                    var data = {
+                        id_jurusan: id_jurusan,
+                        id_kelas: id_kelas,
+                        selected: selected
+                    }
+
+                    $.ajax({
+                        url: `{{ route('getSiswa') }}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            show_loading()
+                        },
+                        complete: function() {
+                            hide_loading()
+                        },
+                        success: function(res) {
+                            $('#to_siswa').html(res);
+
+                        }
+                    });
+                }
+            </script>
+            @endcan
+            @can('admin sekolah')
             <script type="text/javascript">
                 var get_id_jurusan;
                 $('#get_jurusan').on('change', function getKelas() {
@@ -152,6 +225,7 @@
                     });
                 }
             </script>
+            @endcan
             <script>
                 $(function() {
                     'use strict'

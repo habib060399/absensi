@@ -18,38 +18,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\CurlController;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function cekAbsensi($rfid)
-    {
-        $absen = new Absensi();
-        $user = new User();
-        $time_now = date("h:i:s");
-        $date_now = date("d-m-Y"); 
-        $get_date="";
-        $get_absen_user = $absen->getAbsen($rfid);
-        $get_user = $user->getUser($rfid);
-            
-            if($get_absen_user != null){
-                foreach($get_absen_user as $a){
-                    $get_date = $a->tanggal;
-                }
-                if($date_now == $get_date){
-                    return 2;
-                }else{
-                    $absen->setAbsen($rfid, $date_now, $time_now, $get_user->name);
-                    return 1;
-                }
-                // }
-            }else{
-                $absen->setAbsen($rfid, $date_now, $time_now, $get_user->name);
-                return 1;                
-            }
-            // return $status;
-
-            // return 1;
-    }
 
     public function registerJurusan(Request $request)
     {                
@@ -65,7 +37,9 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'jurusan' => 'required',
-            'kelas' => 'required'
+            'kelas' => 'required',
+            'username' => 'required',
+            'password' => 'required'
         ]);
 
         if($validator->fails()){
@@ -73,20 +47,44 @@ class UserController extends Controller
         }
         $validated = $validator->validated();
 
-        Kelas::create([
-            'id_sekolah' => Helper::getSession(),
-            'id_jurusan' => $request->input('jurusan'),
-            'kelas' => $request->input('kelas'),
-        ]);
+        $kelas = new Kelas();
+        $user = new User();
+        $id = date('dmyHis');
+        
+        $user->id = intVal($id);
+        $user->username = $request->input('username');
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+
+        $kelas->id_sekolah = Helper::getSession();
+        $kelas->id_jurusan = $request->input('jurusan');
+        $kelas->kelas = $request->input('kelas');
+        $user->kelas()->save($kelas);
+        $user->assignRole('kelas');
+        $user->givePermissionTo('only class');
 
         return redirect()->route('kelas')->with('status', 'sadfasd');
     }
 
-    public function editKelas($id)
+    public function editKelas($id, Request $request)
     {
-        $get_jurusan = jurusan::where('id_sekolah', Helper::getSession())->get();
-        // $get_kelas = Kelas::where('id', Helper::decryptUrl($id))->first();
-        dd(Helper::decryptUrl($id), $get_jurusan);
+        $id_kelas = Helper::decryptUrl($id);
+        $get_kelas = Kelas::where('id_sekolah', Helper::getSession())->where('id', $id_kelas)->first();
+
+        $get_kelas->id_jurusan = Helper::decryptUrl($request->input('jurusan'));
+        $pass = $request->input('password');
+        $get_kelas->kelas = $request->input('kelas');
+        $get_kelas->user->username = $request->input('username');
+        $get_kelas->save();
+
+        if($pass != null){
+            $get_kelas->user->password = Hash::make($pass);
+            $get_kelas->user->save();
+        }
+        // $get_kelas->user->name = "Eko";
+        // $get_kelas->user->save();
+        // dd(Helper::decryptUrl($id), $get_kelas->user->name, $jurusan, $pass);
+        return redirect()->route('kelas')->with('status', 'sadfasd');
     }
 
     public function registerSiswa(Request $request)
@@ -269,16 +267,29 @@ class UserController extends Controller
         $id_siswa = $request->input('nama');
         $status = $request->input('status_kehadiran');
         $tanggal = $request->input('tanggal');
+        $data = array();
         
         for ($i=0; $i < count($id_siswa); $i++) { 
-            Absensi::create([
-                'id_siswa' => $id_siswa[$i],
-                'tanggal' => $tanggal,
-                'waktu' => $time_now,
-                'status' => $status
-            ]);
+            $get_absen = Absensi::where('id_siswa', $id_siswa[$i])->where('tanggal', $tanggal)->first();
+            if(!$get_absen) {
+                $data[$i] = $id_siswa[$i];
+            }
+            
         }
-        return redirect()->route('absen')->with('status', 'Data berhasil ditambahkan');
+        
+        if($data != null){
+            for($a=0; $a < count($data); $a++) {
+                Absensi::create([
+                    'id_siswa' => $data[$a],
+                    'tanggal' => $tanggal,
+                    'waktu' => $time_now,
+                    'status' => $status
+                ]);
+            }
+            return redirect()->route('absen')->with('status', 'Data berhasil ditambahkan');
+        }
+        
+        return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
     }
 
     public function delAbsen($id, $tanggal){
@@ -370,6 +381,32 @@ class UserController extends Controller
         for ($i=0; $i < count($to); $i++) { 
             $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan);
         }
+
+        return redirect()->to('bc')->with('status', 'success');
+    }
+
+    public function registerUser(Request $request)
+    {
+        $request->validate([
+            'get_jurusan' => 'required',
+            'get_kelas' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = new User();
+        $id = date('dmyHis');
+        $kelas = Kelas::where('id', $request->input('get_kelas'))->first();
+        if($kelas != null) {
+            $user->id = intVal($id);
+            $user->username = $request->input('username');
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+            $user->assignRole('kelas');
+        }
+        // dd($kelas, $request->input('get_kelas'));
+    //     $request->input('get_jurusan'),
+   
 
         return redirect()->to('bc')->with('status', 'success');
     }
