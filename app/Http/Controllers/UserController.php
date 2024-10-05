@@ -396,18 +396,23 @@ class UserController extends Controller
 
         $user = new User();
         $id = date('dmyHis');
+        $intId = intVal($id);
         $kelas = Kelas::where('id', $request->input('get_kelas'))->first();
-        if($kelas != null) {
-            $user->id = intVal($id);
+        if($kelas != null && $kelas->id_user == null) {
+            $user->id = $intId;
             $user->username = $request->input('username');
             $user->password = Hash::make($request->input('password'));
             $user->save();
             $user->assignRole('kelas');
+            $kelas->id_user = $intId;
+            $kelas->save();
+
+            return redirect()->route('profile')->with('status', 'success');
         }
         // dd($kelas, $request->input('get_kelas'));
     //     $request->input('get_jurusan'),
    
 
-        return redirect()->to('bc')->with('status', 'success');
+        return redirect()->route('profile')->with('error', 'Data sudah ada');
     }
 }
