@@ -84,23 +84,7 @@
             </ul>
           </div>
         </li>
-        @endrole   
-        @role('kelas')     
-        <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
-            <i class="link-icon" data-feather="box"></i>
-            <span class="link-title">Sekolah</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="advancedUI">
-            <ul class="nav sub-menu">                            
-              <li class="nav-item">
-                <a href="{{route('siswa')}}" class="nav-link">Siswa</a>
-              </li> 
-            </ul>
-          </div>
-        </li>
-        @endrole   
+        @endrole 
         <li class="nav-item">
           <a href="{{route('bc')}}" class="nav-link">
             <i class="link-icon" data-feather="mail"></i>
@@ -237,11 +221,11 @@
       <div class="theme-wrapper">
         <h6 class="text-muted mb-2">Light Theme:</h6>
         <a class="theme-item active" href="demo1/dashboard.html">
-          <img src="assets/images/screenshots/light.jpg" alt="light theme">
+          {{-- <img src="assets/images/screenshots/light.jpg" alt="light theme"> --}}
         </a>
         <h6 class="text-muted mb-2">Dark Theme:</h6>
         <a class="theme-item" href="demo2/dashboard.html">
-          <img src="assets/images/screenshots/dark.jpg" alt="light theme">
+          {{-- <img src="assets/images/screenshots/dark.jpg" alt="light theme"> --}}
         </a>
       </div>
     </div>

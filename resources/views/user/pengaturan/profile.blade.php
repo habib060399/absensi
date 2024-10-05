@@ -86,7 +86,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="text" class="form-control" name="password">        
+            <input type="password" class="form-control" name="password">        
           </div>
       </div>
       <div class="modal-fo oter">
@@ -99,7 +99,7 @@
   </div>
   <!-- End Modal Tambah User -->
 
-  <script type="text/javascript">
+  <script>
     var get_id_jurusan;
     $('#get_jurusan').on('change', function getKelas() {
         get_id_jurusan = $('#get_jurusan option:selected').val()
