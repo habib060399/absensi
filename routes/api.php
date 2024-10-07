@@ -27,6 +27,6 @@ Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
 Route::post('/absensi', [RfidController::class, 'store']);
 Route::get('search/name', [ApiController::class, 'searchNamaSiswa'])->name('search_nama_siswa');
 Route::post('wa/group', [CurlController::class, 'getGroupWa']);
-Route::post('wa/group/update', [CurlController::class, 'updateGroupWa']);
+Route::post('wa/group/update', [CurlController::class, 'updateGroupWa'])->name('update_group_wa');
 Route::middleware(['auth:sanctum'])->group(function(){
 });

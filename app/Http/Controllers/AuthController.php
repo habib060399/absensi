@@ -36,7 +36,9 @@ class AuthController extends Controller
                 $get_mesin = Mesin::where('id', $sekolah->id_mesin)->first();                
                 Cookie::queue(Cookie::make('id_mesin', $get_mesin->id_mesin));
 
-                $request->session()->put('id', $sekolah->id);
+                // $request->session()->put('id_user', $get_user->id);
+                $request->session()->put('id_user', $get_user->id);
+                $request->session()->put('id_sekolah', $sekolah->id);
                 $request->session()->put('nama', $sekolah->nama_sekolah);
                 $request->session()->put('email', $sekolah->email);
 

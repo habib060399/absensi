@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Wa;
+use App\Models\Sekolah;
 use App\Models\Settings;
 use App\Helpers\Helper;
 use Maatwebsite\Excel\Facades\Excel;
@@ -353,36 +355,68 @@ class UserController extends Controller
 
     public function getSiswa(Request $request){
         $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->get();
+        $sekolah = Sekolah::where('id_user', "61024152445")->first();
+        $serilize = serialize($sekolah->wa->wa_group);
+        $unserilize = unserialize($serilize);
+        $a = json_decode($unserilize);
+        
+
         if($siswa){
             if($request->selected == "ortu"){
-                foreach ($siswa as $s) {
-                    
+                foreach ($siswa as $s) {                    
                     echo "<option value=".Helper::encryptUrl($s->no_hp_ortu)." selected> Ortu $s->nama_siswa</option>";                    
                 }
             }elseif ($request->selected == "siswa") {
                 foreach ($siswa as $s) {
                     echo "<option value=".Helper::encryptUrl($s->no_hp)." selected> $s->nama_siswa</option>";  
                 }            
-            }else {
-                foreach ($siswa as $s) {
-                    echo "<option value=".Helper::encryptUrl($s->no_hp)."> $s->nama_siswa</option>";  
-                }            
+            }else { 
+                for($i = 0; $i < count($siswa); $i++){                    
+                    echo "<option value=".Helper::encryptUrl($siswa[$i]->no_hp).">" .$siswa[$i]->nama_siswa."</option>";
+                }
+                if($a != null){
+                    $b = $a->data;
+                    for($i = 0; $i < count($b); $i++){                    
+                        echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+                    }
+                }
             }
         }else{
             echo "No Result Found";
         }
     }
 
-    public function sendBc(Request $request){
+    public function sendBc(Request $request)
+    {
+        $request->validate([
+            // 'to_siswa' => 'required',
+            // 'pesan' => 'required',
+            'files' => 'file|image|max:5000'
+        ]);
         $wa = new CurlController();
+        $get_file = $request->file('file');
         $to = $request->input('to_siswa');
         $pesan = $request->input('pesan');
 
-        for ($i=0; $i < count($to); $i++) { 
+        if(!empty($get_file)){
+            $filename = $get_file->getClientOriginalName();
+            $get_file->storePubliclyAs('tmp', $filename);
+
+            $filepath = storage_path("app/public/tmp/".$filename);
+            if(file_exists($filepath)){
+                for ($i=0; $i < count($to); $i++) { 
+                $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath);
+                }
+                return redirect()->route('bc')->with('status', 'success');
+            }
+        }else{
+            for ($i=0; $i < count($to); $i++) { 
             $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan);
+            }
+            return redirect()->route('bc')->with('status', 'success');
         }
 
-        return redirect()->to('bc')->with('status', 'success');
+        return redirect()->route('bc');
     }
 
     public function registerUser(Request $request)
@@ -414,5 +448,43 @@ class UserController extends Controller
    
 
         return redirect()->route('profile')->with('error', 'Data sudah ada');
+    }
+
+    public function registerWa(Request $request)
+    {
+        $no = $request->input('no_wa');
+        $wa = new Wa();
+        $user = User::where('id', Helper::getSession())->first();
+
+        $id = date('dmyHis');
+
+        if( $user->getRoleNames()->first() == "sekolah"){
+            $wa->id = $id;
+            $wa->no_wa = $request->input('no_wa');
+            Sekolah::where('id_user', $user->id)->update([
+                'id_wa' => $id
+            ]);
+            $wa->save();
+            return redirect()->route('wa')->with('status', 'Da');
+        }
+        return redirect()->route('wa')->with('error', 'Data gagal ditambahkan');
+    }
+
+    public function updateGroupWa()
+    {
+        $get = CurlController::updateGroupWa();
+        $grup = CurlController::getGroupWa();
+        // $data = file_get_contents($get);
+        $getJson = json_decode($get, true);
+        $getJson2 = json_decode($grup, true);
+        $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
+        $sekolah->wa()->update([
+            'wa_group' => $grup
+        ]);
+        // foreach ($getJson as $value) {
+        //     echo $value;
+        // }
+        // dd($grup, $sekolah->wa);
+        return redirect()->route('wa')->with('status', 'Data gagal ditambahkan');
     }
 }

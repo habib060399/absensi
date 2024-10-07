@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sekolah', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_user')->nullable(false);
+            $table->bigInteger('id_wa')->nullable(true);
             $table->string('id_mesin', 17);
             $table->string('nama_sekolah', 100);
             $table->string('email', 100);
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->string('npsn', 100);
             $table->timestamps();
             $table->foreign('id_user')->on('users')->references('id');
+            $table->foreign('id_wa')->on('wa')->references('id');
         });
     }
 

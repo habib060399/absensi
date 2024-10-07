@@ -105,6 +105,12 @@
             <span class="link-title">Users</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{route('wa')}}" class="nav-link">
+            <i class="link-icon" data-feather="user"></i>
+            <span class="link-title">Whatssap</span>
+          </a>
+        </li>
         @endrole
         {{-- <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">

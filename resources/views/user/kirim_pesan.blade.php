@@ -51,9 +51,20 @@
                                     </div>
                                 </div>
                             </div>
-                            @endcan
-                            <form action="{{ route('send_bc') }}" method="post">
+                            @endcan                            
+                            <form action="{{ route('send_bc') }}" method="post" enctype="multipart/form-data">
                                 @csrf
+                                <div class="subject">
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 col-form-label">File</label>
+                                        <div class="col-md-10">
+                                            <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file">
+                                            @error('file')
+                                                <div class="error invalid-feedback">{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="to">
                                     <div class="row mb-3">
                                         <label class="col-md-2 col-form-label">To:</label>

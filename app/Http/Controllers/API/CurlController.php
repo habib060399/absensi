@@ -56,6 +56,17 @@ class CurlController extends Controller
         return $status = $this->setApiWa($data);
     }
 
+    public function bcWaWithFile($no, $pesan, $pathFile)
+    {
+        $data = array(
+            'target' => $no,
+            'message' => "$pesan",
+            'countryCode' => "62",
+            'file' => new \CURLFile("$pathFile")
+        );
+        return $status = $this->setApiWa($data);
+    }
+
     public static function getDevice()
     {
         $token = env("TOKEN_ACCOUNT_WA");
@@ -80,7 +91,7 @@ class CurlController extends Controller
           return $response;
     }
 
-    public function getGroupWa()
+    public static function getGroupWa()
     {
         $token = env("TOKEN_API_WA");
         $curl = curl_init();
@@ -105,7 +116,7 @@ class CurlController extends Controller
         return $response;
     }
 
-    public function updateGroupWa()
+    public static function updateGroupWa()
     {
         $token = env("TOKEN_API_WA");
         $curl = curl_init();
