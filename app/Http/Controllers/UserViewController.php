@@ -70,7 +70,7 @@ class UserViewController extends Controller
     public function pesan()
     {
         $setting = Settings::where('id_sekolah',session('id_sekolah'))->first();
-        return view('user.broadcast', ['broadcast' => ($setting) ? $setting->bc : "", 'id_sekolah' => session('id_sekolah')]);
+        return view('user.broadcast', ['broadcast' => ($setting) ? $setting->bc : "", 'id_sekolah' => session('id_sekolah')]); 
     }
 
     public function absen()
