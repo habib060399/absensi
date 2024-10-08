@@ -28,7 +28,14 @@ class CurlController extends Controller
         ));
 
         $responseWa = curl_exec($curl);
+        if(curl_errno($curl)){
+            $error_msg = curl_error($curl);
+        }
         curl_close($curl);
+
+        if(isset($error_msg)){
+            return $error_msg;
+        }
 
         return $responseWa;
     }
