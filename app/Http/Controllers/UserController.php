@@ -355,7 +355,7 @@ class UserController extends Controller
 
     public function getSiswa(Request $request){
         $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->get();
-        $sekolah = Sekolah::where('id_user', "61024152445")->first();
+        $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
         $serilize = serialize($sekolah->wa->wa_group);
         $unserilize = unserialize($serilize);
         $a = json_decode($unserilize);
@@ -366,9 +366,21 @@ class UserController extends Controller
                 foreach ($siswa as $s) {                    
                     echo "<option value=".Helper::encryptUrl($s->no_hp_ortu)." selected> Ortu $s->nama_siswa</option>";                    
                 }
+                if($a != null){
+                    $b = $a->data;
+                    for($i = 0; $i < count($b); $i++){                    
+                        echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+                    }
+                }
             }elseif ($request->selected == "siswa") {
                 foreach ($siswa as $s) {
                     echo "<option value=".Helper::encryptUrl($s->no_hp)." selected> $s->nama_siswa</option>";  
+                }
+                if($a != null){
+                    $b = $a->data;
+                    for($i = 0; $i < count($b); $i++){                    
+                        echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+                    }
                 }            
             }else { 
                 for($i = 0; $i < count($siswa); $i++){                    
