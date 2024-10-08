@@ -9,7 +9,12 @@ class Helper
 {
     public static function getSession()
     {   
-        return session('id');
+        return session('id_user');
+    }
+
+    public static function idSessionSekolah()
+    {   
+        return session('id_sekolah');
     }
 
     public static function getCookie()

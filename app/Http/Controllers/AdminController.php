@@ -9,6 +9,7 @@ use App\Models\Perangkat;
 use App\Models\Mesin;
 use App\Models\Sekolah;
 use App\Models\User;
+use App\Models\Wa;
 use App\Http\Controllers\API\RfidController;
 
 class AdminController extends Controller
@@ -87,6 +88,7 @@ class AdminController extends Controller
 
         $sekolah = new Sekolah();
         $user = new User();
+        $wa = new Wa();
         $id = date('dmyHis');
         
         $user->id = intVal($id);
@@ -94,11 +96,16 @@ class AdminController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
  
+        $wa->id = intVal($id);
+        $wa->no_wa = $request->input('contact');
+        $wa->save();
+
         $sekolah->nama_sekolah = $request->input('nama_sekolah');
         $sekolah->email = $request->input('email');
         $sekolah->id_mesin = $id_mesin;
         $sekolah->pendidikan = $request->input('pendidikan') ;
         $sekolah->npsn = $request->input('npsn');
+        $sekolah->id_wa = intVal($id);
         $user->sekolah()->save($sekolah);
         
         $user->assignRole('sekolah');

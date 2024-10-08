@@ -59,7 +59,7 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas'])->group(fu
     Route::post('/pesan/edit', [UserController::class, 'editPesan'])->name('edit_bc');
     Route::get('/absensi', [UserViewController::class, 'absen'])->name('absen');
     Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
-    Route::post('/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
+    // Route::post('/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
 
     Route::get('/siswa/hapus/{id}', [UserController::class, 'hapusSiswa'])->name('hapus');
     Route::get('/absen/hapus/{id}/{tanggal}', [UserController::class, 'delAbsen'])->name('hapus_absen');
@@ -76,7 +76,11 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas'])->group(fu
     Route::get('/rekap', [UserViewController::class, 'rekapAbsen'])->name('rekap');
     Route::post('/rekap/download', [UserController::class, 'rekapAbsen'])->name('download_rekap');
     Route::post('/profile/tambah', [UserController::class, 'registerUser'])->name('tambah_user');
+    Route::get('/whatssap', [UserViewController::class, 'wa'])->name('wa');
+    Route::post('/whatssap/tambah', [UserController::class, 'registerWa'])->name('wa_tambah');
+    Route::get('/whatssap/update', [UserController::class, 'updateGroupWa'])->name('wa_update');
 });
+Route::post('user/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
 
 Route::get('broadcast', function() {
     $user = User::find(2);

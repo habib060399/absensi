@@ -67,7 +67,16 @@
 											</div><!-- Col -->
 										</div><!-- Row -->
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-3">
+												<div class="mb-3">
+													<label class="form-label">Contact</label>
+													<input type="text" class="form-control @error('contact') is-invalid @enderror" placeholder="Contact" name="contact">
+													@error('contact')
+														<div class="error invalid-feedback">{{$message}}</div>
+													@enderror
+												</div>
+											</div><!-- Col -->
+											<div class="col-sm-5">
 												<div class="mb-3">
 													<label class="form-label">Username</label>
 													<input type="text" class="form-control @error('username') is-invalid @enderror" placeholder="Username" name="username">
@@ -76,7 +85,7 @@
 													@enderror
 												</div>
 											</div><!-- Col -->
-											<div class="col-sm-6">
+											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Password</label>
 													<input type="password" class="form-control @error('password') is-invalid @enderror" autocomplete="off" placeholder="Password" name="password">

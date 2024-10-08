@@ -7,6 +7,7 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\User;
+use App\Models\Sekolah;
 use App\Models\Settings;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Cookie;
@@ -47,7 +48,7 @@ class UserViewController extends Controller
     public function siswa()
     {
         // return view('user.siswa', ['kelas' => Kelas::where('id_sekolah', Helper::getSession())->get()]);
-        return view('user.sekolah.siswa', ['siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::getSession())->get()]);
+        return view('user.sekolah.siswa', ['siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get()]);
     }
 
     public function editSiswa($id)
@@ -78,7 +79,7 @@ class UserViewController extends Controller
         if($user){
             if($user->can('only class')){
                 return view('user.absen.data_absen', [
-                    'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
+                    'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
                     'kelas' => $user->kelas
                 ]);
             }
@@ -95,7 +96,7 @@ class UserViewController extends Controller
         if($user){
             if($user->can('only class')){
                 return view('user.absen.absensi_live', [
-                    'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
+                    'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
                     'cookies' => Cookie::get('id_mesin'),
                     'kelas' => $user->kelas
                 ]);
@@ -124,8 +125,9 @@ class UserViewController extends Controller
         $user = User::where('id', session('id_user'))->first();
         if($user){
             if($user->can('only class')){
+                // dd($user->kelas);
                 return view('user.kirim_pesan', [
-                    'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),                    
+                    'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->first(),                    
                     'kelas' => $user->kelas,                    
                 ]);
             }
@@ -147,7 +149,7 @@ class UserViewController extends Controller
                 // $jurusan = jurusan::where('id_sekolah', Helper::getSession())->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first();
                 // dd($jurusan);
                 return view('user.absen.rekap_absen', [
-                    'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
+                    'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
                     'kelas' => $user->kelas
                 ]);
             }
@@ -155,6 +157,20 @@ class UserViewController extends Controller
 
         return view('user.absen.rekap_absen', [
             'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+        ]);
+    }
+
+    public function wa()
+    {
+        $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
+        $get_wa_group = json_decode($sekolah->wa->wa_group, true);
+        if($get_wa_group){
+            return view('user.pengaturan.wa', [
+                'wa' => $get_wa_group['data']
+            ]);
+        }
+        return view('user.pengaturan.wa', [
+            'wa' => []
         ]);
     }
 }
