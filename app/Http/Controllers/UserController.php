@@ -415,13 +415,13 @@ class UserController extends Controller
             $get_file->storePubliclyAs('tmp', $filename);
 
             $filepath = storage_path("app/public/tmp/".$filename);
-            if(file_exists($filepath)){
+            if(file_exists($filepath)){                
                 for ($i=0; $i < count($to); $i++) { 
                 $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath);
                 }
                 return redirect()->route('bc')->with('status', 'success');
             }
-        }else{
+        }elseif(empty($get_file)){
             for ($i=0; $i < count($to); $i++) { 
             $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan);
             }
