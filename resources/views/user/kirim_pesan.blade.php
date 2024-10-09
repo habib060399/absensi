@@ -100,7 +100,7 @@
                             </div>
                             <div>
                                 <div class="col-md-12">
-                                    <button class="btn btn-primary me-1 mb-1" type="submit"> Send</button>
+                                    <button class="btn btn-primary me-1 mb-1" id="submit" type="submit"> Send</button>
                                     <button class="btn btn-secondary me-1 mb-1" type="button"> Cancel</button>
                                 </div>
                             </div>
@@ -109,6 +109,11 @@
                     </div>
                 </div>
             </div>
+            <script>
+                $('#submit').on('click', function() {
+                    show_loading();
+                })
+            </script>
             @can('only class')
             <script>               
                 var get_id_jurusan = $('#get_jurusan option:selected').val()
