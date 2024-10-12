@@ -54,22 +54,24 @@ class CurlController extends Controller
         return $status = $this->setApiWa($data);
     }
 
-    public function bcWa($no, $pesan){
+    public function bcWa($no, $pesan, $time){
         $data = array(
             'target' => $no,
             'message' => "$pesan",
-            'countryCode' => "62"
+            'countryCode' => "62",
+            'schedule' => $time,
         );
         return $status = $this->setApiWa($data);
     }
 
-    public function bcWaWithFile($no, $pesan, $pathFile)
+    public function bcWaWithFile($no, $pesan, $pathFile, $time)
     {
         $data = array(
             'target' => $no,
             'message' => "$pesan",
             'countryCode' => "62",
-            'file' => new \CURLFile("$pathFile")
+            'file' => new \CURLFile("$pathFile"),
+            'schedule' => $time,
         );
         return $status = $this->setApiWa($data);
     }

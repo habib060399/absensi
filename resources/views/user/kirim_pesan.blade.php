@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="to">
+                                <div class="subject">
                                     <div class="row mb-3">
                                         <label class="col-md-2 col-form-label">To:</label>
                                         <div class="col-md-10">
@@ -74,7 +74,28 @@
                                             </select>
                                         </div>
                                     </div>
+                                </div>                                
+                        <div class="subject">
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Schedule Tanggal</label>
+                                <div class="col-md-7">
+                                    <div class="input-group date datepicker" id="datePickerExample3">
+                                        <input type="text" class="form-control" name="tgl" />
+                                        <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>                                       
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="subject">
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Schedule Waktu</label>
+                                <div class="col-md-7">
+                                    <div class="input-group date timepicker" id="datetimepickerExample" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerExample" name="waktu"/>
+                                        <span class="input-group-text" data-target="#datetimepickerExample" data-toggle="datetimepicker"><i data-feather="clock"></i></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-4">
                             <label class="col-md-2 col-form-label"></label>
@@ -91,20 +112,21 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="px-3">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label visually-hidden" for="simpleMdeEditor">Descriptions </label>
-                                    <textarea class="form-control" name="pesan" id="simpleMdeEditor" rows="5"></textarea>
-                                </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label visually-hidden" for="simpleMdeEditor">Descriptions </label>
+                                <textarea class="form-control" name="pesan" id="simpleMdeEditor" rows="5"></textarea>
                             </div>
+                        </div>
+                        <div class="px-3">
                             <div>
                                 <div class="col-md-12">
                                     <button class="btn btn-primary me-1 mb-1" id="submit" type="submit"> Send</button>
                                     <button class="btn btn-secondary me-1 mb-1" type="button"> Cancel</button>
                                 </div>
                             </div>
-                            </form>
+                        </div>
+                        </form>
                         </div>
                     </div>
                 </div>
