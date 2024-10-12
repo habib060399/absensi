@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/simplemde/simplemde.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/prismjs/themes/prism.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" />
+    <link rel="stylesheet" href="{{asset('assets/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css')}}"/>
     <!-- End plugin css for this page -->
 
     <!-- inject:css -->
@@ -376,6 +377,7 @@
     <script src="{{ asset('assets/vendors/prismjs/prism.js') }}"></script>
     <script src="{{ asset('assets/vendors/clipboard/clipboard.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{asset('assets/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js')}}"></script>
     <!-- End plugin js for this page -->
 
     <!-- inject:js -->
@@ -389,6 +391,7 @@
     {{-- <script src="{{ asset('assets/js/sweet-alert.js') }}"></script> --}}
     <script src="{{ asset('assets/js/spinner.js') }}"></script>
     <script src="{{ asset('assets/js/datepicker.js') }}"></script>
+    <script src="{{ asset('assets/js/timepicker.js') }}"></script>
     @if (session('status'))
         <script>
             $(document).ready(() => {

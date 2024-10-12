@@ -29,4 +29,17 @@ $(function () {
         });
         $("#datePickerExample2").datepicker("setDate", today);
     }
+
+    if ($("#datePickerExample3").length) {
+        var date = new Date();
+        var today = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+        $("#datePickerExample3").datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true,
+        });
+    }
 });
