@@ -432,7 +432,7 @@
         </script>
     @endif
     <!-- End custom js for this page -->
-    @vite('resources/js/app.js')
+    {{-- @vite('resources/js/app.js') --}}
     {{-- <script type="module">
         Echo.channel(`Presence`)
             .listen('ScanRFID', (e) => {
