@@ -44,14 +44,14 @@
             <hr>
             <div class="live-absen"></div>
             <div class="example" id="example">
-                <div class="d-flex align-items-start">
+                {{-- <div class="d-flex align-items-start">
                     <img src="{{ asset('storage/foto/20240824183933.png') }}" class="wd-100 wd-sm-200 me-3" alt="...">
                     <div class="data" id="data">
                         <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
                         <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
                         <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <hr>
         </div>
