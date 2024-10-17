@@ -127,7 +127,7 @@
 
         });
     </script>
-    @vite('./resources/js/app.js')
+    @vite('resources/js/app.js')
     <script type="module">
         var rfid = document.getElementById('rfid');
         Echo.channel(`Presence`)

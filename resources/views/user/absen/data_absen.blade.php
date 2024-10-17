@@ -273,7 +273,7 @@
                             data: function(params) {
                                 return {
                                  search: params.term,
-                                 id_sekolah: {{ session('id') }},
+                                 id_sekolah: {{ session('id_sekolah') }},
                                  id_jurusan: get_id_jurusan,
                                  id_kelas: get_id_kelas
                                 }
