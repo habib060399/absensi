@@ -77,18 +77,16 @@ class RfidController extends Controller
             }else{                
                 $Wa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
                 $respon = json_decode($Wa);
+                broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah, $get_siswa->foto));
                
-                if($respon->detail) {
-                    
-                    Absensi::create([
-                        'id_siswa' => $get_siswa->id,
-                        'tanggal' => $date_now,
-                        'waktu' => $time_now,
-                        'status' => 'hadir'
-                    ]);
+                Absensi::create([
+                    'id_siswa' => $get_siswa->id,
+                    'tanggal' => $date_now,
+                    'waktu' => $time_now,
+                    'status' => 'hadir'
+                ]);
 
-                    broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah, $get_siswa->foto));
-
+                if($respon->detail) {                    
                     return response()->json([
                         'message' => "Pesan berhasil dikirim",
                         'message2' => "Absensi Berhasil", 
@@ -98,7 +96,8 @@ class RfidController extends Controller
                 } else {
                     return response()->json([
                         'message' => "Gagal Mengirim Pesan",                    
-                        'status' => 500
+                        'status' => 200,
+                        'name' => $get_siswa->nama_siswa,
                     ]);
                 }
       

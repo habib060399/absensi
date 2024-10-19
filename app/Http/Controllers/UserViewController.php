@@ -51,6 +51,17 @@ class UserViewController extends Controller
         return view('user.sekolah.siswa', ['siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get()]);
     }
 
+    public function guru()
+    {
+        // return view('user.siswa', ['kelas' => Kelas::where('id_sekolah', Helper::getSession())->get()]);
+        return view('user.sekolah.guru');
+    }
+
+    public function addGuru()
+    {
+        return view('user.sekolah.tambah_guru');
+    }
+
     public function editSiswa($id)
     {
         $siswa = Siswa::where('id', Helper::decryptUrl($id))->first();

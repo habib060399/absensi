@@ -68,7 +68,7 @@
         <label class="form-label">Nama Jurusan</label>
         <input type="text" class="form-control" name="jurusan">
         </div>
-      <div class="modal-fo oter">
+      <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
@@ -92,7 +92,7 @@
         <input type="text" id="edit_id_jurusan" type="hidden" name="id_edit_jurusan" hidden>
         <input type="text" id="edit_jurusan" class="form-control" name="edit_jurusan">
         </div>
-      <div class="modal-fo oter">
+      <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
