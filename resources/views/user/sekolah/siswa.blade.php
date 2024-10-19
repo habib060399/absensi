@@ -36,17 +36,25 @@
                                     <th>Kelas</th>
                                     <th>Jurusan</th>
                                     <th>ID Name Tag</th>
+                                    <th>Hadir</th>
+                                    <th>Absen</th>
+                                    <th>Izin</th>
+                                    <th>Sakit</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($siswa as $s)
                                     <tr>
-                                        <td>{{ $s->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $s->nama_siswa }}</td>
                                         <td>{{ $s->kelas }}</td>
                                         <td>{{ $s->nama_jurusan }}</td>
                                         <td>{{ $s->rfid }}</td>
+                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'hadir')->where('id_siswa', $s->id)->count('status')}}</td>
+                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status')}}</td>
+                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status')}}</td>
+                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status')}}</td>
                                         <td>
                                             <a href="{{ route('editSiswa', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" class="btn btn-warning btn-icon btn-xs">
                                                 <i data-feather="edit-3"></i>
