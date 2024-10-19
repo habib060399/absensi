@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ControllerView;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\UserViewController;
 use App\Http\Controllers\AdminViewController;
 
@@ -50,6 +51,13 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas'])->group(fu
     Route::post('/kelas/edit/{id}', [UserController::class, 'editKelas'])->name('e.kelas');
     Route::post('/tambah-kelas', [UserController::class, 'registerKelas'])->name('add_kelas');
     Route::get('/siswa', [UserViewController::class, 'siswa'])->name('siswa');
+    Route::post('/tambah-jabatan', [GuruController::class, 'insertJabatan'])->name('add_jabatan');
+    Route::get('/guru', [GuruController::class, 'index'])->name('guru');
+    Route::get('/guru/edit/{id}', [GuruController::class, 'showEditGuru'])->name('sh_edit_guru');
+    Route::post('/guru/edit/send{id}', [GuruController::class, 'editGuru'])->name('edit_guru');
+    Route::get('/guru/tambah', [GuruController::class, 'showInsertGuru'])->name('add_guru');
+    Route::post('/guru/tambah/tambah-guru', [GuruController::class, 'insertGuru'])->name('guru_tambah');
+    Route::get('/guru/hapus/{id}', [GuruController::class, 'deleteGuru'])->name('hapus_guru');
     Route::get('/siswa/edit/{id}', [UserViewController::class, 'editSiswa'])->name('editSiswa');
     Route::post('/siswa/edit/send/{id}', [UserController::class, 'editSiswa'])->name('edit_siswa');
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');

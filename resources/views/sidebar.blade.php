@@ -81,6 +81,9 @@
               <li class="nav-item">
                 <a href="{{route('siswa')}}" class="nav-link">Siswa</a>
               </li> 
+              <li class="nav-item">
+                <a href="{{route('guru')}}" class="nav-link">Guru</a>
+              </li> 
             </ul>
           </div>
         </li>

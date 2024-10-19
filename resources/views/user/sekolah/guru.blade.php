@@ -3,7 +3,7 @@
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Tables</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data Siswa</li>
+            <li class="breadcrumb-item active" aria-current="page">Data Guru</li>
         </ol>
     </nav>
 
@@ -11,20 +11,13 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Data Siswa</h6>
+                    <h6 class="card-title">Data Guru</h6>
                     <br>
                     <div>
-                        <a href="{{ route('siswa_add') }}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
-                        <a href="{{ route('template_siswa') }}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a>
+                        <a href="{{route('add_guru')}}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
+                        <a href="" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a>
                     </div>
                     <br>
-                    <div>
-                        <form action="{{ route('import_siswa') }}" enctype="multipart/form-data" method="post">
-                            @csrf
-                            <input type="file" name="file" class="form-control-sm">
-                            <button type="submit" class="btn btn-inverse-success btn-icon"><i data-feather="upload"></i></button>
-                        </form>
-                    </div>
                     <hr>
                     <br>
                     <div class="table-responsive">
@@ -32,39 +25,29 @@
                             <thead>
                                 <tr>
                                     <th width="50px">No</th>
-                                    <th>Nama Siswa</th>
-                                    <th>Kelas</th>
-                                    <th>Jurusan</th>
-                                    <th>ID Name Tag</th>
-                                    <th>Hadir</th>
-                                    <th>Absen</th>
-                                    <th>Izin</th>
-                                    <th>Sakit</th>
+                                    <th>Nama Guru</th>
+                                    <th>Jabatan</th>
+                                    <th>No Whatssap</th>                                    
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($siswa as $s)
+                                @foreach ($guru as $g)                                                                    
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $s->nama_siswa }}</td>
-                                        <td>{{ $s->kelas }}</td>
-                                        <td>{{ $s->nama_jurusan }}</td>
-                                        <td>{{ $s->rfid }}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'hadir')->where('id_siswa', $s->id)->count('status')}}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status')}}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status')}}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status')}}</td>
+                                        <td>{{$loop->iteration}}</td> 
+                                        <td>{{$g->nama_guru}}</td>
+                                        <td>{{$g->nama_jabatan}}</td>
+                                        <td>{{$g->no_wa}}</td>                                                                               
                                         <td>
-                                            <a href="{{ route('editSiswa', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" class="btn btn-warning btn-icon btn-xs">
+                                            <a href="{{route('sh_edit_guru',['id' => \App\Helpers\Helper::encryptUrl($g->id)])}}" class="btn btn-warning btn-icon btn-xs">
                                                 <i data-feather="edit-3"></i>
                                             </a>
-                                            <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="{{ route('hapus', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" id="hapus">
+                                            <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="{{route('hapus_guru', ['id' => \App\Helpers\Helper::encryptUrl($g->id)])}}" id="hapus">
                                                 <i data-feather="trash-2"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @endforeach
                             </tbody>
                         </table>
                     </div>
