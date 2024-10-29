@@ -39,5 +39,23 @@ class UserSeeder extends Seeder
         $admin1->save();
         $admin1->assignRole('sekolah');
         $admin1->givePermissionTo('admin sekolah');
+
+        $admin1 = new User();
+        $admin1->id = 2;
+        $admin1->name = '321';
+        $admin1->username = '321';
+        $admin1->password = Hash::make(321);
+        $admin1->save();
+        $admin1->assignRole('kelas');
+        $admin1->givePermissionTo('only class');
+
+        $admin1 = new User();
+        $admin1->id = 3;
+        $admin1->name = '111';
+        $admin1->username = '111';
+        $admin1->password = Hash::make(111);
+        $admin1->save();
+        $admin1->assignRole('kelas');
+        $admin1->givePermissionTo('only class');
     }
 }
