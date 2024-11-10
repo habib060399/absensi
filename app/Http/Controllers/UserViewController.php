@@ -29,7 +29,7 @@ class UserViewController extends Controller
     {
         return view('user.sekolah.kelas', [
             'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
-            'kelas' => Kelas::join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')->select('kelas.*', 'jurusan.nama_jurusan')->where('kelas.id_sekolah', Helper::getSession())->get()
+            'kelas' => Kelas::join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')->select('kelas.*', 'jurusan.nama_jurusan')->where('kelas.id_sekolah', session('id_sekolah'))->get()
         ]);
     }
 

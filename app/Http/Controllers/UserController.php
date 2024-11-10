@@ -28,7 +28,7 @@ class UserController extends Controller
     public function registerJurusan(Request $request)
     {                
         Jurusan::create([
-            'id_sekolah' => Helper::getSession(),
+            'id_sekolah' => session('id_sekolah'),
             'nama_jurusan' => $request->input('jurusan')
         ]);
 
@@ -58,7 +58,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        $kelas->id_sekolah = Helper::getSession();
+        $kelas->id_sekolah = session('id_sekolah');
         $kelas->id_jurusan = $request->input('jurusan');
         $kelas->kelas = $request->input('kelas');
         $user->kelas()->save($kelas);
@@ -413,26 +413,28 @@ class UserController extends Controller
         $waktu = $request->input('waktu');
         $gabung = $tgl ." ".$waktu;
         $unix_time = strtotime($gabung);
+        $siswa = Siswa::where('siswa.id_jurusan', 1)->where('siswa.id_kelas', 1)->join('guru', 'siswa.id_sekolah', '=', 'guru.id_sekolah')->select('siswa.nama_siswa', 'siswa.no_hp', 'siswa.no_hp_ortu', 'guru.nama_guru', 'guru.no_wa')->get();
+        dd($siswa);
 
-        if(!empty($get_file)){
-            $filename = $get_file->getClientOriginalName();
-            $get_file->storePubliclyAs('tmp', $filename);
+        // if(!empty($get_file)){
+        //     $filename = $get_file->getClientOriginalName();
+        //     $get_file->storePubliclyAs('tmp', $filename);
 
-            $filepath = storage_path("app/public/tmp/".$filename);
-            if(file_exists($filepath)){                
-                for ($i=0; $i < count($to); $i++) { 
-                $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath, $unix_time);
-                }
-                return redirect()->route('bc')->with('status', 'success');
-            }
-        }elseif(empty($get_file)){
-            for ($i=0; $i < count($to); $i++) { 
-            $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan, $unix_time);
-            }
-            return redirect()->route('bc')->with('status', 'success');
-        }
+        //     $filepath = storage_path("app/public/tmp/".$filename);
+        //     if(file_exists($filepath)){                
+        //         for ($i=0; $i < count($to); $i++) { 
+        //         $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath, $unix_time);
+        //         }
+        //         return redirect()->route('bc')->with('status', 'success');
+        //     }
+        // }elseif(empty($get_file)){
+        //     for ($i=0; $i < count($to); $i++) { 
+        //     $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan, $unix_time);
+        //     }
+        //     return redirect()->route('bc')->with('status', 'success');
+        // }
 
-        return redirect()->route('bc');
+        // return redirect()->route('bc');
     }
 
     public function registerUser(Request $request)

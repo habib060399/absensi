@@ -27,7 +27,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/fullcalendar/main.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}"> --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/simplemde/simplemde.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/prismjs/themes/prism.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" />
@@ -47,7 +48,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="csrf-tokens" content="{{ csrf_token() }}" />
     <meta name="csrf-tokenss" content="{{ csrf_token() }}" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         let get_siswa = null;
         var url = "{{ url('/') }}";
@@ -367,7 +369,8 @@
     <!-- endinject -->
 
     <!-- Plugin js for this page -->
-    <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/fullcalendar/main.min.js') }}"></script>
