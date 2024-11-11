@@ -126,44 +126,42 @@
         $(document).ready(function() {
         $('#mySelect2').select2();
 
+        var html = [];
+        var element = "";
         $('#mySelect2').on('change', function(){
-            var selectedData = $('#mySelect2').select2('data');
+            var selectedData = $('#mySelect2').select2('data');            
             console.log(selectedData);
+            
+            for (let i = 0; i < selectedData.length; i++) {
+                if(selectedData[i].selected){
+                    var id = selectedData[i].id;
+                    console.log(id);
+                    
+                    $.ajax({
+                            url: `{{ route('getkls2') }}`,
+                            type: 'POST',
+                            data: {id_jurusan: id},
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            beforeSend: function() {
+                                show_loading()
+                            },
+                            complete: function() {
+                                hide_loading()
+                            },
+                            success: function(res) {
+                                console.log(res)                                
+                                html.push(res)
+                                $('#get_kelas').html(html)
+                            }
+                        })   
+                        html.splice(-1,selectedData.length)
+                        console.log(html);             
+                }           
+            }                                        
         })
-
-        })
-        
-        //         $('.compose-multiple-select2').on('change', function getKelas() {
-        //             // get_id_jurusan = $('#get_jurusan option:selected').val()
-        //             var get_id_jurusan = $('#get_jurusan').select2('data');
-        // console.log(get_id_jurusan);
-        //             var data = {
-        //                 id_jurusan: get_id_jurusan
-        //             }
-
-        //             $('#get_jurusan').click(function() {
-        //                 $.ajax({
-        //                     url: `{{ route('getkls') }}`,
-        //                     type: 'POST',
-        //                     data: data,
-        //                     headers: {
-        //                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //                     },
-        //                     beforeSend: function() {
-        //                         show_loading()
-        //                     },
-        //                     complete: function() {
-        //                         hide_loading()
-        //                     },
-        //                     success: function(res) {
-        //                         console.log(res)
-        //                         $('#get_kelas').html(res)
-
-        //                     }
-        //                 })
-        //             });
-
-        //         });
+    })                          
     </script>
         <script>
     

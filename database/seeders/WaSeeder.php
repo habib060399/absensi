@@ -18,5 +18,6 @@ class WaSeeder extends Seeder
         $wa->id_akun = 1;
         $wa->no_wa = "082169376803";
         $wa->wa_group = "";
+        $wa->save();
     }
 }

@@ -51,9 +51,8 @@ class GuruController extends Controller
 
         $foto = $request->file('foto');
         $jurusan = $request->input('jurusan');
-        $int_array = array_map('intval', $jurusan);
-        $kelas = Kelas::where('id_sekolah', session('id_sekolah'))->whereIn('id_jurusan', $int_array)->get();
-        dd($int_array);
+        $kelas = $request->input('kelas');
+
         if($foto != null){
             $request->validate([
                 'foto' => 'image|max:2000'
@@ -62,12 +61,12 @@ class GuruController extends Controller
             $filename = Carbon::now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
             Guru::create([
                 'id_sekolah' => session('id_sekolah'),
+                'id_jurusan' => json_encode($jurusan),
+                'id_kelas' => json_encode($kelas),
                 'nama_guru' => $request->input('nama_guru'),
                 'no_wa' => $request->input('no_wa'),
                 'id_jabatan' => $request->input('jabatan'),
                 'email' => $request->input('email'),
-                'jurusan' => $request->input('jurusan'),
-                'kelas' => $request->input('kelas'),
                 'foto' => $filename
             ]);
             $foto->storePubliclyAs('foto_guru', $filename);
@@ -75,12 +74,12 @@ class GuruController extends Controller
         }else{
             Guru::create([
                 'id_sekolah' => session('id_sekolah'),
+                'id_jurusan' => json_encode($jurusan),
+                'id_kelas' => json_encode($kelas),
                 'nama_guru' => $request->input('nama_guru'),
                 'no_wa' => $request->input('no_wa'),
                 'id_jabatan' => $request->input('jabatan'),
                 'email' => $request->input('email'),
-                'jurusan' => $request->input('jurusan'),
-                'kelas' => $request->input('kelas')
             ]);
 
             return redirect()->route('guru')->with('status', 'asdf');
@@ -149,5 +148,26 @@ class GuruController extends Controller
         ]);
 
         return redirect()->route('guru')->with('status', 'Daasdfg');
+    }
+
+    public function getKelas(Request $request)
+    {
+        $kelas = Kelas::where('id_jurusan', $request->id_jurusan)->get();
+        // $get_kelas = $request->id_kelas;
+        $selected = '';
+
+        if($kelas){
+            // echo "<option selected disabled>Pilih Kelas</option>";/
+            foreach ($kelas as $k) {
+                // if($k->id == $get_kelas){
+                //     $selected = 'selected';
+                // }
+                echo "<option value='$k->id' $selected> $k->kelas</option>";
+                $selected = '';
+                
+            }
+        }else{
+            echo '<option selected disabled>Pilih Kelas</option>';
+        }      
     }
 }
