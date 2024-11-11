@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Guru;
 use App\Models\Wa;
 use App\Models\Sekolah;
 use App\Models\Settings;
@@ -28,7 +29,7 @@ class UserController extends Controller
     public function registerJurusan(Request $request)
     {                
         Jurusan::create([
-            'id_sekolah' => Helper::getSession(),
+            'id_sekolah' => session('id_sekolah'),
             'nama_jurusan' => $request->input('jurusan')
         ]);
 
@@ -58,7 +59,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        $kelas->id_sekolah = Helper::getSession();
+        $kelas->id_sekolah = session('id_sekolah');
         $kelas->id_jurusan = $request->input('jurusan');
         $kelas->kelas = $request->input('kelas');
         $user->kelas()->save($kelas);
@@ -353,56 +354,78 @@ class UserController extends Controller
         return Excel::download($rekap, "Absen-siswa.xlsx");
     }
 
-    public function getSiswa(Request $request){
-        $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->get();
+    public function getSiswa(Request $request){                
+        $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
+        $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
+        $data = array_merge($siswa, $guru);
         $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
         $serilize = serialize($sekolah->wa->wa_group);
         $unserilize = unserialize($serilize);
         $a = json_decode($unserilize);
         
-
-        if($siswa){
+        if($data){
             if($request->selected == "ortu"){
-                foreach ($siswa as $s) {                    
-                    echo "<option value=".Helper::encryptUrl($s->no_hp_ortu)." selected> Ortu $s->nama_siswa</option>";                    
-                }
-                if($a != null){
-                    $b = $a->data;
-                    for($i = 0; $i < count($b); $i++){                    
-                        echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+                for($i = 0; $i < count($data); $i++){
+                    if($data[$i]['no_hp_ortu']){
+                        echo "<option value=".Helper::encryptUrl($data[$i]['no_hp_ortu'])." selected> Ortu ".$data[$i]['nama']."</option>";
                     }
                 }
+                echo "No Result Found";
             }elseif ($request->selected == "siswa") {
-                foreach ($siswa as $s) {
-                    echo "<option value=".Helper::encryptUrl($s->no_hp)." selected> $s->nama_siswa</option>";  
-                }
-                if($a != null){
-                    $b = $a->data;
-                    for($i = 0; $i < count($b); $i++){                    
-                        echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
-                    }
-                }            
-            }else { 
-                for($i = 0; $i < count($siswa); $i++){                    
-                    echo "<option value=".Helper::encryptUrl($siswa[$i]->no_hp).">" .$siswa[$i]->nama_siswa."</option>";
-                }
-                if($a != null){
-                    $b = $a->data;
-                    for($i = 0; $i < count($b); $i++){                    
-                        echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
-                    }
+                for($i = 0; $i < count($data); $i++){
+                if($data[$i]['no_hp']){
+                    echo "<option value=".Helper::encryptUrl($data[$i]['no_hp'])." selected>".$data[$i]['nama']."</option>";
                 }
             }
-        }else{
             echo "No Result Found";
+            }else{
+                for($i = 0; $i < count($data); $i++){
+                    echo "<option value=".Helper::encryptUrl($data[$i]['no_hp']).">".$data[$i]['nama']."</option>";
+                }
+            }
         }
+        // if($siswa){
+        //     if($request->selected == "ortu"){
+        //         foreach ($siswa as $s) {                    
+        //             echo "<option value=".Helper::encryptUrl($s->no_hp_ortu)." selected> Ortu $s->nama_siswa</option>";                    
+        //         }
+        //         if($a != null){
+        //             $b = $a->data;
+        //             for($i = 0; $i < count($b); $i++){                    
+        //                 echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+        //             }
+        //         }
+        //     }elseif ($request->selected == "siswa") {
+        //         foreach ($siswa as $s) {
+        //             echo "<option value=".Helper::encryptUrl($s->no_hp)." selected> $s->nama_siswa</option>";  
+        //         }
+        //         if($a != null){
+        //             $b = $a->data;
+        //             for($i = 0; $i < count($b); $i++){                    
+        //                 echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+        //             }
+        //         }            
+        //     }else { 
+        //         for($i = 0; $i < count($siswa); $i++){                    
+        //             echo "<option value=".Helper::encryptUrl($siswa[$i]->no_hp).">" .$siswa[$i]->nama_siswa."</option>";
+        //         }
+        //         if($a != null){
+        //             $b = $a->data;
+        //             for($i = 0; $i < count($b); $i++){                    
+        //                 echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
+        //             }
+        //         }
+        //     }
+        // }else{
+        //     echo "No Result Found";
+        // }
     }
 
     public function sendBc(Request $request)
     {
         $request->validate([
-            // 'to_siswa' => 'required',
-            // 'pesan' => 'required',
+            'to_siswa' => 'required',
+            'pesan' => 'required',
             'files' => 'file|image|max:5000'
         ]);
         $wa = new CurlController();
@@ -412,7 +435,7 @@ class UserController extends Controller
         $tgl = $request->input('tgl');
         $waktu = $request->input('waktu');
         $gabung = $tgl ." ".$waktu;
-        $unix_time = strtotime($gabung);
+        $unix_time = strtotime($gabung);                
 
         if(!empty($get_file)){
             $filename = $get_file->getClientOriginalName();

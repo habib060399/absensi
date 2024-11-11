@@ -63,6 +63,7 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas'])->group(fu
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');
     Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
+    Route::post('/get-kelas-2', [GuruController::class, 'getKelas'])->name('getkls2');
     Route::get('/pesan', [UserViewController::class, 'pesan'])->name('pesan');
     Route::post('/pesan/edit', [UserController::class, 'editPesan'])->name('edit_bc');
     Route::get('/absensi', [UserViewController::class, 'absen'])->name('absen');

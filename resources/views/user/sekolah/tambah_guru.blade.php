@@ -67,9 +67,34 @@
                                     </div>
                                 </div><!-- Col -->
                         </div><!-- Row -->
-                       
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Jurusan</label>                                        
+                                        <select id="mySelect2" class="form-select" multiple="multiple" name="jurusan[]">
+                                            @foreach ($jurusan as $j)
+                                            <option value="{{$j->id}}">{{$j->nama_jurusan}}</option>                                                
+                                            @endforeach
+                                        </select>                                                                                                                
+                                    @error('jurusan')
+                                        <div class="error invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div><!-- Col -->  
+                            <div class="col-sm-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Kelas</label>                                        
+                                        <select class="compose-multiple-select2 form-select" multiple="multiple"
+                                            id="get_kelas" name="kelas[]">
+                                        </select>                                                                                                                
+                                    @error('kelas')
+                                        <div class="error invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div><!-- Col -->                            
+                        </div><!-- Row -->                       
                         <button type="submit" class="btn btn-primary submit">Submit form</button>
-                    </form>
+                    </form>                    
                 </div>
             </div>
         </div>
@@ -93,8 +118,62 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
-      </form>
+        </form>
       </div>
       </div>
     </div>
+    <script>
+        $(document).ready(function() {
+        $('#mySelect2').select2();
+
+        var html = [];
+        var element = "";
+        $('#mySelect2').on('change', function(){
+            var selectedData = $('#mySelect2').select2('data');            
+            console.log(selectedData);
+            
+            for (let i = 0; i < selectedData.length; i++) {
+                if(selectedData[i].selected){
+                    var id = selectedData[i].id;
+                    console.log(id);
+                    
+                    $.ajax({
+                            url: `{{ route('getkls2') }}`,
+                            type: 'POST',
+                            data: {id_jurusan: id},
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            beforeSend: function() {
+                                show_loading()
+                            },
+                            complete: function() {
+                                hide_loading()
+                            },
+                            success: function(res) {
+                                console.log(res)                                
+                                html.push(res)
+                                $('#get_kelas').html(html)
+                            }
+                        })   
+                        html.splice(-1,selectedData.length)
+                        console.log(html);             
+                }           
+            }                                        
+        })
+    })                          
+    </script>
+        <script>
+    
+            $(function multiple () {
+                'use strict'
+    
+                if ($(".compose-multiple-select2").length) {
+                    $(".compose-multiple-select2").select2();
+                }
+                if ($(".js-example-basic-multiple2").length) {
+                    $(".js-example-basic-multiple2").select2();
+                }
+            });
+        </script>
 @endsection

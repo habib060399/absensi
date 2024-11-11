@@ -15,6 +15,7 @@ class SekolahSeeder extends Seeder
     {
         $sekolah = new Sekolah();
         $sekolah->id_user = 1;
+        $sekolah->id_wa = 1;
         $sekolah->id_mesin = 1;
         $sekolah->nama_sekolah = 'SMK SWASTA PAB 12';
         $sekolah->email = 'smkpab12@gmail.com';

@@ -13,16 +13,18 @@ class KelasSeeder extends Seeder
      */
     public function run(): void
     {
-        // $kelas = new Kelas();
-        // $kelas->id_sekolah = 1;
-        // $kelas->id_jurusan = 1;
-        // $kelas->kelas = 'X';
-        // $kelas->save();
+        $kelas = new Kelas();
+        $kelas->id_user = 2;
+        $kelas->id_sekolah = 1;
+        $kelas->id_jurusan = 1;
+        $kelas->kelas = 'X';
+        $kelas->save();
 
-        // $kelas1 = new Kelas();
-        // $kelas1->id_sekolah = 1;
-        // $kelas1->id_jurusan = 2;
-        // $kelas1->kelas = 'X';
-        // $kelas1->save();
+        $kelas1 = new Kelas();
+        $kelas1->id_user = 3;
+        $kelas1->id_sekolah = 1;
+        $kelas1->id_jurusan = 2;
+        $kelas1->kelas = 'XI';
+        $kelas1->save();
     }
 }

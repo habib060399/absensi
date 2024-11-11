@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('id_sekolah', 255);
             $table->string('id_jabatan', 255)->nullable(true);
+            $table->text('id_jurusan')->nullable(true);
+            $table->text('id_kelas')->nullable(false);
             $table->string('nama_guru', 100);
             $table->string('email', 100);
             $table->string('no_wa', 20);
