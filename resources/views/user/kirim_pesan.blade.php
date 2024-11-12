@@ -137,7 +137,9 @@
                 })
             </script>
             @can('only class')
-            <script>               
+            <script>
+                $( document ).ready(function() {
+   
                 var get_id_jurusan = $('#get_jurusan option:selected').val()
                 $('#no_ortu').on('click', function() {
                     var kelas = $('#get_kelas option:selected').val()
@@ -149,13 +151,13 @@
                     getSiswa(get_id_jurusan, kelas, "siswa")
                 })
 
-                $('#get_kelas').on('change', function() {
+                // $('#get_kelas').on('change', function() {
                     var kelas = $('#get_kelas option:selected').val()
                     $('#no_ortu').prop('checked', false)
                     $('#no_siswa').prop('checked', false)
                     getSiswa(get_id_jurusan, kelas)
 
-                })
+                // })
 
                 function getSiswa(id_jurusan, id_kelas, selected = null) {
                     var data = {
@@ -163,6 +165,8 @@
                         id_kelas: id_kelas,
                         selected: selected
                     }
+                    console.log(data);
+                    
 
                     $.ajax({
                         url: `{{ route('getSiswa') }}`,
@@ -178,11 +182,13 @@
                             hide_loading()
                         },
                         success: function(res) {
+                            console.log(res);                            
                             $('#to_siswa').html(res);
 
                         }
                     });
                 }
+            });
             </script>
             @endcan
             @can('admin sekolah')
@@ -257,6 +263,8 @@
                             hide_loading()
                         },
                         success: function(res) {
+                            console.log(res);
+                            
                             $('#to_siswa').html(res);
 
                         }
