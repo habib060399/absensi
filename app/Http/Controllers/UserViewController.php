@@ -90,7 +90,7 @@ class UserViewController extends Controller
         if($user){
             if($user->can('only class')){
                 return view('user.absen.data_absen', [
-                    'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
+                    'jurusan' => jurusan::where('id', $user->kelas->id_jurusan)->select('nama_jurusan', 'id')->first(),
                     'kelas' => $user->kelas
                 ]);
             }
@@ -107,7 +107,7 @@ class UserViewController extends Controller
         if($user){
             if($user->can('only class')){
                 return view('user.absen.absensi_live', [
-                    'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
+                    'jurusan' => jurusan::where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
                     'cookies' => Cookie::get('id_mesin'),
                     'kelas' => $user->kelas
                 ]);

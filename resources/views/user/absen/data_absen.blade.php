@@ -29,7 +29,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Jurusan</label>
                                     <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
-                                        <option value="{{$kelas->id_jurusan}}" selected>{{$jurusan->nama_jurusan}}</option>
+                                        <option value="{{$jurusan->id}}" selected>{{$jurusan->nama_jurusan}}</option>
                                         {{-- @foreach ($jurusan as $j)
                                             <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>                                            
                                         @endforeach --}}

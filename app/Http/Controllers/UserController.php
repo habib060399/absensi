@@ -83,10 +83,7 @@ class UserController extends Controller
         if($pass != null){
             $get_kelas->user->password = Hash::make($pass);
             $get_kelas->user->save();
-        }
-        // $get_kelas->user->name = "Eko";
-        // $get_kelas->user->save();
-        // dd(Helper::decryptUrl($id), $get_kelas->user->name, $jurusan, $pass);
+        }        
         return redirect()->route('kelas')->with('status', 'sadfasd');
     }
 
@@ -238,13 +235,11 @@ class UserController extends Controller
         $settings = Settings::where('id_sekolah', Helper::decryptUrl($get_id))->first();
         if($settings){
             Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);
-        }else{
-            // dd(Helper::decryptUrl($get_id));
+        }else{            
             Settings::create([
                 'id_sekolah' => Helper::decryptUrl($get_id),
                 'bc' => $request->input('broadcast')
-            ]);
-            // dd('data baru dimasukkan');
+            ]);            
         }
         return redirect()->route('bc')->with('status', 'asdfasd');
     }
@@ -356,69 +351,63 @@ class UserController extends Controller
 
     public function getSiswa(Request $request){                
         $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
-        $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
-        $data = array_merge($siswa, $guru);
+        $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();                
         $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
         $serilize = serialize($sekolah->wa->wa_group);
         $unserilize = unserialize($serilize);
         $a = json_decode($unserilize);
+        $data = [
+            'siswa' => $siswa,
+            'guru' => $guru,
+            'group' => $a
+        ];
         
         if($data){
             if($request->selected == "ortu"){
-                for($i = 0; $i < count($data); $i++){
-                    if($data[$i]['no_hp_ortu']){
-                        echo "<option value=".Helper::encryptUrl($data[$i]['no_hp_ortu'])." selected> Ortu ".$data[$i]['nama']."</option>";
+                for($i = 0; $i < count($data['siswa']); $i++){
+                    if($data['siswa'][$i]['no_hp_ortu']){
+                        echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp_ortu'])." selected> Ortu ".$data['siswa'][$i]['nama']."</option>";
+                    }
+                }   
+                for($i = 0; $i < count($data['guru']); $i++){
+                    echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                }     
+                if ($data['group']->status) {
+                    for($i = 0; $i < count($data['group']->data); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
+                    }
+                }                    
+            }elseif ($request->selected == "siswa") {
+                for($i = 0; $i < count($data['siswa']); $i++){
+                if($data['siswa'][$i]['no_hp']){
+                    echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp'])." selected>".$data['siswa'][$i]['nama']."</option>";
+                }                
+            }
+            for($i = 0; $i < count($data['guru']); $i++){
+                echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+            }     
+            if ($data['group']->status) {
+                for($i = 0; $i < count($data['group']->data); $i++){
+                    echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
+                }
+            }       
+            }else{
+                for($i = 0; $i < count($data['siswa']); $i++){
+                    echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp']).">".$data['siswa'][$i]['nama']."</option>";
+                }
+                for($i = 0; $i < count($data['guru']); $i++){
+                    echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                }
+                if ($data['group']->status) {
+                    for($i = 0; $i < count($data['group']->data); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
                     }
                 }
-                echo "No Result Found";
-            }elseif ($request->selected == "siswa") {
-                for($i = 0; $i < count($data); $i++){
-                if($data[$i]['no_hp']){
-                    echo "<option value=".Helper::encryptUrl($data[$i]['no_hp'])." selected>".$data[$i]['nama']."</option>";
-                }
             }
-            echo "No Result Found";
-            }else{
-                for($i = 0; $i < count($data); $i++){
-                    echo "<option value=".Helper::encryptUrl($data[$i]['no_hp']).">".$data[$i]['nama']."</option>";
-                }
-            }
+        }else{
+            echo "Data Kosong";
         }
-        // if($siswa){
-        //     if($request->selected == "ortu"){
-        //         foreach ($siswa as $s) {                    
-        //             echo "<option value=".Helper::encryptUrl($s->no_hp_ortu)." selected> Ortu $s->nama_siswa</option>";                    
-        //         }
-        //         if($a != null){
-        //             $b = $a->data;
-        //             for($i = 0; $i < count($b); $i++){                    
-        //                 echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
-        //             }
-        //         }
-        //     }elseif ($request->selected == "siswa") {
-        //         foreach ($siswa as $s) {
-        //             echo "<option value=".Helper::encryptUrl($s->no_hp)." selected> $s->nama_siswa</option>";  
-        //         }
-        //         if($a != null){
-        //             $b = $a->data;
-        //             for($i = 0; $i < count($b); $i++){                    
-        //                 echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
-        //             }
-        //         }            
-        //     }else { 
-        //         for($i = 0; $i < count($siswa); $i++){                    
-        //             echo "<option value=".Helper::encryptUrl($siswa[$i]->no_hp).">" .$siswa[$i]->nama_siswa."</option>";
-        //         }
-        //         if($a != null){
-        //             $b = $a->data;
-        //             for($i = 0; $i < count($b); $i++){                    
-        //                 echo "<option value=".Helper::encryptUrl($b[$i]->id).">" .$b[$i]->name."</option>";
-        //             }
-        //         }
-        //     }
-        // }else{
-        //     echo "No Result Found";
-        // }
+        
     }
 
     public function sendBc(Request $request)
@@ -482,10 +471,7 @@ class UserController extends Controller
 
             return redirect()->route('profile')->with('status', 'success');
         }
-        // dd($kelas, $request->input('get_kelas'));
-    //     $request->input('get_jurusan'),
-   
-
+        
         return redirect()->route('profile')->with('error', 'Data sudah ada');
     }
 
@@ -520,10 +506,7 @@ class UserController extends Controller
         $sekolah->wa()->update([
             'wa_group' => $grup
         ]);
-        // foreach ($getJson as $value) {
-        //     echo $value;
-        // }
-        // dd($grup, $sekolah->wa);
+
         return redirect()->route('wa')->with('status', 'Data gagal ditambahkan');
     }
 }
