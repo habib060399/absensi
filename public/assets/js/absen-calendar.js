@@ -39,13 +39,7 @@ function calendarAbsen(data) {
             console.log(tanggal);
 
             $("#modalTitle1").html(eventObj.title);
-            $("#modalBody1").html(eventObj._def.extendedProps.description);
-            // $("#hapus_absen").attr("href", eventObj.url);
-            // $("#hapus_absen").attr("data-id", eventObj._def.publicId);
-            // $("#hapus_absen").attr(
-            //     "data-tanggal",
-            //     eventObj._instance.range.start
-            // );
+            $("#modalBody1").html(eventObj._def.extendedProps.description);            
             $(".hapus_absen").click(function () {
                 hapus(eventObj._def.publicId, eventObj._instance.range.start);
             });

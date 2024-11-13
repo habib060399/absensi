@@ -33,7 +33,7 @@ class UserController extends Controller
             'nama_jurusan' => $request->input('jurusan')
         ]);
 
-        return redirect()->route('jurusan')->with('status', 'sadf');
+        return redirect()->route('jurusan')->with('success', 'Berhasil Menambah Jurusan');
     }
 
     public function registerKelas(Request $request)
@@ -66,7 +66,7 @@ class UserController extends Controller
         $user->assignRole('kelas');
         $user->givePermissionTo('only class');
 
-        return redirect()->route('kelas')->with('status', 'sadfasd');
+        return redirect()->route('kelas')->with('success', 'Berhasil Menambahkan Kelas');
     }
 
     public function editKelas($id, Request $request)
@@ -84,7 +84,7 @@ class UserController extends Controller
             $get_kelas->user->password = Hash::make($pass);
             $get_kelas->user->save();
         }        
-        return redirect()->route('kelas')->with('status', 'sadfasd');
+        return redirect()->route('kelas')->with('success', 'Berhasil Mengubah Kelas');
     }
 
     public function registerSiswa(Request $request)
@@ -117,7 +117,7 @@ class UserController extends Controller
         ]);
         $foto->storePubliclyAs('foto', $filename);
         
-        return redirect()->route('siswa_add')->with('status', 'asdfasdf');
+        return redirect()->route('siswa_add')->with('success', 'Berhasil Menambahkan Siswa');
     }
 
     public function editSiswa($id, Request $request)
@@ -153,7 +153,7 @@ class UserController extends Controller
             ]);
             $foto->storePubliclyAs('foto', $filename);
     
-            return redirect()->route('siswa')->with('status', 'asdfasdf');
+            return redirect()->route('siswa')->with('success', 'Berhasil Mengubah Data Siswa');
         }else{
             Siswa::where('id', Helper::decryptUrl($id))->update([
                 'nama_siswa' => $request->input('nama_siswa'),
@@ -164,7 +164,7 @@ class UserController extends Controller
                 'no_hp_ortu' => $request->input('no_hp_ortu')
             ]);
     
-            return redirect()->route('siswa')->with('status', 'asdfasdf');
+            return redirect()->route('siswa')->with('success', 'Berhasil Mengubah Data Siswa');
         }
 
     }
@@ -226,7 +226,7 @@ class UserController extends Controller
     public function editJurusan(Request $request)
     {
         Jurusan::where('id', $request->input('id_edit_jurusan'))->update(['nama_jurusan' => $request->input('edit_jurusan')]);
-        return redirect()->route('jurusan')->with('status', 'asadf');
+        return redirect()->route('jurusan')->with('success', 'Berhasil Mengubah Jurusan');
     }
 
     public function editPesan(Request $request)
@@ -241,7 +241,7 @@ class UserController extends Controller
                 'bc' => $request->input('broadcast')
             ]);            
         }
-        return redirect()->route('bc')->with('status', 'asdfasd');
+        return redirect()->route('bc')->with('success', 'Berhasil Mengubah Pesan');
     }
 
     public function getAbsen(Request $request)
@@ -284,7 +284,7 @@ class UserController extends Controller
                     'status' => $status
                 ]);
             }
-            return redirect()->route('absen')->with('status', 'Data berhasil ditambahkan');
+            return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
         }
         
         return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
@@ -300,8 +300,7 @@ class UserController extends Controller
     public function editAbsen(Request $request){
         $absen = Absensi::where('id_siswa', $request->id_siswa)->where('tanggal', $request->tanggal)->first();
         $status = ["hadir", "izin", "sakit"];
-        $string ="";
-        // dd($absenn);
+        $string ="";        
 
         foreach($status as $s) {
          if($s == $absen->status){
@@ -315,7 +314,7 @@ class UserController extends Controller
 
         Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
 
-        session(['status' => 'data berhasil ditambahkan']);
+        session(['success' => 'data berhasil ditambahkan']);
         return response()->json([
             'url' => route('absen'),
             'status' => 200,
@@ -334,7 +333,7 @@ class UserController extends Controller
 
         Excel::import(new SiswaImport, $request->file('file'));
 
-        return back()->with('status', 'asfgfsdgd');
+        return back()->with('success', 'Berhasil Mengimport Data');
     }
 
     public function rekapAbsen(Request $request) {
@@ -435,13 +434,13 @@ class UserController extends Controller
                 for ($i=0; $i < count($to); $i++) { 
                 $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath, $unix_time);
                 }
-                return redirect()->route('bc')->with('status', 'success');
+                return redirect()->route('bc')->with('success', 'success');
             }
         }elseif(empty($get_file)){
             for ($i=0; $i < count($to); $i++) { 
             $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan, $unix_time);
             }
-            return redirect()->route('bc')->with('status', 'success');
+            return redirect()->route('bc')->with('success', 'success');
         }
 
         return redirect()->route('bc');
@@ -469,7 +468,7 @@ class UserController extends Controller
             $kelas->id_user = $intId;
             $kelas->save();
 
-            return redirect()->route('profile')->with('status', 'success');
+            return redirect()->route('profile')->with('success', 'success');
         }
         
         return redirect()->route('profile')->with('error', 'Data sudah ada');
@@ -490,7 +489,7 @@ class UserController extends Controller
                 'id_wa' => $id
             ]);
             $wa->save();
-            return redirect()->route('wa')->with('status', 'Da');
+            return redirect()->route('wa')->with('success', 'Berhasil Menambahkan Nomor Whatssap');
         }
         return redirect()->route('wa')->with('error', 'Data gagal ditambahkan');
     }
