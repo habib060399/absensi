@@ -395,12 +395,12 @@
     <script src="{{ asset('assets/js/spinner.js') }}"></script>
     <script src="{{ asset('assets/js/datepicker.js') }}"></script>
     <script src="{{ asset('assets/js/timepicker.js') }}"></script>
-    @if (session('status'))
+    @if (session('success'))
         <script>
             $(document).ready(() => {
                 Swal.fire({
                     icon: "success",
-                    title: "Your work has been saved",
+                    title: `{{ session('success') }}`,
                     showConfirmButton: false,
                     timer: 2000,
                 });
