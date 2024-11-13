@@ -106,10 +106,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 id="modalTitle2" class="modal-title">Tambah Absen</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"><span
-                            class="visually-hidden">close</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"><span class="visually-hidden">close</span></button>
                 </div>
-                <div id="modalBody2" class="">
+                <div id="modalBody2" class="modal-body">
                     <form action="{{ route('input_absen') }}" method="post">
                         @csrf
                         <div class="mb-3">
@@ -119,6 +118,14 @@
                                 <select class="compose-multiple-select form-select" multiple id="nama" name="nama[]">
                                     <option value="hadir">Hadir</option>
                                 </select>
+                            <div class="mt-2">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="radioInline" id="siswa">
+                                <label class="form-check-label" for="radioInline2">
+                                    Semua Siswa
+                                </label>
+                            </div>
+                            </div>
                             <div id="result" class="result"></div>
                         </div>                       
                         <div class="mb-3">
@@ -250,6 +257,43 @@
                     }
                 });
 
+            })
+
+            var select = true;
+            $('#siswa').click(function(){                
+                if(select){
+                    var kelas = $('#get_kelas option:selected').val()
+                    var data = {
+                                id_jurusan: get_id_jurusan,
+                                id_kelas: kelas
+                            }
+
+                    $.ajax({
+                    url: `{{ route('option_siswa') }}`,
+                    type: 'POST',
+                    data: data,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                        show_loading()
+                    },
+                    complete: function() {
+                        hide_loading()
+                    },
+                    success: function(res) {                        
+                        $('#nama').html(res);
+                        
+                    }
+                });                    
+                    select = false;                    
+                }else{
+                    $('#siswa').prop('checked', false);
+                    $('#nama').find(':selected').remove();
+                    console.log("false");
+                    select = true;   
+                }                
+                
             })
         </script>
         <script type="text/javascript">

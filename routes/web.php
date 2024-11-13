@@ -8,6 +8,7 @@ use App\Http\Controllers\ControllerView;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\UserViewController;
 use App\Http\Controllers\AdminViewController;
 
@@ -88,6 +89,8 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas'])->group(fu
     Route::get('/whatssap', [UserViewController::class, 'wa'])->name('wa');
     Route::post('/whatssap/tambah', [UserController::class, 'registerWa'])->name('wa_tambah');
     Route::get('/whatssap/update', [UserController::class, 'updateGroupWa'])->name('wa_update');
+
+    Route::post('/absensi/siswa-option', [AbsenController::class, 'siswaGetOption'])->name('option_siswa');
 });
 Route::post('user/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
 
