@@ -8,7 +8,7 @@ use App\Models\Siswa;
 class AbsenController extends Controller
 {
     function siswaGetOption(Request $request){
-        $siswa = Siswa::where('id_sekolah', session('id_sekolah'))->where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->get();
+        $siswa = Siswa::where('id_sekolah', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->get();
         
         if($siswa){
             for ($i=0; $i < count($siswa); $i++) { 

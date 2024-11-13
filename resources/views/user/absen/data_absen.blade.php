@@ -196,6 +196,43 @@
                     })
                 }
 });
+
+var select = true;
+
+            $('#siswa').click(function(){                
+                if(select){
+                    var kelas = $('#get_kelas option:selected').val()                
+                    var data = {
+                                id_jurusan: get_jurusan,
+                                id_kelas: kelas
+                            }
+
+                    $.ajax({
+                    url: `{{ route('option_siswa') }}`,
+                    type: 'POST',
+                    data: data,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                        show_loading()
+                    },
+                    complete: function() {
+                        hide_loading()
+                    },
+                    success: function(res) {                       
+                        $('#nama').html(res);                        
+                    }
+                });                    
+                    select = false;                    
+                }else{
+                    $('#siswa').prop('checked', false);
+                    $('#nama').find(':selected').remove();
+                    console.log("false");
+                    select = true;   
+                }                
+                
+            })
     </script>
     @endcan
 

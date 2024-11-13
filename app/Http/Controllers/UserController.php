@@ -204,7 +204,8 @@ class UserController extends Controller
     {
         $siswa = Siswa::where('id_kelas', Helper::decryptUrl($id))->get();
         if(empty($siswa[0])){
-            Kelas::where('id', Helper::decryptUrl($id))->delete();
+            $kelas = Kelas::where('id', Helper::decryptUrl($id))->first();
+            $kelas->user()->delete();
             return redirect()->route('kelas')->with('hapus', 'asdfas');
         }else{
             return redirect()->route('kelas')->with('error', 'Data Siswa Masih Ada!');
@@ -348,13 +349,14 @@ class UserController extends Controller
         return Excel::download($rekap, "Absen-siswa.xlsx");
     }
 
-    public function getSiswa(Request $request){                
+    public function getSiswa(Request $request){
+        $user = User::where('id', session('id_user'))->first();                      
         $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
-        $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();                
-        $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
+        $guru = Guru::where('id_sekolah', ($user->can('only class')) ?  session('id') : session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
+        $sekolah = Sekolah::where('id', ($user->can('only class')) ?  session('id') : session('id_sekolah'))->first();
         $serilize = serialize($sekolah->wa->wa_group);
         $unserilize = unserialize($serilize);
-        $a = json_decode($unserilize);
+        $a = json_decode($unserilize);              
         $data = [
             'siswa' => $siswa,
             'guru' => $guru,
@@ -367,11 +369,15 @@ class UserController extends Controller
                     if($data['siswa'][$i]['no_hp_ortu']){
                         echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp_ortu'])." selected> Ortu ".$data['siswa'][$i]['nama']."</option>";
                     }
-                }   
-                for($i = 0; $i < count($data['guru']); $i++){
-                    echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
-                }     
-                if ($data['group']->status) {
+                }
+
+                if(!empty($data['guru'])){
+                    for($i = 0; $i < count($data['guru']); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                    }
+                }
+
+                if (!empty($data['group'])) {
                     for($i = 0; $i < count($data['group']->data); $i++){
                         echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
                     }
@@ -382,10 +388,14 @@ class UserController extends Controller
                     echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp'])." selected>".$data['siswa'][$i]['nama']."</option>";
                 }                
             }
-            for($i = 0; $i < count($data['guru']); $i++){
-                echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
-            }     
-            if ($data['group']->status) {
+
+            if(!empty($data['guru'])){
+                for($i = 0; $i < count($data['guru']); $i++){
+                    echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                }
+            }
+
+            if (!empty($data['group'])) {
                 for($i = 0; $i < count($data['group']->data); $i++){
                     echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
                 }
@@ -394,10 +404,14 @@ class UserController extends Controller
                 for($i = 0; $i < count($data['siswa']); $i++){
                     echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp']).">".$data['siswa'][$i]['nama']."</option>";
                 }
-                for($i = 0; $i < count($data['guru']); $i++){
-                    echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+
+                if(!empty($data['guru'])){
+                    for($i = 0; $i < count($data['guru']); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                    }
                 }
-                if ($data['group']->status) {
+
+                if (!empty($data['group'])) {
                     for($i = 0; $i < count($data['group']->data); $i++){
                         echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
                     }

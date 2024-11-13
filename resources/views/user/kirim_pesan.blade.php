@@ -165,8 +165,6 @@
                         id_kelas: id_kelas,
                         selected: selected
                     }
-                    console.log(data);
-                    
 
                     $.ajax({
                         url: `{{ route('getSiswa') }}`,
@@ -181,8 +179,7 @@
                         complete: function() {
                             hide_loading()
                         },
-                        success: function(res) {
-                            console.log(res);                            
+                        success: function(res) {                            
                             $('#to_siswa').html(res);
 
                         }
@@ -214,8 +211,7 @@
                             complete: function() {
                                 hide_loading()
                             },
-                            success: function(res) {
-                                console.log(res)
+                            success: function(res) {                                
                                 $('#get_kelas').html(res)
 
                             }
@@ -263,8 +259,6 @@
                             hide_loading()
                         },
                         success: function(res) {
-                            console.log(res);
-                            
                             $('#to_siswa').html(res);
 
                         }

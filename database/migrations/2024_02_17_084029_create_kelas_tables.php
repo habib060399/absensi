@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('id_jurusan', 100);
             $table->string('kelas', 50);
             $table->timestamps();
-            $table->foreign('id_user')->on('users')->references('id');
+            $table->foreign('id_user')->on('users')->references('id')->onDelete('cascade');
         });
     }
 

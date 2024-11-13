@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('pendidikan', 100);
             $table->string('npsn', 100);
             $table->timestamps();
-            $table->foreign('id_user')->on('users')->references('id');
-            $table->foreign('id_wa')->on('wa')->references('id');
+            $table->foreign('id_user')->on('users')->references('id')->onDelete('cascade');
+            $table->foreign('id_wa')->on('wa')->references('id')->onDelete('cascade');
         });
     }
 
