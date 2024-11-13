@@ -3,13 +3,18 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sekolah;
+use App\Models\User;
+use App\Models\Wa;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 
 class CurlController extends Controller
 {
     public function setApiWa(array $param) {
-        $token = env("TOKEN_API_WA");
+        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();
+        $token = $sekolah->token_api_wa;            
+                
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
