@@ -281,7 +281,7 @@ class UserController extends Controller
             for($a=0; $a < count($data); $a++) {
                 if($status == 'hadir'){
                     $get_siswa = Siswa::where('id', $data[$a])->first();
-                    $curl->bcWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                    $curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
                 }
                 Absensi::create([
                     'id_siswa' => $data[$a],
