@@ -59,6 +59,48 @@ class CurlController extends Controller
         return $status = $this->setApiWa($data);
     }
 
+    public function sendPresencenWa($no, $nama_siswa, $id_sekolah)
+    {
+        $getSekolah = Settings::where('id_sekolah', $id_sekolah)->first();
+        $bc = preg_replace("/{nama}/", "$nama_siswa", $getSekolah->bc);
+        $sekolah = Sekolah::where('sekolah.id', $id_sekolah)->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();
+        $token = $sekolah->token_api_wa;
+        
+        $curl = curl_init();
+        $data = array(
+            'target' => $no,
+            'message' => "$bc",
+            'countryCode' => "62"
+        );
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: $token"
+            )
+        ));
+
+        $responseWa = curl_exec($curl);
+        if(curl_errno($curl)){
+            $error_msg = curl_error($curl);
+        }
+        curl_close($curl);
+
+        if(isset($error_msg)){
+            return $error_msg;
+        }
+
+        return $responseWa;
+    }
+
     public function bcWa($no, $pesan, $time){
         $data = array(
             'target' => $no,
