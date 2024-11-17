@@ -24,9 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
 // Route::post('/login', [RfidController::class, 'login']);
 // Route::get('/absensi', [RfidController::class, 'index']);
-Route::post('/absensi', [RfidController::class, 'store']);
 Route::get('search/name', [ApiController::class, 'searchNamaSiswa'])->name('search_nama_siswa');
 Route::post('wa/group', [CurlController::class, 'getGroupWa']);
 Route::post('wa/group/update', [CurlController::class, 'updateGroupWa'])->name('update_group_wa');
-Route::middleware(['auth:sanctum'])->group(function(){
+Route::middleware('istoken')->group(function(){
+    Route::post('/absensi', [RfidController::class, 'store']);
+    
 });

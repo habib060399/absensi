@@ -75,7 +75,8 @@ class RfidController extends Controller
                     'status' => 200
                 ]);
             }else{                
-                $Wa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                // $Wa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+                $Wa = $this->curl->sendPresencenWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
                 $respon = json_decode($Wa);
                 broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah, $get_siswa->foto));
                
