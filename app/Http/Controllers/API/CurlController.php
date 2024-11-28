@@ -43,19 +43,17 @@ class CurlController extends Controller
         }
 
         return $responseWa;
-    }
+    }    
 
-    public function curlWa($no, $nama_siswa, $id_sekolah)
+    public function sendWaAbsenManual($no, $nama_siswa, $id_sekolah, $message)
     {
-        $getSekolah = Settings::where('id_sekolah', $id_sekolah)->first();
-        $bc = preg_replace("/{nama}/", "$nama_siswa", $getSekolah->bc);
-
+        $bc = preg_replace("/{nama}/", "$nama_siswa", $message);
         $data = array(
             'target' => $no,
             'message' => "$bc",
             'countryCode' => "62"
         );
-
+        
         return $status = $this->setApiWa($data);
     }
 

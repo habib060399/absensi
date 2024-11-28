@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Models\Sekolah;
 use App\Models\Siswa;
 use App\Models\Mesin;
+use App\Helpers\Helper;
 use App\Http\Controllers\API\CurlController;
 
 class AdminViewController extends Controller
@@ -22,7 +23,8 @@ class AdminViewController extends Controller
         $data = json_decode($getDeviceFonte);
         
         return view('admin.home', [
-            'quota' => ($data->status) ? $data->data[0]->quota : 0,
+            // 'quota' => ($data->status) ? $data->data[0]->quota : 0,
+            'quota' => 0,
             'jml_sekolah' => Sekolah::count(),
             'jml_siswa' => Siswa::count()
         ]);
@@ -56,5 +58,16 @@ class AdminViewController extends Controller
     public function addSekolah()
     {
         return view('tambah_sekolah', ['mesin' => $this->mesin->where('status', 'Not Used')->get()]);
+    }
+
+    public function editSekolah($id)
+    {
+        $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();        
+        // dd($sekolah, $sekolah->wa()->select('no_wa', 'token_account_wa', 'token_api_wa')->get());
+        return view('admin.sekolah.edit_sekolah', [
+            'sekolah' => Sekolah::where('id', Helper::decryptUrl($id))->first(),
+            'wa' => $sekolah->wa()->select('no_wa', 'token_account_wa', 'token_api_wa')->first(),
+            'user' => $sekolah->user()->select('username')->first()
+        ]);
     }
 }

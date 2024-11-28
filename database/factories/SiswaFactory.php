@@ -22,8 +22,8 @@ class SiswaFactory extends Factory
     {
         return [
             'id' => Str::random(10),
-            'id_sekolah' => 1,
-            'id_jurusan' => 1,
+            'id_sekolah' => 112233,
+            'id_jurusan' => 8900,
             'id_kelas' => 1,
             'nama_siswa' => $this->faker->name(),
             'email' => $this->faker->email(),

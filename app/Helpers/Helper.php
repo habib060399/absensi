@@ -17,11 +17,6 @@ class Helper
         return session('id_sekolah');
     }
 
-    public static function getCookie()
-    {
-        return "Ini Cookie";
-    }
-
     public static function encryptUrl($string)
     {
         // Metode enkripsi (cipher method)

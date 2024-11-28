@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jurusan', function (Blueprint $table) {
-            $table->id();
-            $table->string('id_sekolah', 50);
+            // $table->id();
+            $table->bigInteger('id')->nullable(false)->primary();
+            $table->bigInteger('id_sekolah');
             $table->string('nama_jurusan', 100);
             $table->timestamps();
+            $table->foreign('id_sekolah')->on('sekolah')->references('id')->onDelete('cascade');
         });
     }
 

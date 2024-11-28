@@ -3,7 +3,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-3 d-none d-md-block">
+                {{-- <div class="col-md-3 d-none d-md-block"> --}}
+                <div class="col-md-3 d-md-block">
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title mb-4">Full calendar</h6>

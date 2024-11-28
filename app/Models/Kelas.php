@@ -13,12 +13,17 @@ class Kelas extends Model
     use HasFactory;
 
     protected $table = 'kelas';
-    protected $fillable = ['id_sekolah', 'id_jurusan', 'kelas'];
+    protected $fillable = ['id', 'id_sekolah', 'id_jurusan', 'kelas'];
     public $timestamps = false;
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function jurusan(): BelongsTo
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id');
     }
 
 }

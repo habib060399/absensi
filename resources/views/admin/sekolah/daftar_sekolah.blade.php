@@ -39,13 +39,13 @@
             <td>
               <button type="button" class="btn btn-success btn-icon btn-xs">
                 <i data-feather="eye"></i>
-              </button>              
-              <button type="button" class="btn btn-warning btn-icon btn-xs">
+              </button>
+              <a class="btn btn-warning btn-icon btn-xs" href="{{ route('sekolah-edit', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}">
                 <i data-feather="edit-3"></i>
-              </button>
-              <button type="button" class="btn btn-danger btn-icon btn-xs">
+              </a>              
+              <a class="btn btn-danger btn-icon btn-xs alert_notif" href="{{ route('sekolah-hapus', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" id="hapus">
                 <i data-feather="trash-2"></i>
-              </button>
+              </a>
             </td>
           </tr>              
           @endforeach

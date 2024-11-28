@@ -11,7 +11,7 @@ class Wa extends Model
     use HasFactory;
 
     protected $table = 'wa';
-    protected $fillable = ['no_wa', 'wa_group'];
+    protected $fillable = ['no_wa', 'wa_group', 'id_sekolah', 'template_bc'];
     public $timestamps = true;
     
     public function sekolah() : HasMany {

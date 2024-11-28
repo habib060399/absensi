@@ -7,6 +7,7 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\User;
+use App\Models\Wa;
 use App\Models\Sekolah;
 use App\Models\Settings;
 use App\Helpers\Helper;
@@ -16,7 +17,7 @@ class UserViewController extends Controller
 {
     public function jurusan()
     {
-        return view('user.sekolah.jurusan', ['jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get()]);
+        return view('user.sekolah.jurusan', ['jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()]);
     }
 
     public function editJurusan($id)
@@ -28,7 +29,7 @@ class UserViewController extends Controller
     public function kelas()
     {
         return view('user.sekolah.kelas', [
-            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
             'kelas' => Kelas::join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')->select('kelas.*', 'jurusan.nama_jurusan')->where('kelas.id_sekolah', session('id_sekolah'))->get()
         ]);
     }
@@ -46,9 +47,13 @@ class UserViewController extends Controller
     }
 
     public function siswa()
-    {
-        // return view('user.siswa', ['kelas' => Kelas::where('id_sekolah', Helper::getSession())->get()]);
+    {        
         return view('user.sekolah.siswa', ['siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get()]);
+    }
+
+    public function siswaNaik()
+    {        
+        return view('user.sekolah.siswa_naik_kelas', ['siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get()]);
     }
 
     public function guru()
@@ -69,7 +74,7 @@ class UserViewController extends Controller
         return view('user.sekolah.edit_siswa',[
             'siswa' => $siswa,
             'kelas' => $kelas,
-            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),            
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),            
         ]);
     }
 
@@ -80,8 +85,13 @@ class UserViewController extends Controller
 
     public function pesan()
     {
-        $setting = Settings::where('id_sekolah',session('id_sekolah'))->first();
-        return view('user.broadcast', ['broadcast' => ($setting) ? $setting->bc : "", 'id_sekolah' => session('id_sekolah')]); 
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
+        $data = $sekolah->wa()->first()->template_bc;
+        $json = serialize($data);
+        $unserialize = unserialize($json);
+        $decode = json_decode($unserialize);
+                
+        return view('user.broadcast', ['pesan' => $decode]);
     }
 
     public function absen()
@@ -97,7 +107,7 @@ class UserViewController extends Controller
         }
 
         return view('user.absen.data_absen', [
-            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
         ]);
     }
 
@@ -115,7 +125,7 @@ class UserViewController extends Controller
         }
 
         return view('user.absen.absensi_live', [
-            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
             'cookies' => Cookie::get('id_mesin')
         ]);
     }
@@ -145,7 +155,7 @@ class UserViewController extends Controller
         }
 
         return view('user.kirim_pesan', [
-            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
         ]);
     }
 
@@ -167,7 +177,7 @@ class UserViewController extends Controller
         }
 
         return view('user.absen.rekap_absen', [
-            'jurusan' => jurusan::where('id_sekolah', Helper::getSession())->get(),
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
         ]);
     }
 
@@ -183,5 +193,10 @@ class UserViewController extends Controller
         return view('user.pengaturan.wa', [
             'wa' => []
         ]);
+    }
+
+    public function profile1()
+    {
+        return view('user.profile');
     }
 }

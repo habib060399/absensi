@@ -8,9 +8,15 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Perangkat;
 use App\Models\Mesin;
 use App\Models\Sekolah;
+use App\Models\Jurusan;
+use App\Models\Kelas;
+use App\Models\Guru;
 use App\Models\User;
+use App\Models\Siswa;
 use App\Models\Wa;
+use App\Helpers\Helper;
 use App\Http\Controllers\API\RfidController;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {    
@@ -96,10 +102,13 @@ class AdminController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
  
-        $wa->id = intVal($id);
+        $text = `{"data":[{"title":"hadir","message":null},{"title":"sakit","message":null},{"title":"absen","message":null},{"title":"izin","message":null}]}`;
+        $wa->id = intVal($id);                
         $wa->no_wa = $request->input('contact');
+        $wa->template_bc = json_encode($text);
         $wa->save();
 
+        $sekolah->id = intVal($id);
         $sekolah->nama_sekolah = $request->input('nama_sekolah');
         $sekolah->email = $request->input('email');
         $sekolah->id_mesin = $id_mesin;
@@ -115,5 +124,33 @@ class AdminController extends Controller
         ->update(['status' => 'Used']);
 
         return redirect()->route('sekolah')->with('status', 'asdfasdfsad');
-    } 
+    }
+    
+    public function hapusSekolah($id)
+    {
+        $siswa = Siswa::where('id_sekolah', Helper::decryptUrl($id))->delete();
+        $kelas = Kelas::where('id_sekolah', Helper::decryptUrl($id))->join('users', 'users.id', '=', 'kelas.id_user')->get();        
+        for ($i=0; $i < count($kelas); $i++) {             
+            User::where('id', $kelas[$i]['id_user'])->delete();
+        }
+        Kelas::where('id_sekolah', Helper::decryptUrl($id))->delete();
+        $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();
+        $sekolah->guru()->delete();
+        $sekolah->jurusan()->delete();
+        $sekolah->wa()->delete();
+        $sekolah->user()->delete();        
+        
+        return redirect()->route('sekolah')->with('hapus', 'asdfasdfsad');
+    }
+
+    public function editSekolah($id)
+    {
+        $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();
+        $date = Carbon::now();
+        $addDaysDate = Carbon::now()->addDays(1);
+        $addMonthDate = Carbon::now()->addMonths(1);
+
+        $sekolah->user()->first()->update(['expiry_date'=> $addMonthDate]);        
+
+    }
 }

@@ -27,8 +27,10 @@ class UserController extends Controller
 {
 
     public function registerJurusan(Request $request)
-    {                
+    {            
+        $id = date('dmyHis');    
         Jurusan::create([
+            'id' => intval($id),
             'id_sekolah' => session('id_sekolah'),
             'nama_jurusan' => $request->input('jurusan')
         ]);
@@ -232,17 +234,26 @@ class UserController extends Controller
 
     public function editPesan(Request $request)
     {
-        $get_id = $request->input('id_sekolah');
-        $settings = Settings::where('id_sekolah', Helper::decryptUrl($get_id))->first();
-        if($settings){
-            Settings::where('id_sekolah', Helper::decryptUrl($get_id))->update(['bc' => $request->input('broadcast')]);
-        }else{            
-            Settings::create([
-                'id_sekolah' => Helper::decryptUrl($get_id),
-                'bc' => $request->input('broadcast')
-            ]);            
-        }
-        return redirect()->route('bc')->with('success', 'Berhasil Mengubah Pesan');
+        
+        $hadir = $request->input('broadcast-hadir');
+        $sakit = $request->input('broadcast-sakit');
+        $izin = $request->input('broadcast-izin');
+        $absen = $request->input('broadcast-absen');
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
+        // $teks = "{"data":[{"title":"hadir","message":$hadir},{"title":"sakit","message":$sakit},{"title":"absen","message":$absen},{"title":"izin","message":$izin}]}";
+        $teks = $sekolah->wa()->first()->template_bc;
+        $json = serialize($teks);
+        $unserialize = unserialize($json);
+        $decode = json_decode($unserialize);
+        $decode->data[0]->message = $hadir;        
+        $decode->data[1]->message = $sakit;        
+        $decode->data[2]->message = $absen;        
+        $decode->data[3]->message = $izin;        
+        $sekolah->wa()->update([
+            'template_bc' => json_encode($decode)
+        ]);
+        
+        return redirect()->route('pesan')->with('success', 'Berhasil Mengubah Pesan');
     }
 
     public function getAbsen(Request $request)
@@ -278,19 +289,70 @@ class UserController extends Controller
         }
         
         if($data != null){
-            for($a=0; $a < count($data); $a++) {
-                if($status == 'hadir'){
-                    $get_siswa = Siswa::where('id', $data[$a])->first();
-                    $curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
-                }
-                Absensi::create([
-                    'id_siswa' => $data[$a],
-                    'tanggal' => $tanggal,
-                    'waktu' => $time_now,
-                    'status' => $status
-                ]);
+            $sekolah = Sekolah::where('id', session('id_sekolah'))->first();        
+            $teks = $sekolah->wa()->first()->template_bc;
+            $json = serialize($teks);
+            $unserialize = unserialize($json);
+            $decode = json_decode($unserialize);
+
+            switch ($status) {
+                case 'hadir':
+                    for($a=0; $a < count($data); $a++) {                        
+                        $get_siswa = Siswa::where('id', $data[$a])->first();
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message);                        
+                        Absensi::create([
+                            'id_siswa' => $data[$a],
+                            'tanggal' => $tanggal,
+                            'waktu' => $time_now,
+                            'status' => $status
+                        ]);
+                    }
+                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
+                    break;
+                case 'absen':
+                    for($a=0; $a < count($data); $a++) {                        
+                        $get_siswa = Siswa::where('id', $data[$a])->first();
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message);                        
+                        Absensi::create([
+                            'id_siswa' => $data[$a],
+                            'tanggal' => $tanggal,
+                            'waktu' => $time_now,
+                            'status' => $status
+                        ]);
+                    }
+                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
+                    break;
+                case 'izin':
+                    for($a=0; $a < count($data); $a++) {                        
+                        $get_siswa = Siswa::where('id', $data[$a])->first();
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message);                        
+                        Absensi::create([
+                            'id_siswa' => $data[$a],
+                            'tanggal' => $tanggal,
+                            'waktu' => $time_now,
+                            'status' => $status
+                        ]);
+                    }
+                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
+                    break;
+                case 'sakit':
+                    for($a=0; $a < count($data); $a++) {                        
+                        $get_siswa = Siswa::where('id', $data[$a])->first();
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message);                        
+                        Absensi::create([
+                            'id_siswa' => $data[$a],
+                            'tanggal' => $tanggal,
+                            'waktu' => $time_now,
+                            'status' => $status
+                        ]);
+                    }
+                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
+                    break;
+                default:
+                return redirect()->route('absen')->with('error', 'status tidak boleh kosong');
+                    break;
             }
-            return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
+            
         }
         
         return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
@@ -318,7 +380,63 @@ class UserController extends Controller
 
     public function insertEditAbsen(Request $request){
 
-        Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+        // Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+        $curl = new CurlController();
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
+        $teks = $sekolah->wa()->first()->template_bc;
+        $json = serialize($teks);
+        $unserialize = unserialize($json);
+        $decode = json_decode($unserialize);
+            
+            switch ($request->status) {
+                case 'hadir':                    
+                $get_siswa = Siswa::where('id', $request->id)->first();
+                $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[0]->message."\n".Carbon::now());
+                Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+
+                    return response()->json([
+                        'url' => route('absen'),
+                        'status' => 200,
+                        'message' => 'data berhasil ditambahkan'
+                    ]);
+                    break;
+                case 'absen':                    
+                    $get_siswa = Siswa::where('id', $request->id)->first();
+                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[2]->message."\n".Carbon::now());
+                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);                    
+                    
+                    return response()->json([
+                        'url' => route('absen'),
+                        'status' => 200,
+                        'message' => 'data berhasil ditambahkan'
+                    ]);
+                    break;
+                case 'izin':                    
+                    $get_siswa = Siswa::where('id', $request->id)->first();
+                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[3]->message."\n".Carbon::now());
+                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);                    
+                    
+                    return response()->json([
+                        'url' => route('absen'),
+                        'status' => 200,
+                        'message' => 'data berhasil ditambahkan'
+                    ]);
+                    break;
+                case 'sakit':                                           
+                    $get_siswa = Siswa::where('id', $request->id)->first();
+                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[1]->message."\n".Carbon::now());
+                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);                    
+                    
+                    return response()->json([
+                        'url' => route('absen'),
+                        'status' => 200,
+                        'message' => 'data berhasil ditambahkan'
+                    ]);
+                    break;
+                default:
+                return redirect()->route('absen')->with('error', 'status tidak boleh kosong');
+                    break;
+            }
 
         session(['success' => 'data berhasil ditambahkan']);
         return response()->json([
