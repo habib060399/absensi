@@ -13,7 +13,8 @@ class CurlController extends Controller
 {
     public function setApiWa(array $param) {
         $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();
-        $token = $sekolah->token_api_wa;            
+        // (!empty($sekolah->token_api_wa)) ? $sekolah->token_api_wa : " ";
+        $token = (!empty($sekolah->token_api_wa)) ? $sekolah->token_api_wa : " ";
                 
         $curl = curl_init();
 
@@ -62,7 +63,8 @@ class CurlController extends Controller
         $getSekolah = Settings::where('id_sekolah', $id_sekolah)->first();
         $bc = preg_replace("/{nama}/", "$nama_siswa", $getSekolah->bc);
         $sekolah = Sekolah::where('sekolah.id', $id_sekolah)->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();
-        $token = $sekolah->token_api_wa;
+        // $token = $sekolah->token_api_wa;
+        $token = (!empty($sekolah->token_api_wa)) ? $sekolah->token_api_wa : " ";
         
         $curl = curl_init();
         $data = array(
