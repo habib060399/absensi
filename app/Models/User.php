@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Sekolah;
 use App\Models\Kelas;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -26,7 +27,8 @@ class User extends Authenticatable
         'name',
         'id_sekolah',
         'username',
-        'password'
+        'password',
+        'expiry_date'
     ];
     protected $primaryKey = 'id';
     public $timestamps = false;
@@ -41,28 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Kelas::class, 'id_user', 'id');
     }
-
-    public function getUser($rfid)
-    {
-        $user = User::where('rfid_tag', $rfid)->first();
-        return $user;
-    }
-
-    public function setUser($name, $username)
-    {
-        User::create([
-            'name' => $name,
-            'username' => $username,            
-        ]);
-    }
-
-    public function updateUser($rfid, $username, $nama, $no_hp)
-    {
-        User::where('rfid_tag', $rfid)->update([
-            'username' => $username,
-            'name' => $nama,
-            'no_hp' => $no_hp
-        ]);
-    }
     
+    public function isActive()
+    {
+        return $this->expiry_date && Carbon::now()->lessThanOrEqualTo($this->expiry_date);
+    }
 }

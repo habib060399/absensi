@@ -10,18 +10,9 @@ use App\Models\Sekolah;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
-        // $sekolah = User::create([
-        //     'name' => 'SMK PANCA BUDI MEDAN',
-        //     'username' => 'smkpancabudi',
-        //     'password' => Hash::make(123)
-        // ]);
-
-        // $sekolah->assignRole('sekolah');
         
         $admin = new User();
         $admin->id = 0;

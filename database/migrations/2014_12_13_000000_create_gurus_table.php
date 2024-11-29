@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('guru', function (Blueprint $table) {
             $table->id();
-            $table->string('id_sekolah', 255);
+            $table->bigInteger('id_sekolah')->nullable(false);
             $table->string('id_jabatan', 255)->nullable(true);
             $table->text('id_jurusan')->nullable(true);
             $table->text('id_kelas')->nullable(false);
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('no_wa', 20);
             $table->string('foto', 200)->nullable(true);
             $table->timestamps();
+            $table->foreign('id_sekolah')->on('sekolah')->references('id')->onDelete('cascade');
         });
     }
 

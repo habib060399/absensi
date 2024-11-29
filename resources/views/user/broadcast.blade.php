@@ -15,12 +15,15 @@
                         @csrf
                         <div class="row">
                             <div class="col-sm-6">
+                                
+                                @foreach ($pesan->data as $p)
                                 <div class="mb-3">
-                                    <input type="hidden" name="id_sekolah" id=""
-                                        value="{{ \App\Helpers\Helper::encryptUrl($id_sekolah) }}">
-                                    <label class="form-label">Pesan</label>
-                                    <textarea type="text" class="form-control @error('email') is-invalid @enderror" name="broadcast">{{ $broadcast }}</textarea>
-                                </div>
+                                    {{-- <input type="hidden" name="id_sekolah" id=""
+                                        value="{{ \App\Helpers\Helper::encryptUrl($id_sekolah) }}"> --}}
+                                    <label class="form-label">Pesan : {{$p->title}}</label>
+                                    <textarea type="text" class="form-control @error('email') is-invalid @enderror" name="broadcast-{{$p->title}}">{{$p->message}}</textarea>
+                                </div>    
+                                @endforeach
                             </div><!-- Col -->
                         </div><!-- Row -->
                         <button type="submit" class="btn btn-primary submit">Submit form</button>

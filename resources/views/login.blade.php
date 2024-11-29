@@ -22,7 +22,7 @@ License: For each use you must have a valid license purchased only from above li
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.css') }}">
   <!-- End fonts -->
 
 	<!-- core:css -->
@@ -40,6 +40,7 @@ License: For each use you must have a valid license purchased only from above li
   <!-- Layout styles -->  
 	<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
   <!-- End layout styles -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" />
 </head>
@@ -111,6 +112,18 @@ License: For each use you must have a valid license purchased only from above li
 	<!-- endinject -->
 
 	<!-- Custom js for this page -->
+	<script src="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.js') }}"></script>
+	@if(session('error'))
+        <script>
+            $(document).ready(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `{{ session('error') }}`,
+                });
+            })
+        </script>
+		@endif
 	<!-- End custom js for this page -->
 
 </body>

@@ -12,8 +12,9 @@ class SekolahSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {
+    {    
         $sekolah = new Sekolah();
+        $sekolah->id = 112233;
         $sekolah->id_user = 1;
         $sekolah->id_wa = 1;
         $sekolah->id_mesin = 1;

@@ -14,8 +14,7 @@ class WaSeeder extends Seeder
     public function run(): void
     {
         $wa = new Wa();
-        $wa->id = 1;
-        $wa->id_akun = 1;
+        $wa->id = 1;        
         $wa->no_wa = "082169376803";
         $wa->wa_group = "";
         $wa->save();

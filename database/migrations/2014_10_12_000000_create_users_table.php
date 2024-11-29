@@ -24,8 +24,8 @@ return new class extends Migration
             $table->bigInteger('id')->nullable(false)->primary();                       
             $table->string('name')->nullable(true);
             $table->string('username')->nullable(true)->unique();
-            $table->string('password')->nullable(true); 
-            // $table->foreign('id_sekolah')->on('sekolah')->references('id');           
+            $table->string('password')->nullable(true);
+            $table->timestamp('expiry_date')->nullable(true);
         });
     }
 

@@ -13,19 +13,11 @@
                 <div class="card-body">
                     <h6 class="card-title">Data Siswa</h6>
                     <br>
-                    <div>
-                        <a href="{{ route('siswa_add') }}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
-                        <a href="{{ route('template_siswa') }}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a>
-                        <a href="{{route ('siswa_naik_kelas')}}" class="btn btn-inverse-success btn-icon"><i data-feather="chevron-right"></i></a>
+                    <div>                        
+                        <a href="" class="btn btn-inverse-success btn-icon"><i data-feather="chevron-right"></i></a>
                     </div>
                     <br>
-                    <div>
-                        <form action="{{ route('import_siswa') }}" enctype="multipart/form-data" method="post">
-                            @csrf
-                            <input type="file" name="file" class="form-control-sm">
-                            <button type="submit" class="btn btn-inverse-success btn-icon"><i data-feather="upload"></i></button>
-                        </form>
-                    </div>
+                    
                     <hr>
                     <br>
                     <div class="table-responsive">
@@ -36,11 +28,7 @@
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
                                     <th>Jurusan</th>
-                                    <th>ID Name Tag</th>
-                                    <th>Hadir</th>
-                                    <th>Absen</th>
-                                    <th>Izin</th>
-                                    <th>Sakit</th>
+                                    <th>ID Name Tag</th>                                    
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -51,23 +39,18 @@
                                         <td>{{ $s->nama_siswa }}</td>
                                         <td>{{ $s->kelas }}</td>
                                         <td>{{ $s->nama_jurusan }}</td>
-                                        <td>{{ $s->rfid }}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'hadir')->where('id_siswa', $s->id)->count('status')}}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status')}}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status')}}</td>
-                                        <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status')}}</td>
+                                        <td>{{ $s->rfid }}</td>                                        
                                         <td>
-                                            <a href="{{ route('editSiswa', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" class="btn btn-warning btn-icon btn-xs">
-                                                <i data-feather="edit-3"></i>
-                                            </a>
-                                            <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="{{ route('hapus', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" id="hapus">
-                                                <i data-feather="trash-2"></i>
-                                            </a>
+                                            <select class="form-select" id="jurusan_sekolah" name="jurusan_sekolah">
+                                                <option value="" selected disabled>Pilih Kelas</option>
+                                                <option value=""></option>
+                                            </select>                                            
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <button>simpan</button>
                     </div>
                 </div>
             </div>

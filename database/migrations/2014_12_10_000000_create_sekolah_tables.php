@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sekolah', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
+            $table->bigInteger('id')->nullable(false)->primary();
             $table->bigInteger('id_user')->nullable(false);
             $table->bigInteger('id_wa')->nullable(true);
             $table->string('id_mesin', 17);
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('email', 100);
             $table->string('pendidikan', 100);
             $table->string('npsn', 100);
+            $table->string('paket', 100)->nullable(true);
             $table->timestamps();
             $table->foreign('id_user')->on('users')->references('id')->onDelete('cascade');
             $table->foreign('id_wa')->on('wa')->references('id')->onDelete('cascade');
