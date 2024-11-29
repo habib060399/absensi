@@ -102,10 +102,10 @@ class AdminController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
  
-        $text = `{"data":[{"title":"hadir","message":null},{"title":"sakit","message":null},{"title":"absen","message":null},{"title":"izin","message":null}]}`;
+        // $text = `{"data":[{"title":"hadir","message":null},{"title":"sakit","message":null},{"title":"absen","message":null},{"title":"izin","message":null}]}`;
         $wa->id = intVal($id);                
         $wa->no_wa = $request->input('contact');
-        $wa->template_bc = json_encode($text);
+        // $wa->template_bc = json_encode($text);
         $wa->save();
 
         $sekolah->id = intVal($id);
