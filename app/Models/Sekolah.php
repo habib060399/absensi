@@ -13,7 +13,7 @@ class Sekolah extends Model
     use HasFactory;
 
     protected $table = 'sekolah';
-    protected $fillable = ['id_user', 'id_wa', 'nama_sekolah', 'email', 'id_mesin', 'pendidikan', 'npsn'];
+    protected $fillable = ['id_user', 'id_wa', 'nama_sekolah', 'email', 'id_mesin', 'pendidikan', 'npsn', 'paket'];
     public $timestamps = false;
 
     public function user(): BelongsTo

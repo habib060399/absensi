@@ -70,4 +70,10 @@ class AdminViewController extends Controller
             'user' => $sekolah->user()->select('username')->first()
         ]);
     }
+
+    public function paket($id)
+    {
+        $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();
+        return view('admin.paket', ['sekolah' => $sekolah]);
+    }
 }

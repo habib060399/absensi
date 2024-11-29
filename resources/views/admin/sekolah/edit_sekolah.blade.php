@@ -95,20 +95,25 @@
 											<div class="col-sm-5">
 												<div class="mb-3">
 													<label class="form-label">Token API WA</label>
-													<input type="text" class="form-control @error('username') is-invalid @enderror" name="toke_api_wa" {{($wa->token_account_wa) ? "value=$wa->token_account_wa"  : 'placeholder=Token'}}>
+													<input type="text" class="form-control @error('token_api_wa') is-invalid @enderror" name="token_api_wa" {{($wa->token_account_wa) ? "value=$wa->token_account_wa"  : 'placeholder=Token'}}>
 												</div>
 											</div><!-- Col -->
 											<div class="col-sm-3">
 												<div class="mb-3">
-													<label class="form-label">Perpanjang Masa Aktif</label>
-													<input type="text" class="form-control @error('username') is-invalid @enderror" placeholder="Masa Aktif" name="expiry">
+													<label class="form-label">Pilih Paket Langganan</label>
+													<select class="form-select @error('paket') is-invalid @enderror" id="exampleFormControlSelect2" name="paket">
+														<option selected disabled>Pilih Paket</option>
+														<option value="bronze">Bronze</option>
+														<option value="silver">Silver</option>
+														<option value="gold">Gold</option>
+													</select>
 												</div>
 											</div><!-- Col -->
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">Token Akun WA</label>
-													<input type="text" class="form-control @error('npsn') is-invalid @enderror" name="token_akun_wa" {{($wa->token_api_wa) ? "value=$wa->token_api_wa"  : 'placeholder=Token'}}>
-													@error('npsn')
+													<input type="text" class="form-control @error('token_akun_wa') is-invalid @enderror" name="token_akun_wa" {{($wa->token_api_wa) ? "value=$wa->token_api_wa"  : 'placeholder=Token'}}>
+													@error('token_akun_wa')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
 												</div>

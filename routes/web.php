@@ -40,6 +40,8 @@ Route::prefix('flockbase')->middleware(['auth', 'can:isAdmin'])->group(function(
     Route::get('/sekolah/hapus/{id}', [AdminController::class, 'hapusSekolah'])->name('sekolah-hapus');    
     Route::get('/sekolah/edit/{id}', [AdminViewController::class, 'editSekolah'])->name('sekolah-edit');
     Route::post('/sekolah/edit/{id}/simpan', [AdminController::class, 'editSekolah'])->name('simpan-edit-sekolah');
+    Route::get('/sekolah/paket/{id}', [AdminViewController::class, 'paket'])->name('paket');
+    Route::get('/sekolah/paket/{id}/{paket}', [AdminController::class, 'registerPaket'])->name('paket-add');
 });
 
 Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.active'])->group(function(){

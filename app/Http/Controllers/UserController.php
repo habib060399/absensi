@@ -54,11 +54,13 @@ class UserController extends Controller
 
         $kelas = new Kelas();
         $user = new User();
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
         $id = date('dmyHis');
         
         $user->id = intVal($id);
         $user->username = $request->input('username');
         $user->password = Hash::make($request->input('password'));
+        $user->expiry_date = $sekolah->user()->first()->expiry_date;
         $user->save();
 
         $kelas->id_sekolah = session('id_sekolah');
