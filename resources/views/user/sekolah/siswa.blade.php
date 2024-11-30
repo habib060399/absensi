@@ -15,7 +15,8 @@
                     <br>
                     <div>
                         <a href="{{ route('siswa_add') }}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
-                        <a href="{{ route('template_siswa') }}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a>
+                        {{-- <a href="{{ route('template_siswa') }}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a> --}}
+                        <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><i data-feather="download"></i></button>
                         <a href="{{route ('siswa_naik_kelas')}}" class="btn btn-inverse-success btn-icon"><i data-feather="chevron-right"></i></a>
                     </div>
                     <br>
@@ -73,6 +74,76 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Template</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('template_siswa') }}" method="post">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label">Nama Jurusan</label>
+                        <select class="form-select" id="jurusan_sekolah" name="jurusan_sekolah">
+                            <option selected disabled>Pilih Jurusan</option>
+                            @foreach ($jurusan as $j)                                        
+                            <option value="{{$j->id}}">{{$j->nama_jurusan}}</option>
+                            @endforeach									
+                        </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kelas</label>
+                    <select class="form-select @error('kelas_sekolah') is-invalid @enderror" id="kelas_sekolah" name="kelas_sekolah">
+                        <option selected disabled>Pilih Kelas</option>
+                    </select>
+                    @error('kelas_sekolah')
+                        <div class="error invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jumlah Siswa</label>
+                    <input type="number" class="form-control @error('jml_siswa') is-invalid @enderror" placeholder="Jumlah Siswa" name="jml_siswa">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Download Template</button>
+            </div>
+          </form>
+          </div>
+          </div>
+        </div>
+
+        <script type="text/javascript">
+            $('#jurusan_sekolah').on('change', function() {
+                var value = $('#jurusan_sekolah option:selected').val()
+                var data = {
+                    id_jurusan: value
+                }
+    
+                $('#jurusan_sekolah').click(function() {
+                    $.ajax({
+                        url: `{{ route('getkls') }}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(res) {
+                            console.log(res);
+    
+                            $('#kelas_sekolah').html(res)
+    
+                        }
+                    })
+                });
+    
+            });
+        </script>
+
     <script type="text/javascript">
         $('.alert_notif').click(function() {
             var getLink = $(this).data('href');

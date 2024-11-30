@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama_siswa', 200);
             $table->string('email', 100);
             $table->string('foto', 100)->nullable(true);
-            $table->string('rfid', 100);
+            $table->string('rfid', 100)->nullable(true);
             $table->string('no_hp', 100);
             $table->string('no_hp_ortu', 100);
             $table->timestamps();
