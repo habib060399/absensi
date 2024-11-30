@@ -13,27 +13,31 @@ use App\Helpers\Helper;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 
-class TemplateDaftarSiswa implements WithHeadings, WithStyles, FromArray
+// class TemplateDaftarSiswa implements WithHeadings, WithStyles, FromArray
+class TemplateDaftarSiswa implements WithHeadings, FromArray
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    // public function collection()
-    // {
-    
-    // }
+    var $id_jurusan;
+    var $id_kelas;
+    var $count = 1;
+
+    public function __construct($id_jurusan, $id_kelas, $count)
+    {
+        $this->id_jurusan = $id_jurusan;
+        $this->id_kelas = $id_kelas;
+        $this->count = $count;
+    }
 
     public function getContent() {
         // $id_jurusan = 0;
         $content = '';
-        $jurusan = Jurusan::where('id_sekolah', Helper::getSession())->get();
-        
+        $jurusan = Jurusan::where('id_sekolah', session('id_sekolah'))->get();
+        $content .= "Sekolah - id = " . session('id_sekolah') . "\n";
         for ($i=0; $i < count($jurusan); $i++) { 
             $kelas = Kelas::where('id_jurusan', $jurusan[$i]['id'])->get();
             $id_jurusan = $jurusan[$i]['id'];
-            $content .= "(Id: $id_jurusan)"." - ".$jurusan[$i]['nama_jurusan']."\n";
+            $content .= $jurusan[$i]['nama_jurusan']. " - Id = $id_jurusan\n";
             for ($a=0; $a < count($kelas); $a++) { 
-                $content .= $kelas[$a]['kelas']." - Id Kelas: ".$kelas[$a]['id']."\n";
+                $content .= $kelas[$a]['kelas']." - Id Kelas = ".$kelas[$a]['id']."\n";
             }
         }
         
@@ -42,30 +46,33 @@ class TemplateDaftarSiswa implements WithHeadings, WithStyles, FromArray
 
     public function array(): array
     {
+        $cell = array();
+        for ($i=1; $i <= $this->count ; $i++) { 
+            $cell[$i] = array_merge([session('id_sekolah'), $this->id_jurusan, $this->id_kelas, null, null, null, null, null, null, null, null, null]);
+        }
+        // dd($cell);
         return [
-            [null, null, null, null, null, null, null, null, null, null, null, null, $this->getContent()],
+            $cell
         ];
     }
 
     public function headings(): array {
         return [
-            "ID_SEKOLAH",
-            "NAMA SEKOLAH",
+            "ID SEKOLAH",            
             "JURUSAN",
             "KELAS",
             "NAMA SISWA",
-            "EMAIL",
-            "RFID",
+            "EMAIL",            
             "NO HP",
             "NO HP ORANGTUA"
         ];
     }
 
-    public function column(): array {
-        return ['M' => Text::make('Name', 'name')];
-    }
+    // public function column(): array {
+    //     return ['M' => Text::make('Name', 'name')];
+    // }
         
-    public function styles(Worksheet $sheet) {
-        $sheet->mergeCells('M2:R20');
-    }
+    // public function styles(Worksheet $sheet) {
+    //     $sheet->mergeCells('M2:R20');
+    // }
 }

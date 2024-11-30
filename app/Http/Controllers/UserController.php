@@ -448,8 +448,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function exportTemplateSiswa() {
-        return Excel::download(new TemplateDaftarSiswa, "template-daftar-siswa.xlsx");
+    public function exportTemplateSiswa(Request $request) {
+        $jurusan = $request->input('jurusan_sekolah');
+        $kelas = $request->input('kelas_sekolah');
+        $siswa = $request->input('jml_siswa');
+        if(!empty($jurusan) && !empty($kelas)){
+            return Excel::download(new TemplateDaftarSiswa($jurusan, $kelas, $siswa), "template-daftar-siswa.xlsx");
+        }
+        return back()->with('error', 'Data Tidak boleh Kosong');
     }
 
     public function importSiswa(Request $request) {
@@ -457,9 +463,14 @@ class UserController extends Controller
             'file' => 'required|max:2048'
         ]);
 
-        Excel::import(new SiswaImport, $request->file('file'));
+        try {
+            $file = Excel::import(new SiswaImport, $request->file('file'));
+            return back()->with('success', 'Berhasil Mengimport Data');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }                
 
-        return back()->with('success', 'Berhasil Mengimport Data');
+        // return back()->with('success', 'Berhasil Mengimport Data');
     }
 
     public function rekapAbsen(Request $request) {
