@@ -11,6 +11,7 @@ use App\Models\Wa;
 use App\Models\Sekolah;
 use App\Models\Settings;
 use App\Helpers\Helper;
+use App\Http\Controllers\API\CurlController;
 use Illuminate\Support\Facades\Cookie;
 
 class UserViewController extends Controller
@@ -163,7 +164,21 @@ class UserViewController extends Controller
     }
 
     public function home() {
-        return view('user.index');
+        $api_wa = new CurlController();
+        $data = $api_wa->getDevice();
+        $device_wa = json_decode($data);
+        $count = 0;
+
+        if(session('id_sekolah')){
+            $count = Siswa::where('id_sekolah', session('id_sekolah'))->count();
+        }elseif (session('id_kelas')) {
+            $count = Siswa::where('id_kelas', session('id_kelas'))->count();
+        }
+        
+        return view('user.index',[
+            'wa' => ($device_wa->status) ? $device_wa->data : $device_wa->status,
+            'jml_siswa' => $count
+        ]);
     }
 
     public function rekapAbsen() {

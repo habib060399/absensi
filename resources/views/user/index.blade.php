@@ -25,7 +25,7 @@
       </div>
       <div class="row">
         <div class="col-6 col-md-12 col-xl-5">
-        <h3 class="mb-2 text-success"></h3>
+        <h3 class="mb-2 text-success">{{($wa) ? $wa[0]->quota : 'failed'}}</h3>
         </div>
         <div class="col-6 col-md-12 col-xl-7">
         <div id="customersChart" class="mt-md-3 mt-xl-0"></div>
@@ -38,13 +38,13 @@
     <div class="card">
       <div class="card-body">
       <div class="d-flex justify-content-between align-items-baseline">
-        <h6 class="card-title mb-0">Jumlah Sekolah</h6>
+        <h6 class="card-title mb-0">Whatssap</h6>
         <div class="dropdown mb-2">					
         </div>
       </div>
       <div class="row">
         <div class="col-6 col-md-12 col-xl-5">
-        <h3 class="mb-2"></h3>				
+        <h3 class="mb-2">{{($wa) ? $wa[0]->status : 'failed'}}</h3>				
         </div>
         <div class="col-6 col-md-12 col-xl-7">
         <div id="ordersChart" class="mt-md-3 mt-xl-0"></div>
@@ -63,7 +63,7 @@
       </div>
       <div class="row">
         <div class="col-6 col-md-12 col-xl-5">
-        <h3 class="mb-2"></h3>
+        <h3 class="mb-2">{{$jml_siswa}}</h3>
         </div>
         <div class="col-6 col-md-12 col-xl-7">
         <div id="growthChart" class="mt-md-3 mt-xl-0"></div>
