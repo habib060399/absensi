@@ -125,8 +125,10 @@ class CurlController extends Controller
 
     public static function getDevice()
     {
-        $token = env("TOKEN_ACCOUNT_WA");
+        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();        
+        $token = $sekolah->token_account_wa;
         $curl = curl_init();
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.fonnte.com/get-devices',
             CURLOPT_RETURNTRANSFER => true,

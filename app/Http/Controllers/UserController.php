@@ -291,7 +291,7 @@ class UserController extends Controller
         }
         
         if($data != null){
-            $sekolah = Sekolah::where('id', session('id_sekolah'))->first();        
+            $sekolah = Sekolah::where('id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->first();        
             $teks = $sekolah->wa()->first()->template_bc;
             $json = serialize($teks);
             $unserialize = unserialize($json);
