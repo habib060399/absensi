@@ -86,8 +86,8 @@ class RfidController extends Controller
                     'waktu' => $time_now,
                     'status' => 'hadir'
                 ]);
-
-                if($respon->detail) {                    
+                                
+                if($respon->status) {                    
                     return response()->json([
                         'message' => "Pesan berhasil dikirim",
                         'message2' => "Absensi Berhasil", 
@@ -96,7 +96,7 @@ class RfidController extends Controller
                     ]); 
                 } else {
                     return response()->json([
-                        'message' => "Gagal Mengirim Pesan",                    
+                        'message' => "Gagal Mengirim Pesan".$respon->reason,                    
                         'status' => 200,
                         'name' => $get_siswa->nama_siswa,
                     ]);

@@ -291,7 +291,7 @@ class UserController extends Controller
         }
         
         if($data != null){
-            $sekolah = Sekolah::where('id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->first();        
+            $sekolah = Sekolah::where('id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->first();
             $teks = $sekolah->wa()->first()->template_bc;
             $json = serialize($teks);
             $unserialize = unserialize($json);
@@ -301,7 +301,7 @@ class UserController extends Controller
                 case 'hadir':
                     for($a=0; $a < count($data); $a++) {                        
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message);                        
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
