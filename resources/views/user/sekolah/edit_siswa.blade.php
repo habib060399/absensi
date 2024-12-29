@@ -28,6 +28,7 @@
                             </div><!-- Col -->
                         </div><!-- Row -->
                         <div class="row">
+                            @jurusan
                             <div class="col-sm-4">
                                 <div class="mb-3">
                                     <label class="form-label">Jurusan</label>
@@ -41,6 +42,7 @@
                                     @enderror
                                 </div>
                             </div><!-- Col -->
+                            @endjurusan
                             <div class="col-sm-4">
                                 <div class="mb-3">
                                     <label class="form-label">Kelas</label>
@@ -84,10 +86,10 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Foto</label>                          
-                                        @if ($siswa->foto)  
+                                    <label class="form-label">Foto</label>
+                                        @if ($siswa->foto)
                                                 <div class="card">
-                                                    <img src="{{asset('storage/foto/'.$siswa->foto)}}" class="card-img-top" alt="..."/>                                                    
+                                                    <img src="{{asset('storage/foto/'.$siswa->foto)}}" class="card-img-top" alt="..."/>
                                                 </div>
                                                 <br>
                                                 @endif
@@ -172,7 +174,7 @@
         // 				success: function(res){
         // 					console.log(res);
 
-        // 						$('#kelas').html(res)	
+        // 						$('#kelas').html(res)
 
         // 				}
         // 			})

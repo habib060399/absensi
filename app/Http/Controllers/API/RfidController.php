@@ -27,11 +27,11 @@ class RfidController extends Controller
         $this->modelAbsen = new Absensi();
         $this->modelUser = new User();
         $this->controllerUser = new UserController();
-        $this->curl = new CurlController();             
+        $this->curl = new CurlController();
     }
-    
+
     public function index()
-    {        
+    {
         return response()->json([
             'test' => 100,
             'status' => 200,
@@ -40,11 +40,11 @@ class RfidController extends Controller
     }
 
     public function login(Request $request)
-    {        
+    {
         $get_perangkat = $this->perangkat->where('id_mesin', $request->id_mesin)->leftJoin('personal_access_tokens', 'perangkat.id_mesin', '=', 'personal_access_tokens.name')->select('perangkat.*', 'personal_access_tokens.token')->first();
         if($get_perangkat){
             if($get_perangkat->token == null){
-                // $token = $get_perangkat->createToken($id_perangkat, ['token:check'])->plainTextToken;             
+                // $token = $get_perangkat->createToken($id_perangkat, ['token:check'])->plainTextToken;
                 $token = "fasdkfjalskdjflkasjdl";
                 return response()->json([
                 'id_mesin' => $get_perangkat->id_mesin,
@@ -61,11 +61,11 @@ class RfidController extends Controller
             ]);
         }
     }
-    
+
     public function store(Request $request)
-    {   
+    {
         $time_now = date("h:i:s");
-        $date_now = date("Y-m-d");     
+        $date_now = date("Y-m-d");
         $get_siswa = Siswa::where('rfid', $request->rfid_tag)->first();
         if($get_siswa){
             $get_absen = Absensi::where('id_siswa', $get_siswa->id)->where('tanggal', $date_now)->first();
@@ -74,34 +74,34 @@ class RfidController extends Controller
                     'message' => 'Anda Sudah Melakukan Absen',
                     'status' => 200
                 ]);
-            }else{                
-                // $Wa = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
+            }else{
+                // $Broadcast = $this->curl->curlWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
                 $Wa = $this->curl->sendPresencenWa($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah);
                 $respon = json_decode($Wa);
                 broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah, $get_siswa->foto));
-               
+
                 Absensi::create([
                     'id_siswa' => $get_siswa->id,
                     'tanggal' => $date_now,
                     'waktu' => $time_now,
                     'status' => 'hadir'
                 ]);
-                                
-                if($respon->status) {                    
+
+                if($respon->status) {
                     return response()->json([
                         'message' => "Pesan berhasil dikirim",
-                        'message2' => "Absensi Berhasil", 
-                        'name' => $get_siswa->nama_siswa,                  
+                        'message2' => "Absensi Berhasil",
+                        'name' => $get_siswa->nama_siswa,
                         'status' => 200
-                    ]); 
+                    ]);
                 } else {
                     return response()->json([
-                        'message' => "Gagal Mengirim Pesan".$respon->reason,                    
+                        'message' => "Gagal Mengirim Pesan".$respon->reason,
                         'status' => 200,
                         'name' => $get_siswa->nama_siswa,
                     ]);
                 }
-      
+
             }
         }else{
             return response()->json([
@@ -109,7 +109,7 @@ class RfidController extends Controller
                 'status' => 400
             ]);
         }
-    }    
+    }
 
     public function scan(Request $request)
     {

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Events\SendPresence;
 use App\Models\User;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ControllerView;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -11,6 +13,8 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\UserViewController;
 use App\Http\Controllers\AdminViewController;
+use App\Http\Controllers\Admin\SekolahController;
+use App\Http\Controllers\Admin\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,16 +36,22 @@ Route::get('/live-absen', [UserViewController::class, 'liveAbsen']);
 Route::prefix('flockbase')->middleware(['auth', 'can:isAdmin'])->group(function(){
     Route::get('/home', [AdminViewController::class, 'home'])->name('homeAdmin');
     // Route::get('/absen', [ControllerView::class, 'dataAbsen'])->name('absen');
-    Route::get('/sekolah', [AdminViewController::class, 'sekolah'])->name('sekolah');
+    Route::get('/sekolah', [SekolahController::class, 'index'])->name('sekolah');
+    Route::get('/sekolah/wizard', [SekolahController::class, 'wizard'])->name('wizard');
     Route::get('/sekolah/tambah', [ControllerView::class, 'addSekolah'])->name('sekolah-add');
-    Route::post('/tambah-sekolah', [AdminController::class, 'registerSekolah'])->name('add_sekolah');
+    Route::post('/tambah-sekolah', [SekolahController::class, 'store'])->name('add_sekolah');
+//    Route::post('/tambah-sekolah', [AdminController::class, 'registerSekolah'])->name('add_sekolah');
     Route::get('/mesin', [AdminViewController::class, 'mesin'])->name('mesin');
     Route::post('/tambah-mesin', [AdminController::class, 'registerMesin'])->name('add_mesin');
-    Route::get('/sekolah/hapus/{id}', [AdminController::class, 'hapusSekolah'])->name('sekolah-hapus');    
-    Route::get('/sekolah/edit/{id}', [AdminViewController::class, 'editSekolah'])->name('sekolah-edit');
-    Route::post('/sekolah/edit/{id}/simpan', [AdminController::class, 'editSekolah'])->name('simpan-edit-sekolah');
+    Route::get('/sekolah/hapus/{id}', [SekolahController::class, 'delete'])->name('sekolah-hapus');
+    Route::get('/sekolah/{id}/edit', [SekolahController::class, 'edit'])->name('sekolah-edit');
+    Route::post('/sekolah/edit/{id}/simpan', [SekolahController::class, 'update'])->name('simpan-edit-sekolah');
     Route::get('/sekolah/paket/{id}', [AdminViewController::class, 'paket'])->name('paket');
     Route::get('/sekolah/paket/{id}/{paket}', [AdminController::class, 'registerPaket'])->name('paket-add');
+    Route::get('/sekolah/paket2/{id}', [\App\Helpers\Helper::class, 'getPaket'])->name('paket-add2');
+    Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice');
+    Route::get('/invoice/{id}', [InvoiceController::class, 'showInvoice'])->name('invoice2');
+    Route::get('/sekolah/invoice/download/{id}', [InvoiceController::class, 'generateInvoicePDF'])->name('invoice-download');
 });
 
 Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.active'])->group(function(){
@@ -51,12 +61,12 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::get('/jurusan/hapus/{id}', [UserController::class, 'hapusJurusan'])->name('hapus_jurusan');
     Route::get('/jurusan/{id}', [UserViewController::class, 'editJurusan'])->name('edit_jurusan');
     Route::post('/jurusan/edit', [UserController::class, 'editJurusan'])->name('edit_jurusan1');
-    Route::get('/kelas', [UserViewController::class, 'kelas'])->name('kelas');
+    Route::get('/kelas', [KelasController::class, 'index'])->name('kelas');
     Route::get('/kelas/hapus/{id}', [UserController::class, 'hapusKelas'])->name('hapus_kelas');
     Route::get('/kelas/{id}', [UserViewController::class, 'editKelas'])->name('editKelas');
     Route::post('/kelas/edit/{id}', [UserController::class, 'editKelas'])->name('e.kelas');
-    Route::post('/tambah-kelas', [UserController::class, 'registerKelas'])->name('add_kelas');
-    Route::get('/siswa', [UserViewController::class, 'siswa'])->name('siswa');
+    Route::post('/tambah-kelas', [KelasController::class, 'store'])->name('add_kelas');
+    Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa');
     Route::get('/siswa/naik-kelas', [UserViewController::class, 'siswaNaik'])->name('siswa_naik_kelas');
     Route::post('/tambah-jabatan', [GuruController::class, 'insertJabatan'])->name('add_jabatan');
     Route::get('/guru', [GuruController::class, 'index'])->name('guru');
@@ -65,11 +75,13 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::get('/guru/tambah', [GuruController::class, 'showInsertGuru'])->name('add_guru');
     Route::post('/guru/tambah/tambah-guru', [GuruController::class, 'insertGuru'])->name('guru_tambah');
     Route::get('/guru/hapus/{id}', [GuruController::class, 'deleteGuru'])->name('hapus_guru');
-    Route::get('/siswa/edit/{id}', [UserViewController::class, 'editSiswa'])->name('editSiswa');
-    Route::post('/siswa/edit/send/{id}', [UserController::class, 'editSiswa'])->name('edit_siswa');
+    Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('editSiswa');
+    Route::post('/siswa/edit/send/{id}', [SiswaController::class, 'update'])->name('edit_siswa');
     Route::get('/siswa/tambah', [UserViewController::class, 'addSiswa'])->name('siswa_add');
-    Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
+//    Route::post('/siswa/tambah/tambah-siswa', [UserController::class, 'registerSiswa'])->name('add_siswa');
+    Route::post('/siswa/tambah/tambah-siswa', [SiswaController::class, 'store'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
+    Route::get('/get-kelas-1', [KelasController::class, 'getAllKelas'])->name('get_all_kelas');
     Route::post('/get-kelas-2', [GuruController::class, 'getKelas'])->name('getkls2');
     Route::get('/pesan', [UserViewController::class, 'pesan'])->name('pesan');
     Route::post('/pesan/edit', [UserController::class, 'editPesan'])->name('edit_bc');

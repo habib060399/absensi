@@ -7,7 +7,7 @@
                     <h6 class="card-title">Form Guru</h6>
                     <br>
                     <div>
-                        <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i data-feather="plus"></i></button>                        
+                        <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i data-feather="plus"></i></button>
                     </div>
                     <br>
                     <hr>
@@ -56,7 +56,7 @@
                                         <div class="error invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div><!-- Col -->                            
+                            </div><!-- Col -->
                                 <div class="col-sm-4">
                                     <div class="mb-2">
                                         <label class="form-label">Foto</label>
@@ -68,33 +68,35 @@
                                 </div><!-- Col -->
                         </div><!-- Row -->
                         <div class="row">
+                            @jurusan
                             <div class="col-sm-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Jurusan</label>                                        
+                                    <label class="form-label">Jurusan</label>
                                         <select id="mySelect2" class="form-select" multiple="multiple" name="jurusan[]">
                                             @foreach ($jurusan as $j)
-                                            <option value="{{$j->id}}">{{$j->nama_jurusan}}</option>                                                
+                                            <option value="{{$j->id}}">{{$j->nama_jurusan}}</option>
                                             @endforeach
-                                        </select>                                                                                                                
+                                        </select>
                                     @error('jurusan')
                                         <div class="error invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div><!-- Col -->  
+                            </div><!-- Col -->
+                            @endjurusan
                             <div class="col-sm-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Kelas</label>                                        
+                                    <label class="form-label">Kelas</label>
                                         <select class="compose-multiple-select2 form-select" multiple="multiple"
                                             id="get_kelas" name="kelas[]">
-                                        </select>                                                                                                                
+                                        </select>
                                     @error('kelas')
                                         <div class="error invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div><!-- Col -->                            
-                        </div><!-- Row -->                       
+                            </div><!-- Col -->
+                        </div><!-- Row -->
                         <button type="submit" class="btn btn-primary submit">Submit form</button>
-                    </form>                    
+                    </form>
                 </div>
             </div>
         </div>
@@ -122,6 +124,7 @@
       </div>
       </div>
     </div>
+@jurusan
     <script>
         $(document).ready(function() {
         $('#mySelect2').select2();
@@ -129,14 +132,14 @@
         var html = [];
         var element = "";
         $('#mySelect2').on('change', function(){
-            var selectedData = $('#mySelect2').select2('data');            
+            var selectedData = $('#mySelect2').select2('data');
             console.log(selectedData);
-            
+
             for (let i = 0; i < selectedData.length; i++) {
                 if(selectedData[i].selected){
                     var id = selectedData[i].id;
                     console.log(id);
-                    
+
                     $.ajax({
                             url: `{{ route('getkls2') }}`,
                             type: 'POST',
@@ -151,23 +154,37 @@
                                 hide_loading()
                             },
                             success: function(res) {
-                                console.log(res)                                
+                                console.log(res)
                                 html.push(res)
                                 $('#get_kelas').html(html)
                             }
-                        })   
+                        })
                         html.splice(-1,selectedData.length)
-                        console.log(html);             
-                }           
-            }                                        
+                        console.log(html);
+                }
+            }
         })
-    })                          
+    })
     </script>
+@else
+<script type="text/javascript">
+    $.ajax({
+        url: `{{ route('get_all_kelas') }}`,
+        type: 'GET',
+        success: function(res) {
+            console.log(res);
+
+            $('#get_kelas').html(res)
+
+        }
+    })
+</script>
+@endjurusan
         <script>
-    
+
             $(function multiple () {
                 'use strict'
-    
+
                 if ($(".compose-multiple-select2").length) {
                     $(".compose-multiple-select2").select2();
                 }

@@ -1,5 +1,5 @@
 @extends('template')
-@section('content')    
+@section('content')
 <div class="page-content">
 
     <nav class="page-breadcrumb">
@@ -25,8 +25,11 @@
         <thead>
           <tr>
             <th width="50px">No</th>
+              @can('jurusan sekolah')
             <th>Jurusan</th>
+              @endcan
             <th>Kelas</th>
+            <th>Username</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -34,17 +37,20 @@
           @foreach ($kelas as $k)
           <tr>
             <td>{{$loop->iteration}}</td>
+              @can('jurusan sekolah')
             <td>{{$k->nama_jurusan}}</td>
+              @endcan
             <td>{{$k->kelas}}</td>
+            <td>{{$k->username}}</td>
             <td>
               <a href="{{route('editKelas', ['id' => \App\Helpers\Helper::encryptUrl($k->id)])}}" class="btn btn-warning btn-icon btn-xs">
                 <i data-feather="edit-3"></i>
-              </a>              
+              </a>
               <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="{{route('hapus_kelas', ['id' => \App\Helpers\Helper::encryptUrl($k->id)])}}">
                 <i data-feather="trash-2"></i>
               </a>
             </td>
-          </tr>                      
+          </tr>
           @endforeach
         </tbody>
       </table>
@@ -66,27 +72,29 @@
       </div>
       <div class="modal-body">
         <form action="{{route('add_kelas')}}" method="post">
-          @csrf        
+          @csrf
+            @can('jurusan sekolah')
         <div class="mb-3">
           <label class="form-label">Nama Jurusan</label>
 							<select class="form-select" id="exampleFormControlSelect1" name="jurusan">
 									<option selected disabled>Pilih Jurusan</option>
-                  @foreach ($jurusan as $j)                                        
+                  @foreach ($jurusan as $j)
 									<option value="{{$j->id}}">{{$j->nama_jurusan}}</option>
-                  @endforeach									
+                  @endforeach
 							</select>
         </div>
+            @endcan
         <div class="mb-3">
           <label class="form-label">Kelas</label>
-          <input type="text" class="form-control" name="kelas">        
+          <input type="text" class="form-control" name="kelas">
         </div>
         <div class="mb-3">
           <label class="form-label">Username</label>
-          <input type="text" class="form-control" name="username">        
+          <input type="text" class="form-control" name="username" value="{{$username}}">
         </div>
         <div class="mb-3">
           <label class="form-label">Password</label>
-          <input type="password" class="form-control" name="password">        
+          <input type="password" class="form-control" name="password">
         </div>
         </div>
       <div class="modal-footer">
@@ -107,7 +115,7 @@
                   },
                   buttonsStyling: false,
               });
-  
+
               swalWithBootstrapButtons
                   .fire({
                       title: "Are you sure?",
@@ -123,7 +131,7 @@
                     console.log(result);
                       if (result.isConfirmed) {
                         window.location.href = getLink
-                          
+
                       } else if (
                           // Read more about handling dismissals
                           result.dismiss === Swal.DismissReason.cancel

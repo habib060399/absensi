@@ -17,11 +17,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $table = 'users';
     protected $fillable = [
         'name',
@@ -43,7 +38,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Kelas::class, 'id_user', 'id');
     }
-    
+
     public function isActive()
     {
         return $this->expiry_date && Carbon::now()->lessThanOrEqualTo($this->expiry_date);

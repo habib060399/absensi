@@ -16,4 +16,9 @@ class Siswa extends Model
     public function absensi() {
         $this->belongsTo(Absensi::class, 'id_siswa', 'id');
     }
+
+    public static function checkLimit($limit, array $conditions = [])
+    {
+        return self::where($conditions)->count() >= $limit;
+    }
 }

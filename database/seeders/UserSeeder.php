@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
 
     public function run(): void
     {
-        
+
         $admin = new User();
         $admin->id = 0;
         $admin->name = 'admin';
@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
         $admin1->password = Hash::make(123);
         $admin1->save();
         $admin1->assignRole('sekolah');
+        $admin1->givePermissionTo('jurusan sekolah');
         $admin1->givePermissionTo('admin sekolah');
 
         $admin1 = new User();
@@ -38,6 +39,7 @@ class UserSeeder extends Seeder
         $admin1->password = Hash::make(321);
         $admin1->save();
         $admin1->assignRole('kelas');
+        $admin1->givePermissionTo('jurusan sekolah');
         $admin1->givePermissionTo('only class');
 
         $admin1 = new User();
@@ -47,6 +49,7 @@ class UserSeeder extends Seeder
         $admin1->password = Hash::make(111);
         $admin1->save();
         $admin1->assignRole('kelas');
+        $admin1->givePermissionTo('jurusan sekolah');
         $admin1->givePermissionTo('only class');
     }
 }

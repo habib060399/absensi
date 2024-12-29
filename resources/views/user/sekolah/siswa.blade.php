@@ -15,18 +15,12 @@
                     <br>
                     <div>
                         <a href="{{ route('siswa_add') }}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
-                        {{-- <a href="{{ route('template_siswa') }}" class="btn btn-inverse-success btn-icon"><i data-feather="download"></i></a> --}}
                         <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><i data-feather="download"></i></button>
+                        <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#upload"><i data-feather="upload"></i></button>
                         <a href="{{route ('siswa_naik_kelas')}}" class="btn btn-inverse-success btn-icon"><i data-feather="chevron-right"></i></a>
                     </div>
                     <br>
-                    <div>
-                        <form action="{{ route('import_siswa') }}" enctype="multipart/form-data" method="post">
-                            @csrf
-                            <input type="file" name="file" class="form-control-sm">
-                            <button type="submit" class="btn btn-inverse-success btn-icon"><i data-feather="upload"></i></button>
-                        </form>
-                    </div>
+
                     <hr>
                     <br>
                     <div class="table-responsive">
@@ -36,7 +30,9 @@
                                     <th width="50px">No</th>
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
+                                    @can('jurusan sekolah')
                                     <th>Jurusan</th>
+                                    @endcan
                                     <th>ID Name Tag</th>
                                     <th>Hadir</th>
                                     <th>Absen</th>
@@ -51,7 +47,9 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $s->nama_siswa }}</td>
                                         <td>{{ $s->kelas }}</td>
+                                        @jurusan
                                         <td>{{ $s->nama_jurusan }}</td>
+                                        @endjurusan
                                         <td>{{ $s->rfid }}</td>
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'hadir')->where('id_siswa', $s->id)->count('status')}}</td>
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status')}}</td>
@@ -85,15 +83,17 @@
             <div class="modal-body">
               <form action="{{ route('template_siswa') }}" method="post">
                 @csrf
+                  @jurusan
                 <div class="mb-3">
                     <label class="form-label">Nama Jurusan</label>
                         <select class="form-select" id="jurusan_sekolah" name="jurusan_sekolah">
                             <option selected disabled>Pilih Jurusan</option>
-                            @foreach ($jurusan as $j)                                        
+                            @foreach ($jurusan as $j)
                             <option value="{{$j->id}}">{{$j->nama_jurusan}}</option>
-                            @endforeach									
+                            @endforeach
                         </select>
                 </div>
+                  @endjurusan
                 <div class="mb-3">
                     <label class="form-label">Kelas</label>
                     <select class="form-select @error('kelas_sekolah') is-invalid @enderror" id="kelas_sekolah" name="kelas_sekolah">
@@ -117,13 +117,38 @@
           </div>
         </div>
 
+<div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Template</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('import_siswa') }}" enctype="multipart/form-data" method="post">
+                    @csrf
+                    @jurusan
+                    <input type="text" name="jurusan" class="form-control-sm" value="true" hidden>
+                    @endjurusan
+                    <input type="file" name="file" class="form-control-sm">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@jurusan
         <script type="text/javascript">
             $('#jurusan_sekolah').on('change', function() {
                 var value = $('#jurusan_sekolah option:selected').val()
                 var data = {
                     id_jurusan: value
                 }
-    
+
                 $('#jurusan_sekolah').click(function() {
                     $.ajax({
                         url: `{{ route('getkls') }}`,
@@ -134,16 +159,29 @@
                         },
                         success: function(res) {
                             console.log(res);
-    
+
                             $('#kelas_sekolah').html(res)
-    
+
                         }
                     })
                 });
-    
+
             });
         </script>
+@else
+<script type="text/javascript">
+    $.ajax({
+        url: `{{ route('get_all_kelas') }}`,
+        type: 'GET',
+        success: function(res) {
+            console.log(res);
 
+            $('#kelas_sekolah').html(res)
+
+        }
+    })
+</script>
+@endjurusan
     <script type="text/javascript">
         $('.alert_notif').click(function() {
             var getLink = $(this).data('href');

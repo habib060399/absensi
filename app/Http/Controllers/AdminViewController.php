@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Paket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Sekolah;
@@ -19,9 +20,9 @@ class AdminViewController extends Controller
 
     public function home()
     {
-        $getDeviceFonte= CurlController::getDevice();
-        $data = json_decode($getDeviceFonte);
-        
+        // $getDeviceFonte= CurlController::getDevice();
+        // $data = json_decode($getDeviceFonte);
+
         return view('admin.home', [
             // 'quota' => ($data->status) ? $data->data[0]->quota : 0,
             'quota' => 0,
@@ -36,7 +37,7 @@ class AdminViewController extends Controller
     }
 
     public function mesin()
-    {        
+    {
         return view('admin.mesin.index', ['uniqId' => Str::random(16), 'mesin' => Mesin::get()]);
     }
 
@@ -44,14 +45,14 @@ class AdminViewController extends Controller
     {
         return view('admin.sekolah.daftar_sekolah', ['sekolah' => Sekolah::get()]);
     }
-    
+
     public function registerView()
-    {        
+    {
         return view('register_perangkat', ['uniqId' => Str::random(16)]);
     }
 
     public function loginDeviceView()
-    {        
+    {
         return view('login_device');
     }
 
@@ -62,7 +63,7 @@ class AdminViewController extends Controller
 
     public function editSekolah($id)
     {
-        $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();        
+        $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();
         // dd($sekolah, $sekolah->wa()->select('no_wa', 'token_account_wa', 'token_api_wa')->get());
         return view('admin.sekolah.edit_sekolah', [
             'sekolah' => Sekolah::where('id', Helper::decryptUrl($id))->first(),
@@ -74,6 +75,10 @@ class AdminViewController extends Controller
     public function paket($id)
     {
         $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();
-        return view('admin.paket', ['sekolah' => $sekolah]);
+
+        return view('admin.paket', [
+            'sekolah' => $sekolah,
+            'paket' => Paket::all()
+        ]);
     }
 }

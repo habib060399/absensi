@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('id_user')->nullable(false);
             $table->string('id_sekolah', 100);
-            $table->bigInteger('id_jurusan')->nullable(false);
+            $table->bigInteger('id_jurusan')->nullable(true);
             $table->string('kelas', 50);
             $table->timestamps();
             $table->foreign('id_user')->on('users')->references('id')->onDelete('cascade');
