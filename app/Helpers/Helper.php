@@ -82,7 +82,7 @@ class Helper
 
     public static function getSekolah($column)
     {
-        $sekolah = Sekolah::where('id', session('id_sekolah'))->select($column)->first();
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->select($column)->first();              
         return $sekolah;
     }
 }

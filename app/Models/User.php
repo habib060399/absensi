@@ -43,4 +43,10 @@ class User extends Authenticatable
     {
         return $this->expiry_date && Carbon::now()->lessThanOrEqualTo($this->expiry_date);
     }
+
+    public static function checkRole($name)
+    {
+        $user = User::where('id', session('id_user'))->first();        
+        return $user->hasRole($name);
+    }
 }
