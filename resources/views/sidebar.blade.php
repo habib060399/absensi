@@ -102,6 +102,22 @@
           </div>
         </li>
         @endrole
+        @role('kelas')
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
+            <i class="link-icon" data-feather="box"></i>
+            <span class="link-title">Sekolah</span>
+            <i class="link-arrow" data-feather="chevron-down"></i>
+          </a>
+          <div class="collapse" id="advancedUI">
+            <ul class="nav sub-menu">                              
+              <li class="nav-item">
+                <a href="{{route('siswa')}}" class="nav-link">Siswa</a>
+              </li>              
+            </ul>
+          </div>
+        </li>
+        @endrole
         @can('message wa')
         <li class="nav-item">
           <a href="{{route('bc')}}" class="nav-link">

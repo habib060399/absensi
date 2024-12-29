@@ -13,12 +13,14 @@
                 <div class="card-body">
                     <h6 class="card-title">Data Siswa</h6>
                     <br>
+                    @role('sekolah')
                     <div>
                         <a href="{{ route('siswa_add') }}" class="btn btn-inverse-success btn-icon"><i data-feather="plus"></i></a>
                         <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModal"><i data-feather="download"></i></button>
                         <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#upload"><i data-feather="upload"></i></button>
                         <a href="{{route ('siswa_naik_kelas')}}" class="btn btn-inverse-success btn-icon"><i data-feather="chevron-right"></i></a>
                     </div>
+                    @endrole
                     <br>
 
                     <hr>
@@ -38,7 +40,9 @@
                                     <th>Absen</th>
                                     <th>Izin</th>
                                     <th>Sakit</th>
+                                    @role('sekolah')
                                     <th>Action</th>
+                                    @endrole
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,6 +59,7 @@
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status')}}</td>
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status')}}</td>
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status')}}</td>
+                                        @role('sekolah')
                                         <td>
                                             <a href="{{ route('editSiswa', ['id' => \App\Helpers\Helper::encryptUrl($s->id)]) }}" class="btn btn-warning btn-icon btn-xs">
                                                 <i data-feather="edit-3"></i>
@@ -63,6 +68,7 @@
                                                 <i data-feather="trash-2"></i>
                                             </a>
                                         </td>
+                                        @endrole
                                     </tr>
                                 @endforeach
                             </tbody>

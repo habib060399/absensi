@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
         $permission2 = Permission::create(['name' => 'admin sekolah']);
         $permission3 = Permission::create(['name' => 'message wa']);
         $permission4 = Permission::create(['name' => 'sms']);
-        $permission5 = Permission::create(['name' => 'jurusan sekolah']);
+        Permission::create(['name' => 'jurusan sekolah']);
         Role::create([
             'name' => 'admin',
             'guard_name' => 'web'
@@ -38,8 +38,6 @@ class RoleSeeder extends Seeder
         $permission3->syncRoles($role2);
         $permission3->syncRoles($role);
         $permission4->syncRoles($role2);
-        $permission4->syncRoles($role);
-        $permission5->syncRoles($role);
-        $permission5->syncRoles($role2);
+        $permission4->syncRoles($role);        
     }
 }
