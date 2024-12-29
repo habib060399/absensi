@@ -11,15 +11,17 @@
                             <div id='external-events' class='external-events'>
                                 <h6 class="mb-2 text-muted">Draggable Events</h6>
                                 @can('admin sekolah')
+                                @can('jurusan sekolah')
                                 <div class="mb-3">
                                     <label class="form-label">Jurusan</label>
                                     <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
                                         <option value="" selected disabled>Pilih Jurusan</option>
                                         @foreach ($jurusan as $j)
-                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>                                            
+                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
                                         @endforeach
                                     </select>
-                                </div>                                                                
+                                </div>
+                                @endcan
                                 <div class="mb-3">
                                     <label class="form-label">Kelas</label>
                                     <select type="text" class="form-select" id="get_kelas" name="get_kelas">
@@ -27,15 +29,17 @@
                                 </div>
                                 @endcan
                                 @can('only class')
+                                @can('jurusan sekolah')
                                 <div class="mb-3">
                                     <label class="form-label">Jurusan</label>
                                     <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
                                         <option value="{{$jurusan->id}}" selected>{{$jurusan->nama_jurusan}}</option>
                                         {{-- @foreach ($jurusan as $j)
-                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>                                            
+                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
                                         @endforeach --}}
                                     </select>
                                 </div>
+                                @endcan
                                 <div class="mb-3">
                                     <label class="form-label">Kelas</label>
                                     <select type="text" class="form-select" id="get_kelas" name="get_kelas">
@@ -84,7 +88,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Absen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
                 </div>
                 @csrf
@@ -128,7 +132,7 @@
                             </div>
                             </div>
                             <div id="result" class="result"></div>
-                        </div>                       
+                        </div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Status Kehadiran</label>
                             <select type="text" class="form-select" id="status_kehadiran" name="status_kehadiran">
@@ -158,7 +162,7 @@
                     id_jurusan: get_jurusan,
                     id_kelas: get_kelas
                 }
-                                
+
                 $.ajax({
                     url: `{{ route('getAbsen') }}`,
                     type: 'POST',
@@ -167,13 +171,13 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(res) {
-                        var data = JSON.parse(res);                        
+                        var data = JSON.parse(res);
                         calendarAbsen(data);
                     }
                 });
-        
+
                 if ($(".compose-multiple-select").length) {
-                    $(".compose-multiple-select").select2({                        
+                    $(".compose-multiple-select").select2({
                         ajax: {
                             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             url: `{{ route('search_nama_siswa') }}`,
@@ -186,7 +190,7 @@
                                  id_kelas: get_kelas
                                 }
                             },
-                            processResults: function(data){                                
+                            processResults: function(data){
                                 return {
                                     results: data
                                 }
@@ -200,9 +204,9 @@
 
 var select = true;
 
-            $('#siswa').click(function(){                
+            $('#siswa').click(function(){
                 if(select){
-                    var kelas = $('#get_kelas option:selected').val()                
+                    var kelas = $('#get_kelas option:selected').val()
                     var data = {
                                 id_jurusan: get_jurusan,
                                 id_kelas: kelas
@@ -221,18 +225,18 @@ var select = true;
                     complete: function() {
                         hide_loading()
                     },
-                    success: function(res) {                       
-                        $('#nama').html(res);                        
+                    success: function(res) {
+                        $('#nama').html(res);
                     }
-                });                    
-                    select = false;                    
+                });
+                    select = false;
                 }else{
                     $('#siswa').prop('checked', false);
                     $('#nama').find(':selected').remove();
                     console.log("false");
-                    select = true;   
-                }                
-                
+                    select = true;
+                }
+
             })
     </script>
     @endcan
@@ -260,7 +264,7 @@ var select = true;
                         complete: function() {
                             hide_loading()
                         },
-                        success: function(res) {                            
+                        success: function(res) {
                             $('#get_kelas').html(res)
 
                         }
@@ -290,7 +294,7 @@ var select = true;
                         hide_loading()
                     },
                     success: function(res) {
-                        var data = JSON.parse(res);                        
+                        var data = JSON.parse(res);
                         calendarAbsen(data);
                     }
                 });
@@ -298,7 +302,7 @@ var select = true;
             })
 
             var select = true;
-            $('#siswa').click(function(){                
+            $('#siswa').click(function(){
                 if(select){
                     var kelas = $('#get_kelas option:selected').val()
                     var data = {
@@ -319,19 +323,19 @@ var select = true;
                     complete: function() {
                         hide_loading()
                     },
-                    success: function(res) {                        
+                    success: function(res) {
                         $('#nama').html(res);
-                        
+
                     }
-                });                    
-                    select = false;                    
+                });
+                    select = false;
                 }else{
                     $('#siswa').prop('checked', false);
                     $('#nama').find(':selected').remove();
                     console.log("false");
-                    select = true;   
-                }                
-                
+                    select = true;
+                }
+
             })
         </script>
         <script type="text/javascript">
@@ -347,7 +351,7 @@ var select = true;
 
             $( document ).ready(function() {
                 if ($(".compose-multiple-select").length) {
-                    $(".compose-multiple-select").select2({                        
+                    $(".compose-multiple-select").select2({
                         ajax: {
                             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             url: `{{ route('search_nama_siswa') }}`,
@@ -360,7 +364,7 @@ var select = true;
                                  id_kelas: get_id_kelas
                                 }
                             },
-                            processResults: function(data){                                
+                            processResults: function(data){
                                 return {
                                     results: data
                                 }
@@ -373,4 +377,23 @@ var select = true;
 });
         </script>
         @endcan
+
+        @jurusan
+        <script type="text/javascript">
+        </script>
+        @else
+        <script type="text/javascript">
+            $.ajax({
+                url: `{{ route('get_all_kelas') }}`,
+                type: 'GET',
+                success: function(res) {
+                    console.log(res);
+
+                    $('#get_kelas').html(res)
+
+                }
+            })
+        </script>
+        @endjurusan
+
     @endsection

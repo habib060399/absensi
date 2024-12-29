@@ -28,6 +28,7 @@
                             </div><!-- Col -->
                         </div><!-- Row -->
                         <div class="row">
+                            @jurusan
                             <div class="col-sm-4">
                                 <div class="mb-3">
                                     <label class="form-label">Jurusan</label>
@@ -42,6 +43,7 @@
                                     @enderror
                                 </div>
                             </div><!-- Col -->
+                            @endjurusan
                             <div class="col-sm-4">
                                 <div class="mb-3">
                                     <label class="form-label">Kelas</label>
@@ -100,7 +102,7 @@
             </div>
         </div>
     </div>
-
+@jurusan
     <script type="text/javascript">
         $('#jurusan_sekolah').on('change', function() {
             var value = $('#jurusan_sekolah option:selected').val()
@@ -127,6 +129,20 @@
 
         });
     </script>
+@else
+<script type="text/javascript">
+            $.ajax({
+                url: `{{ route('get_all_kelas') }}`,
+                type: 'GET',
+                success: function(res) {
+                    console.log(res);
+
+                    $('#kelas_sekolah').html(res)
+
+                }
+            })
+</script>
+@endjurusan
     @vite('resources/js/app.js')
     <script type="module">
         var rfid = document.getElementById('rfid');

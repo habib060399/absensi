@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Wa;
+use App\Models\Broadcast;
 
 class Sekolah extends Model
 {
     use HasFactory;
 
     protected $table = 'sekolah';
-    protected $fillable = ['id_user', 'id_wa', 'nama_sekolah', 'email', 'id_mesin', 'pendidikan', 'npsn', 'paket'];
+    protected $fillable = ['id_user', 'id_wa', 'nama_sekolah', 'email', 'id_mesin', 'pendidikan', 'npsn', 'paket', 'no_hp'];
     public $timestamps = false;
 
     public function user(): BelongsTo
@@ -21,9 +21,9 @@ class Sekolah extends Model
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
-    public function wa(): BelongsTo
+    public function broadcast(): BelongsTo
     {
-        return $this->belongsTo(Wa::class, 'id_wa', 'id');
+        return $this->belongsTo(Broadcast::class, 'id_wa', 'id');
     }
 
     public function jurusan(): HasMany

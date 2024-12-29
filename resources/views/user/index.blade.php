@@ -7,8 +7,8 @@
   <div class="d-flex align-items-center flex-wrap text-nowrap">
     <div class="input-group date datepicker wd-200 me-2 mb-2 mb-md-0" id="dashboardDate">
       <span class="input-group-text input-group-addon bg-transparent border-primary"><i data-feather="calendar" class=" text-primary"></i></span>
-      <input type="text" class="form-control border-primary bg-transparent">
-    </div>    
+      <input type="text" class="form-control border-primary bg-transparent" value="{{$expired->expiry_date}}" readonly>
+    </div>
   </div>
 </div>
 
@@ -39,12 +39,12 @@
       <div class="card-body">
       <div class="d-flex justify-content-between align-items-baseline">
         <h6 class="card-title mb-0">Whatssap</h6>
-        <div class="dropdown mb-2">					
+        <div class="dropdown mb-2">
         </div>
       </div>
       <div class="row">
         <div class="col-6 col-md-12 col-xl-5">
-        <h3 class="mb-2">{{($wa) ? $wa[0]->status : 'failed'}}</h3>				
+        <h3 class="mb-2">{{($wa) ? $wa[0]->status : 'failed'}}</h3>
         </div>
         <div class="col-6 col-md-12 col-xl-7">
         <div id="ordersChart" class="mt-md-3 mt-xl-0"></div>
@@ -58,7 +58,7 @@
       <div class="card-body">
       <div class="d-flex justify-content-between align-items-baseline">
         <h6 class="card-title mb-0">Jumlah Siswa</h6>
-        <div class="dropdown mb-2">					
+        <div class="dropdown mb-2">
         </div>
       </div>
       <div class="row">
@@ -97,7 +97,7 @@
     </div>
     <p class="text-muted">Sales are activities related to selling or the number of goods or services sold in a given time period.</p>
     <div id="monthlySalesChart"></div>
-    </div> 
+    </div>
   </div>
   </div>
   <div class="col-lg-5 col-xl-4 grid-margin stretch-card">

@@ -26,7 +26,7 @@
             <span class="link-title">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item nav-category">Menu</li>       
+        <li class="nav-item nav-category">Menu</li>
         @role('admin')
         <li class="nav-item">
           <a href="{{route('sekolah')}}" class="nav-link">
@@ -40,14 +40,25 @@
             <i class="link-icon" data-feather="speaker"></i>
             <span class="link-title">Data Mesin</span>
           </a>
+        </li><li class="nav-item">
+          <a href="" class="nav-link">
+            <i class="link-icon" data-feather="speaker"></i>
+            <span class="link-title">Backup Data</span>
+          </a>
         </li>
+          <li class="nav-item">
+              <a href="{{route('invoice')}}" class="nav-link">
+                  <i class="link-icon" data-feather="speaker"></i>
+                  <span class="link-title">Invoice</span>
+              </a>
+          </li>
         @endrole
         @role('kelas|sekolah')
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
             <i class="link-icon" data-feather="book"></i>
-            <span class="link-title">Absensi</span>  
-            <i class="link-arrow" data-feather="chevron-down"></i>          
+            <span class="link-title">Absensi</span>
+            <i class="link-arrow" data-feather="chevron-down"></i>
           </a>
           <div class="collapse" id="uiComponents">
             <ul class="nav sub-menu">
@@ -56,7 +67,7 @@
               </li>
               <li class="nav-item">
                 <a href="{{route('absen')}}" class="nav-link" id="data_absen">Data Absen</a>
-              </li>              
+              </li>
               <li class="nav-item">
                 <a href="{{route('rekap')}}" class="nav-link" id="rekap">Rekapitulasi Absen</a>
               </li>
@@ -64,7 +75,7 @@
           </div>
         </li>
         @endrole
-        @role('sekolah')     
+        @role('sekolah')
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
             <i class="link-icon" data-feather="box"></i>
@@ -73,30 +84,32 @@
           </a>
           <div class="collapse" id="advancedUI">
             <ul class="nav sub-menu">
+                @jurusan
               <li class="nav-item">
                 <a href="{{route('jurusan')}}" class="nav-link" id="jurusan">Jurusan</a>
               </li>
+                @endjurusan
               <li class="nav-item">
                 <a href="{{route('kelas')}}" class="nav-link" id="kelas">Kelas</a>
               </li>
               <li class="nav-item">
                 <a href="{{route('siswa')}}" class="nav-link">Siswa</a>
-              </li> 
+              </li>
               <li class="nav-item">
                 <a href="{{route('guru')}}" class="nav-link">Guru</a>
-              </li> 
+              </li>
             </ul>
           </div>
         </li>
         @endrole
-        @role('kelas|sekolah')
+        @can('message wa')
         <li class="nav-item">
           <a href="{{route('bc')}}" class="nav-link">
             <i class="link-icon" data-feather="mail"></i>
             <span class="link-title">Kirim Pesan</span>
           </a>
         </li>
-        @endrole
+        @endcan
         @role('sekolah')
         <li class="nav-item nav-category">Settings</li>
         <li class="nav-item">
@@ -107,12 +120,12 @@
         </li>
         @endrole
         @role('sekolah')
-        <li class="nav-item">
-          <a href="{{route('profile')}}" class="nav-link">
-            <i class="link-icon" data-feather="user"></i>
-            <span class="link-title">Users</span>
-          </a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--          <a href="{{route('profile')}}" class="nav-link">-->
+<!--            <i class="link-icon" data-feather="user"></i>-->
+<!--            <span class="link-title">Users</span>-->
+<!--          </a>-->
+<!--        </li>-->
         <li class="nav-item">
           <a href="{{route('wa')}}" class="nav-link">
             <i class="link-icon" data-feather="user"></i>
@@ -210,70 +223,5 @@
           </div>
         </li>         --}}
       </ul>
-    </div>
-  </nav>
-  <nav class="settings-sidebar">
-    <div class="sidebar-body">
-      <a href="#" class="settings-sidebar-toggler">
-        <i data-feather="settings"></i>
-      </a>
-      <h6 class="text-muted mb-2">Sidebar:</h6>
-      <div class="mb-3 pb-3 border-bottom">
-        <div class="form-check form-check-inline">
-          <input type="radio" class="form-check-input" name="sidebarThemeSettings" id="sidebarLight" value="sidebar-light" checked>
-          <label class="form-check-label" for="sidebarLight">
-            Light
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input type="radio" class="form-check-input" name="sidebarThemeSettings" id="sidebarDark" value="sidebar-dark">
-          <label class="form-check-label" for="sidebarDark">
-            Dark
-          </label>
-        </div>
-      </div>
-      <div class="theme-wrapper">
-        <h6 class="text-muted mb-2">Light Theme:</h6>
-        <a class="theme-item active" href="demo1/dashboard.html">
-          {{-- <img src="assets/images/screenshots/light.jpg" alt="light theme"> --}}
-        </a>
-        <h6 class="text-muted mb-2">Dark Theme:</h6>
-        <a class="theme-item" href="demo2/dashboard.html">
-          {{-- <img src="assets/images/screenshots/dark.jpg" alt="light theme"> --}}
-        </a>
-      </div>
-    </div>
-  </nav>
-
-  <nav class="settings-sidebar">
-    <div class="sidebar-body">
-      <a href="#" class="settings-sidebar-toggler">
-        <i data-feather="settings"></i>
-      </a>
-      <h6 class="text-muted mb-2">Sidebar:</h6>
-      <div class="mb-3 pb-3 border-bottom">
-        <div class="form-check form-check-inline">
-          <input type="radio" class="form-check-input" name="sidebarThemeSettings" id="sidebarLight" value="sidebar-light" checked>
-          <label class="form-check-label" for="sidebarLight">
-            Light
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input type="radio" class="form-check-input" name="sidebarThemeSettings" id="sidebarDark" value="sidebar-dark">
-          <label class="form-check-label" for="sidebarDark">
-            Dark
-          </label>
-        </div>
-      </div>
-      <div class="theme-wrapper">
-        <h6 class="text-muted mb-2">Light Theme:</h6>
-        <a class="theme-item active" href="../../../demo1/dashboard.html">
-          <img src="../../../assets/images/screenshots/light.jpg" alt="light theme">
-        </a>
-        <h6 class="text-muted mb-2">Dark Theme:</h6>
-        <a class="theme-item" href="../../../demo2/dashboard.html">
-          <img src="../../../assets/images/screenshots/dark.jpg" alt="light theme">
-        </a>
-      </div>
     </div>
   </nav>

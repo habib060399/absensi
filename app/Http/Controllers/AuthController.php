@@ -26,17 +26,17 @@ class AuthController extends Controller
         $password = $request->input('password');
 
         if(Auth::attempt(['username' => $username, 'password' => $password])) {
-            $get_user = User::where('username', $username)->first();            
-            $sekolah = $get_user->sekolah;  
-            $kelas = $get_user->kelas;  
+            $get_user = User::where('username', $username)->first();
+            $sekolah = $get_user->sekolah;
+            $kelas = $get_user->kelas;
             $role = $get_user->getRoleNames();
-            
+
             $request->session()->regenerate();
             if($sekolah){
-                $get_mesin = Mesin::where('id', $sekolah->id_mesin)->first();                
+                $get_mesin = Mesin::where('id', $sekolah->id_mesin)->first();
                 Cookie::queue(Cookie::make('id_mesin', $get_mesin->id_mesin));
 
-                // $request->session()->put('id_user', $get_user->id);
+                $request->session()->put('pendidikan', $sekolah->pendidikan);
                 $request->session()->put('id_user', $get_user->id);
                 $request->session()->put('id_sekolah', $sekolah->id);
                 $request->session()->put('nama', $sekolah->nama_sekolah);
@@ -50,7 +50,7 @@ class AuthController extends Controller
                 $request->session()->put('nama', 'Kelas : '.$kelas->kelas);
 
                 return redirect()->intended('/user/home');
-            } else{                                          
+            } else{
                 $request->session()->put('id', $get_user->id);
 
                 return redirect()->intended('/flockbase/home');

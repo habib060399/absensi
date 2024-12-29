@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('siswa', function (Blueprint $table) {
             $table->uuid('id')->nullable(false)->primary();
             $table->string('id_sekolah', 100);
-            $table->string('id_jurusan', 100);
+            $table->string('id_jurusan', 100)->nullable(true);
             $table->string('id_kelas', 100);
             $table->string('nama_siswa', 200);
             $table->string('email', 100);

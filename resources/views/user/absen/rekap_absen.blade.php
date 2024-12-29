@@ -15,7 +15,7 @@
                     <br>
                     <form action="{{ route('download_rekap') }}" method="post">
                         @csrf
-                        @can('only class')
+                        @can('only class', 'jurusan sekolah')
                         <div class="mb-3">
                             <label class="form-label">Nama Jurusan</label>
                             <select class="form-select @error('get_jurusan') is-invalid @enderror" id="get_jurusan" name="get_jurusan" @readonly(true)>
@@ -28,6 +28,7 @@
                         </div>
                         @endcan
                         @can('admin sekolah')
+                        @jurusan
                         <div class="mb-3">
                             <label class="form-label">Nama Jurusan</label>
                             <select class="form-select @error('get_jurusan') is-invalid @enderror" id="get_jurusan" name="get_jurusan">
@@ -41,6 +42,7 @@
                             <div class="error invalid-feedback">{{ $message }}</div>
                         @enderror
                         </div>
+                        @endjurusan
                         @endcan
                         @can('only class')
                         <div class="mb-3">
@@ -153,4 +155,21 @@
 
         })
     </script>
+@jurusan
+<script type="text/javascript">
+</script>
+@else
+<script type="text/javascript">
+    $.ajax({
+        url: `{{ route('get_all_kelas') }}`,
+        type: 'GET',
+        success: function(res) {
+            console.log(res);
+
+            $('#get_kelas').html(res)
+
+        }
+    })
+</script>
+@endjurusan
 @endsection

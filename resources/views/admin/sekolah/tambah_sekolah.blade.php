@@ -5,7 +5,7 @@
 						<div class="card">
 							<div class="card-body">
 								<h6 class="card-title">Form Grid</h6>
-								
+
 									<form action="{{route('add_sekolah')}}" method="post">
 										@csrf
 										<div class="row">
@@ -35,9 +35,9 @@
 													<select class="form-select @error('id_mesin') is-invalid @enderror" id="exampleFormControlSelect1" name="id_mesin">
 														<option selected disabled>Pilih Id Mesin</option>
 														@foreach ($mesin as $m)
-														<option value="{{$m->id}}">{{$m->id_mesin}}</option>								
-														@endforeach	
-													</select>													
+														<option value="{{$m->id}}">{{$m->id_mesin}}</option>
+														@endforeach
+													</select>
 													@error('id_mesin')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
@@ -95,6 +95,17 @@
 												</div>
 											</div><!-- Col -->
 										</div><!-- Row -->
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Slug</label>
+                                                    <input type="text" class="form-control @error('slug') is-invalid @enderror" placeholder="Slug" name="slug">
+                                                    @error('slug')
+                                                    <div class="error invalid-feedback">{{$message}}</div>
+                                                    @enderror
+                                                </div>
+                                            </div><!-- Col -->
+                                        </div><!-- Row -->
 										<button type="submit" class="btn btn-primary submit">Submit form</button>
 									</form>
 							</div>

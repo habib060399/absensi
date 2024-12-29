@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SiswaImportWithJurusan;
 use Illuminate\Http\Request;
 use App\Models\Absensi;
 use App\Models\User;
@@ -9,7 +10,7 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Guru;
-use App\Models\Wa;
+use App\Models\Broadcast;
 use App\Models\Sekolah;
 use App\Models\Settings;
 use App\Helpers\Helper;
@@ -27,8 +28,8 @@ class UserController extends Controller
 {
 
     public function registerJurusan(Request $request)
-    {            
-        $id = date('dmyHis');    
+    {
+        $id = date('dmyHis');
         Jurusan::create([
             'id' => intval($id),
             'id_sekolah' => session('id_sekolah'),
@@ -36,41 +37,6 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('jurusan')->with('success', 'Berhasil Menambah Jurusan');
-    }
-
-    public function registerKelas(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'jurusan' => 'required',
-            'kelas' => 'required',
-            'username' => 'required',
-            'password' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return redirect()->route('kelas')->with('error', 'Data Tidak Boleh Kosong');
-        }
-        $validated = $validator->validated();
-
-        $kelas = new Kelas();
-        $user = new User();
-        $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
-        $id = date('dmyHis');
-        
-        $user->id = intVal($id);
-        $user->username = $request->input('username');
-        $user->password = Hash::make($request->input('password'));
-        $user->expiry_date = $sekolah->user()->first()->expiry_date;
-        $user->save();
-
-        $kelas->id_sekolah = session('id_sekolah');
-        $kelas->id_jurusan = $request->input('jurusan');
-        $kelas->kelas = $request->input('kelas');
-        $user->kelas()->save($kelas);
-        $user->assignRole('kelas');
-        $user->givePermissionTo('only class');
-
-        return redirect()->route('kelas')->with('success', 'Berhasil Menambahkan Kelas');
     }
 
     public function editKelas($id, Request $request)
@@ -87,41 +53,8 @@ class UserController extends Controller
         if($pass != null){
             $get_kelas->user->password = Hash::make($pass);
             $get_kelas->user->save();
-        }        
+        }
         return redirect()->route('kelas')->with('success', 'Berhasil Mengubah Kelas');
-    }
-
-    public function registerSiswa(Request $request)
-    {
-        $request->validate([
-            'nama_siswa' => 'required',
-            'email' => 'required',
-            'jurusan_sekolah' => 'required',
-            'kelas_sekolah' => 'required',
-            'no_hp' => 'required',
-            'no_hp_ortu' => 'required',
-            'rfid' => 'required|unique:siswa,rfid',
-            'foto' => 'image|max:2000'
-        ]);
-
-        $foto = $request->file('foto');
-        $filename = Carbon::now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
-
-        
-        $siswa = Siswa::create([
-            'id_sekolah' => $request->session()->get('id'),
-            'id_jurusan' => $request->input('jurusan_sekolah'),
-            'id_kelas' => $request->input('kelas_sekolah'),
-            'nama_siswa' => $request->input('nama_siswa'),
-            'rfid' => $request->input('rfid'),
-            'email' => $request->input('email'),
-            'no_hp' =>  $request->input('no_hp'),
-            'no_hp_ortu' => $request->input('no_hp_ortu'),
-            'foto' => $filename
-        ]);
-        $foto->storePubliclyAs('foto', $filename);
-        
-        return redirect()->route('siswa_add')->with('success', 'Berhasil Menambahkan Siswa');
     }
 
     public function editSiswa($id, Request $request)
@@ -156,7 +89,7 @@ class UserController extends Controller
                 'foto' => $filename
             ]);
             $foto->storePubliclyAs('foto', $filename);
-    
+
             return redirect()->route('siswa')->with('success', 'Berhasil Mengubah Data Siswa');
         }else{
             Siswa::where('id', Helper::decryptUrl($id))->update([
@@ -167,7 +100,7 @@ class UserController extends Controller
                 'no_hp' => $request->input('no_hp'),
                 'no_hp_ortu' => $request->input('no_hp_ortu')
             ]);
-    
+
             return redirect()->route('siswa')->with('success', 'Berhasil Mengubah Data Siswa');
         }
 
@@ -187,11 +120,11 @@ class UserController extends Controller
                 }
                 echo "<option value='$k->id' $selected> $k->kelas</option>";
                 $selected = '';
-                
+
             }
         }else{
             echo '<option selected disabled>Pilih Kelas</option>';
-        }      
+        }
     }
 
     public function hapusSiswa($id)
@@ -214,7 +147,7 @@ class UserController extends Controller
         }else{
             return redirect()->route('kelas')->with('error', 'Data Siswa Masih Ada!');
         }
-        
+
     }
 
     public function hapusJurusan($id)
@@ -236,25 +169,25 @@ class UserController extends Controller
 
     public function editPesan(Request $request)
     {
-        
+
         $hadir = $request->input('broadcast-hadir');
         $sakit = $request->input('broadcast-sakit');
         $izin = $request->input('broadcast-izin');
         $absen = $request->input('broadcast-absen');
         $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
         // $teks = "{"data":[{"title":"hadir","message":$hadir},{"title":"sakit","message":$sakit},{"title":"absen","message":$absen},{"title":"izin","message":$izin}]}";
-        $teks = $sekolah->wa()->first()->template_bc;
+        $teks = $sekolah->broadcast()->first()->template_bc;
         $json = serialize($teks);
         $unserialize = unserialize($json);
         $decode = json_decode($unserialize);
-        $decode->data[0]->message = $hadir;        
-        $decode->data[1]->message = $sakit;        
-        $decode->data[2]->message = $absen;        
-        $decode->data[3]->message = $izin;        
-        $sekolah->wa()->update([
+        $decode->data[0]->message = $hadir;
+        $decode->data[1]->message = $sakit;
+        $decode->data[2]->message = $absen;
+        $decode->data[3]->message = $izin;
+        $sekolah->broadcast()->update([
             'template_bc' => json_encode($decode)
         ]);
-        
+
         return redirect()->route('pesan')->with('success', 'Berhasil Mengubah Pesan');
     }
 
@@ -276,30 +209,30 @@ class UserController extends Controller
     public function insertAbsenManual(Request $request){
         $curl = new CurlController();
         $time_now = date("h:i:s");
-        
+
         $id_siswa = $request->input('nama');
         $status = $request->input('status_kehadiran');
         $tanggal = $request->input('tanggal');
         $data = array();
-        
-        for ($i=0; $i < count($id_siswa); $i++) { 
+
+        for ($i=0; $i < count($id_siswa); $i++) {
             $get_absen = Absensi::where('id_siswa', $id_siswa[$i])->where('tanggal', $tanggal)->first();
             if(!$get_absen) {
                 $data[$i] = $id_siswa[$i];
             }
-            
+
         }
-        
+
         if($data != null){
             $sekolah = Sekolah::where('id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->first();
-            $teks = $sekolah->wa()->first()->template_bc;
+            $teks = $sekolah->broadcast()->first()->template_bc;
             $json = serialize($teks);
             $unserialize = unserialize($json);
             $decode = json_decode($unserialize);
 
             switch ($status) {
                 case 'hadir':
-                    for($a=0; $a < count($data); $a++) {                        
+                    for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
                         $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message);
                         Absensi::create([
@@ -312,9 +245,9 @@ class UserController extends Controller
                     return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
                     break;
                 case 'absen':
-                    for($a=0; $a < count($data); $a++) {                        
+                    for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message);                        
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -325,9 +258,9 @@ class UserController extends Controller
                     return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
                     break;
                 case 'izin':
-                    for($a=0; $a < count($data); $a++) {                        
+                    for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message);                        
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -338,9 +271,9 @@ class UserController extends Controller
                     return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
                     break;
                 case 'sakit':
-                    for($a=0; $a < count($data); $a++) {                        
+                    for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message);                        
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -354,9 +287,9 @@ class UserController extends Controller
                 return redirect()->route('absen')->with('error', 'status tidak boleh kosong');
                     break;
             }
-            
+
         }
-        
+
         return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
     }
 
@@ -370,7 +303,7 @@ class UserController extends Controller
     public function editAbsen(Request $request){
         $absen = Absensi::where('id_siswa', $request->id_siswa)->where('tanggal', $request->tanggal)->first();
         $status = ["hadir", "izin", "sakit"];
-        $string ="";        
+        $string ="";
 
         foreach($status as $s) {
          if($s == $absen->status){
@@ -385,13 +318,13 @@ class UserController extends Controller
         // Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
         $curl = new CurlController();
         $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
-        $teks = $sekolah->wa()->first()->template_bc;
+        $teks = $sekolah->broadcast()->first()->template_bc;
         $json = serialize($teks);
         $unserialize = unserialize($json);
         $decode = json_decode($unserialize);
-            
+
             switch ($request->status) {
-                case 'hadir':                    
+                case 'hadir':
                 $get_siswa = Siswa::where('id', $request->id)->first();
                 $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[0]->message."\n".Carbon::now());
                 Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
@@ -402,33 +335,33 @@ class UserController extends Controller
                         'message' => 'data berhasil ditambahkan'
                     ]);
                     break;
-                case 'absen':                    
+                case 'absen':
                     $get_siswa = Siswa::where('id', $request->id)->first();
                     $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[2]->message."\n".Carbon::now());
-                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);                    
-                    
+                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+
                     return response()->json([
                         'url' => route('absen'),
                         'status' => 200,
                         'message' => 'data berhasil ditambahkan'
                     ]);
                     break;
-                case 'izin':                    
+                case 'izin':
                     $get_siswa = Siswa::where('id', $request->id)->first();
                     $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[3]->message."\n".Carbon::now());
-                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);                    
-                    
+                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+
                     return response()->json([
                         'url' => route('absen'),
                         'status' => 200,
                         'message' => 'data berhasil ditambahkan'
                     ]);
                     break;
-                case 'sakit':                                           
+                case 'sakit':
                     $get_siswa = Siswa::where('id', $request->id)->first();
                     $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[1]->message."\n".Carbon::now());
-                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);                    
-                    
+                    Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
+
                     return response()->json([
                         'url' => route('absen'),
                         'status' => 200,
@@ -452,7 +385,7 @@ class UserController extends Controller
         $jurusan = $request->input('jurusan_sekolah');
         $kelas = $request->input('kelas_sekolah');
         $siswa = $request->input('jml_siswa');
-        if(!empty($jurusan) && !empty($kelas)){
+        if(!empty($kelas)){
             return Excel::download(new TemplateDaftarSiswa($jurusan, $kelas, $siswa), "template-daftar-siswa.xlsx");
         }
         return back()->with('error', 'Data Tidak boleh Kosong');
@@ -462,20 +395,25 @@ class UserController extends Controller
         $request->validate([
             'file' => 'required|max:2048'
         ]);
+        $jurusan = $request->input('jurusan');
 
         try {
-            $file = Excel::import(new SiswaImport, $request->file('file'));
-            return back()->with('success', 'Berhasil Mengimport Data');
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }                
+            if ($jurusan != null){
+                Excel::import(new SiswaImportWithJurusan, $request->file('file'));
+            }else{
+                Excel::import(new SiswaImport, $request->file('file'));
+            }
 
-        // return back()->with('success', 'Berhasil Mengimport Data');
+            return back();
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
     public function rekapAbsen(Request $request) {
         $request->validate([
-            'get_jurusan' => 'required',
+//            'get_jurusan' => 'required',
             'get_kelas' => 'required',
             'tgl_mulai' => 'required|date|before_or_equal:tgl_selesai',
             'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai'
@@ -486,19 +424,19 @@ class UserController extends Controller
     }
 
     public function getSiswa(Request $request){
-        $user = User::where('id', session('id_user'))->first();                      
+        $user = User::where('id', session('id_user'))->first();
         $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
         $guru = Guru::where('id_sekolah', ($user->can('only class')) ?  session('id') : session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
         $sekolah = Sekolah::where('id', ($user->can('only class')) ?  session('id') : session('id_sekolah'))->first();
-        $serilize = serialize($sekolah->wa->wa_group);
+        $serilize = serialize($sekolah->broadcast->wa_group);
         $unserilize = unserialize($serilize);
-        $a = json_decode($unserilize);              
+        $a = json_decode($unserilize);
         $data = [
             'siswa' => $siswa,
             'guru' => $guru,
             'group' => $a
         ];
-        
+
         if($data){
             if($request->selected == "ortu"){
                 for($i = 0; $i < count($data['siswa']); $i++){
@@ -517,12 +455,12 @@ class UserController extends Controller
                     for($i = 0; $i < count($data['group']->data); $i++){
                         echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
                     }
-                }                    
+                }
             }elseif ($request->selected == "siswa") {
                 for($i = 0; $i < count($data['siswa']); $i++){
                 if($data['siswa'][$i]['no_hp']){
                     echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp'])." selected>".$data['siswa'][$i]['nama']."</option>";
-                }                
+                }
             }
 
             if(!empty($data['guru'])){
@@ -535,7 +473,7 @@ class UserController extends Controller
                 for($i = 0; $i < count($data['group']->data); $i++){
                     echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
                 }
-            }       
+            }
             }else{
                 for($i = 0; $i < count($data['siswa']); $i++){
                     echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp']).">".$data['siswa'][$i]['nama']."</option>";
@@ -556,7 +494,7 @@ class UserController extends Controller
         }else{
             echo "Data Kosong";
         }
-        
+
     }
 
     public function sendBc(Request $request)
@@ -573,21 +511,21 @@ class UserController extends Controller
         $tgl = $request->input('tgl');
         $waktu = $request->input('waktu');
         $gabung = $tgl ." ".$waktu;
-        $unix_time = strtotime($gabung);                
+        $unix_time = strtotime($gabung);
 
         if(!empty($get_file)){
             $filename = $get_file->getClientOriginalName();
             $get_file->storePubliclyAs('tmp', $filename);
 
-            $filepath = storage_path("app/tmp/".$filename);
-            if(file_exists($filepath)){                                
-                for ($i=0; $i < count($to); $i++) { 
+            $filepath = storage_path("app/public/tmp/".$filename);
+            if(file_exists($filepath)){
+                for ($i=0; $i < count($to); $i++) {
                 $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath, $unix_time);
                 }
                 return redirect()->route('bc')->with('success', 'success');
             }
         }elseif(empty($get_file)){
-            for ($i=0; $i < count($to); $i++) { 
+            for ($i=0; $i < count($to); $i++) {
             $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan, $unix_time);
             }
             return redirect()->route('bc')->with('success', 'success');
@@ -620,14 +558,14 @@ class UserController extends Controller
 
             return redirect()->route('profile')->with('success', 'success');
         }
-        
+
         return redirect()->route('profile')->with('error', 'Data sudah ada');
     }
 
     public function registerWa(Request $request)
     {
         $no = $request->input('no_wa');
-        $wa = new Wa();
+        $wa = new Broadcast();
         $user = User::where('id', Helper::getSession())->first();
 
         $id = date('dmyHis');
@@ -652,7 +590,7 @@ class UserController extends Controller
         $getJson = json_decode($get, true);
         $getJson2 = json_decode($grup, true);
         $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
-        $sekolah->wa()->update([
+        $sekolah->broadcast()->update([
             'wa_group' => $grup
         ]);
 

@@ -7,7 +7,7 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\User;
-use App\Models\Wa;
+use App\Models\Broadcast;
 use App\Models\Sekolah;
 use App\Models\Settings;
 use App\Helpers\Helper;
@@ -39,7 +39,7 @@ class UserViewController extends Controller
     {
         Helper::decryptUrl($id);
         $kelas = Kelas::where('id', Helper::decryptUrl($id))->select('*')->first();
-        
+
         return view('user.sekolah.edit_kelas', [
             'kelas' => $kelas,
             'user' => $kelas->user,
@@ -48,7 +48,7 @@ class UserViewController extends Controller
     }
 
     public function siswa()
-    {        
+    {
         return view('user.sekolah.siswa', [
             'siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get(),
             'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
@@ -56,7 +56,7 @@ class UserViewController extends Controller
     }
 
     public function siswaNaik()
-    {        
+    {
         return view('user.sekolah.siswa_naik_kelas', ['siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get()]);
     }
 
@@ -78,23 +78,23 @@ class UserViewController extends Controller
         return view('user.sekolah.edit_siswa',[
             'siswa' => $siswa,
             'kelas' => $kelas,
-            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),            
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
         ]);
     }
 
     public function addSiswa()
     {
-        return view('user.sekolah.tambah_siswa', ['cookies' => Cookie::get('id_mesin'), 'jurusan' => jurusan::where('id_sekolah', session('id'))->get()]);
+        return view('user.sekolah.tambah_siswa', ['cookies' => Cookie::get('id_mesin'), 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()]);
     }
 
     public function pesan()
     {
         $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
-        $data = $sekolah->wa()->first()->template_bc;
+        $data = $sekolah->broadcast()->first()->template_bc;
         $json = serialize($data);
         $unserialize = unserialize($json);
         $decode = json_decode($unserialize);
-                
+
         return view('user.broadcast', ['pesan' => $decode]);
     }
 
@@ -152,8 +152,8 @@ class UserViewController extends Controller
             if($user->can('only class')){
                 // dd($user->kelas);
                 return view('user.kirim_pesan', [
-                    'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->first(),                    
-                    'kelas' => $user->kelas,                    
+                    'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->first(),
+                    'kelas' => $user->kelas,
                 ]);
             }
         }
@@ -168,16 +168,18 @@ class UserViewController extends Controller
         $data = $api_wa->getDevice();
         $device_wa = json_decode($data);
         $count = 0;
+        $expired = '';
 
         if(session('id_sekolah')){
             $count = Siswa::where('id_sekolah', session('id_sekolah'))->count();
         }elseif (session('id_kelas')) {
             $count = Siswa::where('id_kelas', session('id_kelas'))->count();
         }
-        
+
         return view('user.index',[
-            'wa' => ($device_wa->status) ? $device_wa->data : $device_wa->status,
-            'jml_siswa' => $count
+            'wa' => (!empty($device_wa->status)) ? $device_wa->data : null,
+            'jml_siswa' => $count,
+            'expired' => User::where('id', session('id_user'))->select('expiry_date')->first()
         ]);
     }
 
@@ -202,7 +204,7 @@ class UserViewController extends Controller
     public function wa()
     {
         $sekolah = Sekolah::where('id_user', Helper::getSession())->first();
-        $get_wa_group = json_decode($sekolah->wa->wa_group, true);
+        $get_wa_group = json_decode($sekolah->broadcast->wa_group, true);
         if($get_wa_group){
             return view('user.pengaturan.wa', [
                 'wa' => $get_wa_group['data']

@@ -5,14 +5,17 @@
             <h1 class="page-title">Media Object</h1>
             <hr>
             @can('only class')
+            @jurusan
             <div class="mb-3">
                 <label class="form-label">Jurusan</label>
                 <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
                     <option value="" selected>{{$jurusan->nama_jurusan}}</option>
                 </select>
             </div>
+            @endjurusan
             @endcan
             @can('admin sekolah')
+            @jurusan
             <div class="mb-3">
                 <label class="form-label">Jurusan</label>
                 <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
@@ -23,6 +26,7 @@
                     @endforeach
                 </select>
             </div>
+            @endjurusan
             @endcan
             @can('only class')
             <div class="mb-3">
@@ -59,6 +63,7 @@
 
     @vite('resources/js/app.js')
     @can('admin sekolah')
+    @jurusan
     <script type="text/javascript">
         $('#get_jurusan').on('change', function getKelas() {
             var value = $('#get_jurusan option:selected').val()
@@ -91,6 +96,20 @@
 
         });
     </script>
+    @else
+    <script type="text/javascript">
+    $.ajax({
+        url: `{{ route('get_all_kelas') }}`,
+        type: 'GET',
+        success: function(res) {
+            console.log(res);
+
+            $('#get_kelas').html(res)
+
+            }
+        })
+    </script>
+    @endjurusan
     @endcan
     @vite('resources/js/app.js')
     @can('admin sekolah')
@@ -118,7 +137,7 @@
                     <div class="data" id="data">
                         <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
                         <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
-                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>         
+                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
                     </div>
                 </div>
             </div>
@@ -134,7 +153,7 @@
         var currentKelas;
         var kelas = $('#get_kelas option:selected').val()
         var element = document.querySelector('.live-absen');
-        
+
         if (currentKelas >= 0) {
                 window.location.reload();
             }
@@ -153,7 +172,7 @@
                     <div class="data" id="data">
                         <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
                         <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
-                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>         
+                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
                     </div>
                 </div>
             </div>

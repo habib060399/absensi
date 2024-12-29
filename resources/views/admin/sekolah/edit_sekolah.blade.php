@@ -4,7 +4,7 @@
 					<div class="col-md-12 stretch-card">
 						<div class="card">
 							<div class="card-body">
-								<h6 class="card-title">Form Grid</h6>								
+								<h6 class="card-title mb-5">Edit sekolah {{$sekolah->nama_sekolah}}</h6>
 									<form action="{{route('simpan-edit-sekolah', ['id' => \App\Helpers\Helper::encryptUrl($sekolah->id)])}}" method="post">
 										@csrf
 										<div class="row">
@@ -31,9 +31,9 @@
 											<div class="col-sm-4">
 												<div class="mb-3">
 													<label class="form-label">ID Mesin</label>
-													<select class="form-select @error('id_mesin') is-invalid @enderror" id="exampleFormControlSelect1" name="id_mesin">
-														<option selected disabled>Pilih Id Mesin</option>														
-													</select>													
+													<select class="form-select @error('id_mesin') is-invalid @enderror" id="exampleFormControlSelect1" name="id_mesin" disabled>
+														<option selected disabled>{{$sekolah->id_mesin}}</option>
+													</select>
 													@error('id_mesin')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
@@ -44,8 +44,9 @@
 													<label class="form-label">Pendidikan</label>
 													<select class="form-select @error('pendidikan') is-invalid @enderror" id="exampleFormControlSelect2" name="pendidikan">
 														<option selected disabled>Pilih Pendidikan</option>
-														<option>SMA</option>
-														<option>SMK</option>
+														<option value="SMA" {{ ($sekolah->pendidikan == 'SMA') ? 'selected' : '' }}>SMA</option>
+														<option value="SMK" {{ ($sekolah->pendidikan == 'SMK') ? 'selected' : '' }}>SMK</option>
+														<option value="SMP" {{ ($sekolah->pendidikan == 'SMP') ? 'selected' : '' }}>SMP</option>
 													</select>
 													@error('pendidikan')
 														<div class="error invalid-feedback">{{$message}}</div>
@@ -66,7 +67,7 @@
 											<div class="col-sm-3">
 												<div class="mb-3">
 													<label class="form-label">Contact</label>
-													<input type="text" class="form-control @error('contact') is-invalid @enderror" name="contact" value="{{$wa->no_wa}}">
+													<input type="text" class="form-control @error('contact') is-invalid @enderror" name="contact" value="{{$sekolah->no_hp}}">
 													@error('contact')
 														<div class="error invalid-feedback">{{$message}}</div>
 													@enderror
@@ -100,12 +101,12 @@
 											</div><!-- Col -->
 											<div class="col-sm-3">
 												<div class="mb-3">
-													<label class="form-label">Pilih Paket Langganan</label>
-													<select class="form-select @error('paket') is-invalid @enderror" id="exampleFormControlSelect2" name="paket">
+													<label class="form-label">Paket Langganan</label>
+													<select class="form-select @error('paket') is-invalid @enderror" id="exampleFormControlSelect2" name="paket" disabled>
 														<option selected disabled>Pilih Paket</option>
-														<option value="bronze">Bronze</option>
-														<option value="silver">Silver</option>
-														<option value="gold">Gold</option>
+                                                        @foreach($paket as $p)
+                                                        <option value="{{$p->id}}" {{($sekolah->id_paket == $p->id) ? 'selected' : ''}}>{{$p->nama_paket}}</option>
+                                                        @endforeach
 													</select>
 												</div>
 											</div><!-- Col -->
@@ -119,6 +120,30 @@
 												</div>
 											</div><!-- Col -->
 										</div><!-- Row -->
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Slug</label>
+                                                    <input type="text" class="form-control @error('slug') is-invalid @enderror" placeholder="Slug" name="slug" value="{{$sekolah->id_slug_user}}">
+                                                    @error('slug')
+                                                    <div class="error invalid-feedback">{{$message}}</div>
+                                                    @enderror
+                                                </div>
+                                            </div><!-- Col -->
+                                        </div><!-- Row -->
+
+                                        <h6 class="card-title mb-3">Feature Paket {{$sekolah->nama_paket}}</h6>
+                                        @foreach($paket_detail as $d)
+                                        <div class="form-check mb-2">
+                                            <input type="checkbox" class="form-check-input" id="checkDisabled" {{ ($d->status == "active") ? "disabled checked" : "disabled"}}>
+                                            <label class="form-check-label" for="checkDisabled">
+                                                {{$d->text}}
+                                            </label>
+                                        </div>
+                                        @endforeach
+                                        <div class="form-check mb-4">
+                                        </div>
+
 										<button type="submit" class="btn btn-primary submit">Submit form</button>
 									</form>
 							</div>

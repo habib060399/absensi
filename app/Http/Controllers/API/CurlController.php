@@ -4,18 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sekolah;
-use App\Models\User;
-use App\Models\Wa;
-use App\Models\Settings;
-use Illuminate\Http\Request;
 
 class CurlController extends Controller
 {
     public function setApiWa(array $param) {
-        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();
+        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('token_account_wa', 'token_api_wa')->first();
         // (!empty($sekolah->token_api_wa)) ? $sekolah->token_api_wa : " ";
         $token = $sekolah->token_api_wa;
-                
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -44,7 +40,7 @@ class CurlController extends Controller
         }
 
         return $responseWa;
-    }    
+    }
 
     public function sendWaAbsenManual($no, $nama_siswa, $id_sekolah, $message)
     {
@@ -54,21 +50,21 @@ class CurlController extends Controller
             'message' => "$bc",
             'countryCode' => "62"
         );
-        
+
         return $status = $this->setApiWa($data);
     }
 
     public function sendPresencenWa($no, $nama_siswa, $id_sekolah)
     {
         $sekolah = Sekolah::where('id', $id_sekolah)->first();
-        $teks = $sekolah->wa()->first()->template_bc;
+        $teks = $sekolah->broadcast()->first()->template_bc;
         $json = serialize($teks);
         $unserialize = unserialize($json);
         $decode = json_decode($unserialize);
-        
+
         $bc = preg_replace("/{nama}/", "$nama_siswa", $decode->data[0]->message);
-        $token = $sekolah->wa()->first()->token_api_wa;        
-        
+        $token = $sekolah->broadcast()->first()->token_api_wa;
+
         $curl = curl_init();
         $data = array(
             'target' => $no,
@@ -128,7 +124,7 @@ class CurlController extends Controller
 
     public static function getDevice()
     {
-        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('wa', 'sekolah.id_wa', '=', 'wa.id')->select('token_account_wa', 'token_api_wa')->first();        
+        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('token_account_wa', 'token_api_wa')->first();
         $token = $sekolah->token_account_wa;
         $curl = curl_init();
 
@@ -145,9 +141,9 @@ class CurlController extends Controller
               "Authorization: $token"
             ),
           ));
-          
+
           $response = curl_exec($curl);
-          
+
           curl_close($curl);
           return $response;
     }
