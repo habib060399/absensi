@@ -384,7 +384,7 @@ var select = true;
         @else
         <script type="text/javascript">
             $.ajax({
-                url: `{{ route('get_all_kelas') }}`,
+                url: `{{ route('get_all_kelas')}}`,
                 type: 'GET',
                 success: function(res) {
                     console.log(res);

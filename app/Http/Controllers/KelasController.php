@@ -129,14 +129,17 @@ class KelasController extends Controller
 
     public function getAllKelas(Request $request)
     {
-        $kelas = Kelas::where('id_sekolah', session('id_sekolah'))->get();
+        // (session('id_sekolah')) ? "id_sekolah ," session('id_sekolah') :"id_user, "session('id_user')
+        $param1 = (session('id_sekolah') ? 'id_sekolah': 'id_user');
+        $param2 = (session('id_sekolah') ? session('id_sekolah') : session('id_user'));
+        $kelas = Kelas::where($param1, $param2)->get();
         $get_kelas = $request->id_kelas;
         $selected = '';
 
         if($kelas){
             echo "<option selected disabled>Pilih Kelas</option>";
             foreach ($kelas as $k) {
-                if($k->id == $get_kelas){
+                if($k->id == $get_kelas || $param1 == 'id_user'){
                     $selected = 'selected';
                 }
                 echo "<option value='$k->id' $selected> $k->kelas</option>";
