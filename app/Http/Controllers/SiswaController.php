@@ -16,16 +16,21 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        if(Helper::checkPermission('jurusan sekolah') && User::checkRole('sekolah')) {            
+        if(User::checkPermission('jurusan sekolah') && User::checkRole('sekolah')) {            
             return view('user.sekolah.siswa', [
                 'siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get(),
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
             ]);
-        }else{
-            $getSiswaHasKelas = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('kelas.id_user', session('id_user'))->get();
-            $getSiswaHasSekolah = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'kelas.kelas')->where('siswa.id_sekolah', session('id_sekolah'))->get();
+        }elseif (User::checkRole('kelas') && User::checkPermission('jurusan sekolah')) {
+            $kelas = Kelas::where('id_user', session('id_user'))->first();
+            $siswa = Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', session('id'))->where('siswa.id_kelas', $kelas->id)->get();            
             return view('user.sekolah.siswa', [
-                'siswa' => (User::checkRole('sekolah')) ? $getSiswaHasSekolah : $getSiswaHasKelas,
+                'siswa' => $siswa,
+                'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
+            ]);
+        }else{            
+            return view('user.sekolah.siswa', [
+                'siswa' => Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('kelas.id_user', session('id_user'))->get(),
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
             ]);
         }
