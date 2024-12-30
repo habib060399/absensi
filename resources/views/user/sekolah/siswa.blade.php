@@ -51,9 +51,9 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $s->nama_siswa }}</td>
                                         <td>{{ $s->kelas }}</td>
-                                        @jurusan
+                                        {{-- @can('jurusan sekolah') --}}
                                         <td>{{ $s->nama_jurusan }}</td>
-                                        @endjurusan
+                                        {{-- @endcan --}}
                                         <td>{{ $s->rfid }}</td>
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'hadir')->where('id_siswa', $s->id)->count('status')}}</td>
                                         <td>{{$s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status')}}</td>

@@ -49,4 +49,10 @@ class User extends Authenticatable
         $user = User::where('id', session('id_user'))->first();        
         return $user->hasRole($name);
     }
+
+    public static function checkPermission($name)
+    {
+        $user = User::where('id', session('id_user'))->first();
+        return $user->hasPermissionTo($name);
+    }
 }
