@@ -26,6 +26,7 @@ class SiswaController extends Controller
             $getSiswaHasSekolah = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'kelas.kelas')->where('siswa.id_sekolah', session('id_sekolah'))->get();
             return view('user.sekolah.siswa', [
                 'siswa' => (User::checkRole('sekolah')) ? $getSiswaHasSekolah : $getSiswaHasKelas,
+                'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
             ]);
         }
     }
