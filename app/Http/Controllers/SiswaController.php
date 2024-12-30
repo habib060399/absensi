@@ -16,7 +16,7 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        if(Helper::checkPermission('jurusan sekolah')) {            
+        if(Helper::checkPermission('jurusan sekolah') && User::checkRole('sekolah')) {            
             return view('user.sekolah.siswa', [
                 'siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get(),
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
