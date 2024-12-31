@@ -96,6 +96,7 @@ class SekolahController extends Controller
             $this->sekolahModel->id_paket = $getPaket->id;
 
             $this->invoiceModel->id_paket = $getPaket->id;
+            $this->invoiceModel->serial_number = Helper::generateNumberInv();
             $this->invoiceModel->id_sekolah = intVal($id);
             $this->invoiceModel->nama_paket = $getPaket->nama_paket;
             $this->invoiceModel->kuantiti = $getPaket->siswa;
