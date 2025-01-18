@@ -134,14 +134,12 @@
             <span class="link-title">Pesan</span>
           </a>
         </li>
-        @endrole
-        @role('sekolah')
-<!--        <li class="nav-item">-->
-<!--          <a href="{{route('profile')}}" class="nav-link">-->
-<!--            <i class="link-icon" data-feather="user"></i>-->
-<!--            <span class="link-title">Users</span>-->
-<!--          </a>-->
-<!--        </li>-->
+        <li class="nav-item">
+          <a href="" class="nav-link">
+            <i class="link-icon" data-feather="user"></i>
+            <span class="link-title">Sekolah</span>
+          </a>
+        </li>
         <li class="nav-item">
           <a href="{{route('wa')}}" class="nav-link">
             <i class="link-icon" data-feather="user"></i>

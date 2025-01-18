@@ -112,11 +112,17 @@
 
             $('#jurusan_sekolah').click(function() {
                 $.ajax({
-                    url: `{{ route('getkls') }}`,
+                    url: `{{ route('get_kelas_id') }}`,
                     type: 'POST',
                     data: data,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                        show_loading()
+                    },
+                    complete: function() {
+                        hide_loading()
                     },
                     success: function(res) {
                         console.log(res);

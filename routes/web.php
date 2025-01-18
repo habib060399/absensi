@@ -63,10 +63,11 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::post('/jurusan/edit', [UserController::class, 'editJurusan'])->name('edit_jurusan1');
     Route::get('/kelas', [KelasController::class, 'index'])->name('kelas');
     Route::get('/kelas/hapus/{id}', [UserController::class, 'hapusKelas'])->name('hapus_kelas');
-    Route::get('/kelas/{id}', [UserViewController::class, 'editKelas'])->name('editKelas');
-    Route::post('/kelas/edit/{id}', [UserController::class, 'editKelas'])->name('e.kelas');
+    Route::get('/kelas/{id}/edit', [KelasController::class, 'edit'])->name('editKelas');
+    Route::post('/kelas/{id}/edit/update', [KelasController::class, 'update'])->name('e.kelas');
     Route::post('/tambah-kelas', [KelasController::class, 'store'])->name('add_kelas');
     Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa');
+    Route::post('/siswa/get-siswa', [SiswaController::class, 'getSiswaByDate'])->name('get_siswa_by_tgl');
     Route::get('/siswa/naik-kelas', [UserViewController::class, 'siswaNaik'])->name('siswa_naik_kelas');
     Route::post('/tambah-jabatan', [GuruController::class, 'insertJabatan'])->name('add_jabatan');
     Route::get('/guru', [GuruController::class, 'index'])->name('guru');
@@ -82,11 +83,12 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::post('/siswa/tambah/tambah-siswa', [SiswaController::class, 'store'])->name('add_siswa');
     Route::post('/get-kelas', [UserController::class, 'getKelas'])->name('getkls');
     Route::get('/get-kelas-1', [KelasController::class, 'getAllKelas'])->name('get_all_kelas');
+    Route::post('/get-kelas/id', [KelasController::class, 'getKelasById'])->name('get_kelas_id');
     Route::post('/get-kelas-2', [GuruController::class, 'getKelas'])->name('getkls2');
     Route::get('/pesan', [UserViewController::class, 'pesan'])->name('pesan');
     Route::post('/pesan/edit', [UserController::class, 'editPesan'])->name('edit_bc');
     Route::get('/absensi', [UserViewController::class, 'absen'])->name('absen');
-    Route::post('/absen/get-absen', [UserController::class, 'getAbsen'])->name('getAbsen');
+    Route::post('/absen/get-absen', [AbsenController::class, 'getAllAbsen'])->name('getAbsen');
     // Route::post('/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
 
     Route::get('/siswa/hapus/{id}', [UserController::class, 'hapusSiswa'])->name('hapus');
@@ -111,7 +113,8 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
 
     Route::post('/absensi/siswa-option', [AbsenController::class, 'siswaGetOption'])->name('option_siswa');
 });
-Route::post('user/broadcast/get-siswa', [UserController::class, 'getSiswa'])->name('getSiswa');
+Route::post('user/broadcast/get-siswa', [SiswaController::class, 'findContact'])->name('getSiswa');
+// Route::post('user/siswa/get-siswa', [SiswaController::class, 'getSiswaByDate'])->name('get_siswa_by_tgl');
 
 Route::get('broadcast', function() {
     $user = User::find(2);

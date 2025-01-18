@@ -6,6 +6,7 @@ use App\Models\Paket;
 use App\Models\Sekolah;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
@@ -74,6 +75,19 @@ class Helper
         return $sekolah->id_slug_user . intval($get_string_last)+1;
     }
 
+    public static function generateNumberInv()
+    {
+        $id = '';
+        $getLastNumber = Invoice::select('serial_number')->orderBy('serial_number', 'desc')->first();
+        if(empty($getLastNumber->serial_number)){
+            return "INV-0000001";
+        }else{
+            $number = str_replace("INV-", "", $getLastNumber->serial_number);
+            $id = str_pad($number + 1, 7, 0, STR_PAD_LEFT);
+        }
+        return "ENV-".$id;
+    }
+
     public static function checkPermission($name)
     {
         $user = User::where('id', session('id_user'))->first();
@@ -84,5 +98,14 @@ class Helper
     {
         $sekolah = Sekolah::where('id', session('id_sekolah'))->select($column)->first();              
         return $sekolah;
+    }
+
+    public static function access()
+    {
+        $user = User::where('id', session('id_user'))->first();
+        $roles = $user->getRoleNames()->toArray();
+        $permissions = $user->getPermissionNames()->toArray();
+        $array_merged = array_merge($roles, $permissions);
+        return $array_merged;
     }
 }

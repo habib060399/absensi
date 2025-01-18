@@ -12,8 +12,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoice = Invoice::join('sekolah', 'sekolah.id', '=', 'invoice.id_sekolah')->select('invoice.*', 'sekolah.nama_sekolah')->get();
-
+        $invoice = Invoice::join('sekolah', 'sekolah.id', '=', 'invoice.id_sekolah')->select('invoice.*', 'sekolah.nama_sekolah')->get();        
         return view('admin.list_invoice',[
             'invoice' => $invoice
         ]);

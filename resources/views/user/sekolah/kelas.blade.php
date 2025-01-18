@@ -25,7 +25,7 @@
         <thead>
           <tr>
             <th width="50px">No</th>
-              @can('jurusan sekolah')
+              @can('jurusan')
             <th>Jurusan</th>
               @endcan
             <th>Kelas</th>
@@ -37,7 +37,7 @@
           @foreach ($kelas as $k)
           <tr>
             <td>{{$loop->iteration}}</td>
-              @can('jurusan sekolah')
+              @can('jurusan')
             <td>{{$k->nama_jurusan}}</td>
               @endcan
             <td>{{$k->kelas}}</td>
@@ -73,7 +73,7 @@
       <div class="modal-body">
         <form action="{{route('add_kelas')}}" method="post">
           @csrf
-            @can('jurusan sekolah')
+            @can('jurusan')
         <div class="mb-3">
           <label class="form-label">Nama Jurusan</label>
 							<select class="form-select" id="exampleFormControlSelect1" name="jurusan">

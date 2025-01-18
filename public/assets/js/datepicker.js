@@ -29,7 +29,6 @@ $(function () {
         });
         $("#datePickerExample2").datepicker("setDate", today);
     }
-
     if ($("#datePickerExample3").length) {
         var date = new Date();
         var today = new Date(
@@ -43,3 +42,22 @@ $(function () {
         });
     }
 });
+
+$('#datePickerMulai').datepicker({    
+    format: "yyyy-mm-dd",
+    todayHighlight: true,
+});
+
+$('#datePickerSelesai').datepicker({    
+    format: "yyyy-mm-dd",
+    todayHighlight: true,
+});
+// $('#datePickerMulai').on('changeDate', function() {    
+//     tgl_mulai = $('#datePickerMulai').datepicker('getDate')            
+//     var d = new Date(tgl_mulai);
+//     date = ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0"+d.getDate()).slice(-2)+ "-" + d.getFullYear();
+//     console.log(date);
+//     return date;
+    
+
+// });    

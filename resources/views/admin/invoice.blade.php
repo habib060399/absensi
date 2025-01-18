@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-lg-3 pe-0">
                         <h4 class="fw-bolder text-uppercase text-end mt-4 mb-2">invoice</h4>
-                        <h6 class="text-end mb-5 pb-4"># INV-002308</h6>
+                        <h6 class="text-end mb-5 pb-4"># {{$invoice->serial_number}}</h6>
                         <p class="text-end mb-1">Balance Due</p>
                         <h4 class="text-end fw-normal">@currency($invoice->total)</h4>
                         <h6 class="mb-0 mt-3 text-end fw-normal mb-2"><span class="text-muted">Invoice Date :</span>{{$invoice->created_at}}</h6>

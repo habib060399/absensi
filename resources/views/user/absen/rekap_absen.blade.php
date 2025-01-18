@@ -15,7 +15,8 @@
                     <br>
                     <form action="{{ route('download_rekap') }}" method="post">
                         @csrf
-                        @can('only class', 'jurusan sekolah')
+                        @role('kelas')
+                        @jurusan
                         <div class="mb-3">
                             <label class="form-label">Nama Jurusan</label>
                             <select class="form-select @error('get_jurusan') is-invalid @enderror" id="get_jurusan" name="get_jurusan" @readonly(true)>
@@ -26,8 +27,9 @@
                             <div class="error invalid-feedback">{{ $message }}</div>
                         @enderror
                         </div>
-                        @endcan
-                        @can('admin sekolah')
+                        @endjurusan
+                        @endrole
+                        @role('sekolah')
                         @jurusan
                         <div class="mb-3">
                             <label class="form-label">Nama Jurusan</label>
@@ -43,19 +45,19 @@
                         @enderror
                         </div>
                         @endjurusan
-                        @endcan
-                        @can('only class')
+                        @endrole
+                        @role('kelas')
                         <div class="mb-3">
                             <label class="form-label">Kelas</label>
-                            <select class="form-select @error('get_kelas') is-invalid @enderror" id="get_kelas" name="get_kelas" @readonly(true)>
+                            <select class="form-select @error('get_kelas') is-invalid @enderror" name="get_kelas" @readonly(true)>
                                 <option value="{{$kelas->id}}" @readonly(true)>{{$kelas->kelas}}</option>
                             </select>
                             @error('get_kelas')
                             <div class="error invalid-feedback">{{ $message }}</div>
                         @enderror
                         </div>
-                        @endcan
-                        @can('admin sekolah')
+                        @endrole
+                        @role('sekolah')
                         <div class="mb-3">
                             <label class="form-label">Kelas</label>
                             <select class="form-select @error('get_kelas') is-invalid @enderror" id="get_kelas" name="get_kelas">
@@ -65,7 +67,7 @@
                             <div class="error invalid-feedback">{{ $message }}</div>
                         @enderror
                         </div>
-                        @endcan
+                        @endrole
                         <div class="mb-3">
                             <label class="form-label">Tanggal Mulai</label>
                             <div class="input-group date datepicker" id="datePickerExample">
@@ -106,7 +108,7 @@
 
             $('#get_jurusan').click(function() {
                 $.ajax({
-                    url: `{{ route('getkls') }}`,
+                    url: `{{ route('get_kelas_id') }}`,
                     type: 'POST',
                     data: data,
                     headers: {
@@ -119,6 +121,8 @@
                         hide_loading()
                     },
                     success: function(res) {
+                        console.log(res);
+                        
                         $('#get_kelas').html(res)
 
                     }

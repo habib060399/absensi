@@ -4,7 +4,7 @@
         <div class="col-xl-10 main-content ps-xl-4 pe-xl-5">
             <h1 class="page-title">Media Object</h1>
             <hr>
-            @can('only class')
+            @role('kelas')
             @jurusan
             <div class="mb-3">
                 <label class="form-label">Jurusan</label>
@@ -13,8 +13,8 @@
                 </select>
             </div>
             @endjurusan
-            @endcan
-            @can('admin sekolah')
+            @endrole
+            @role('sekolah')
             @jurusan
             <div class="mb-3">
                 <label class="form-label">Jurusan</label>
@@ -27,23 +27,23 @@
                 </select>
             </div>
             @endjurusan
-            @endcan
-            @can('only class')
+            @endrole
+            @role('kelas')
             <div class="mb-3">
                 <label class="form-label">Kelas</label>
                 <select type="text" class="form-select" id="get_kelas" name="get_kelas">
                     <option value="{{$kelas->id}}" selected>{{$kelas->kelas}}</option>
                 </select>
             </div>
-            @endcan
-            @can('admin sekolah')
+            @endrole
+            @role('sekolah')
             <div class="mb-3">
                 <label class="form-label">Kelas</label>
                 <select type="text" class="form-select" id="get_kelas" name="get_kelas">
                     <option value="" selected disabled>Pilih Kelas</option>
                 </select>
             </div>
-            @endcan
+            @endrole
 
             <hr>
             <div class="live-absen"></div>
@@ -62,7 +62,7 @@
     </div>
 
     @vite('resources/js/app.js')
-    @can('admin sekolah')
+    @role('sekolah')
     @jurusan
     <script type="text/javascript">
         $('#get_jurusan').on('change', function getKelas() {
@@ -73,7 +73,7 @@
 
             $('#get_jurusan').click(function() {
                 $.ajax({
-                    url: `{{ route('getkls') }}`,
+                    url: `{{ route('get_kelas_id') }}`,
                     type: 'POST',
                     data: data,
                     headers: {
@@ -110,9 +110,8 @@
         })
     </script>
     @endjurusan
-    @endcan
-    @vite('resources/js/app.js')
-    @can('admin sekolah')
+    
+    @vite('resources/js/app.js')    
     <script type="module">
         var currentKelas;
         $('#get_kelas').on('change', function() {
@@ -147,8 +146,8 @@
                 });
         });
     </script>
-    @endcan
-    @can('only class')
+    @endrole
+    @role('kelas')
     <script>
         var currentKelas;
         var kelas = $('#get_kelas option:selected').val()
@@ -181,5 +180,5 @@
 
                 });
     </script>
-    @endcan
+    @endrole
 @endsection

@@ -96,6 +96,7 @@ class SekolahController extends Controller
             $this->sekolahModel->id_paket = $getPaket->id;
 
             $this->invoiceModel->id_paket = $getPaket->id;
+            $this->invoiceModel->serial_number = Helper::generateNumberInv();
             $this->invoiceModel->id_sekolah = intVal($id);
             $this->invoiceModel->nama_paket = $getPaket->nama_paket;
             $this->invoiceModel->kuantiti = $getPaket->siswa;
@@ -113,10 +114,9 @@ class SekolahController extends Controller
             }
             $this->invoiceModel->save();
             $this->userModel->sekolah()->save($this->sekolahModel);
-
-            $this->userModel->givePermissionTo('admin sekolah');
+            
             if($jurusan == "true"){
-                $this->userModel->givePermissionTo('jurusan sekolah');
+                $this->userModel->givePermissionTo('jurusan');
             }
 
             switch ($getPaket->nama_paket){

@@ -108,7 +108,7 @@ class UserController extends Controller
 
     public function getKelas(Request $request)
     {
-        $kelas = Kelas::where('id_jurusan', $request->id_jurusan)->get();
+        $kelas = Kelas::where('id_jurusan', Helper::decryptUrl($request->id_jurusan))->get();
         $get_kelas = $request->id_kelas;
         $selected = '';
 
@@ -189,22 +189,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('pesan')->with('success', 'Berhasil Mengubah Pesan');
-    }
-
-    public function getAbsen(Request $request)
-    {
-        $siswa = Siswa::join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('absensi.*', 'siswa.nama_siswa')->get();
-        $data_array = array();
-        foreach ($siswa as $s) {
-            $data_array[] = array(
-                'id' => $s->id_siswa,
-                'title' => $s->nama_siswa ." - ". $s->status,
-                'start' => $s->tanggal ." ".  $s->waktu
-            );
-        }
-
-        return json_encode($data_array);
-    }
+    }    
 
     public function insertAbsenManual(Request $request){
         $curl = new CurlController();
@@ -426,8 +411,8 @@ class UserController extends Controller
     public function getSiswa(Request $request){
         $user = User::where('id', session('id_user'))->first();
         $siswa = Siswa::where('id_jurusan', $request->id_jurusan)->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
-        $guru = Guru::where('id_sekolah', ($user->can('only class')) ?  session('id') : session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
-        $sekolah = Sekolah::where('id', ($user->can('only class')) ?  session('id') : session('id_sekolah'))->first();
+        $guru = Guru::where('id_sekolah', ($user->hasROle('kelas')) ?  session('id') : session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
+        $sekolah = Sekolah::where('id', ($user->hasRole('kelas')) ?  session('id') : session('id_sekolah'))->first();
         $serilize = serialize($sekolah->broadcast->wa_group);
         $unserilize = unserialize($serilize);
         $a = json_decode($unserilize);

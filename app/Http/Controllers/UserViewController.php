@@ -102,7 +102,7 @@ class UserViewController extends Controller
     {
         $user = User::where('id', session('id_user'))->first();
         if($user){
-            if($user->can('only class')){
+            if($user->hasRole('kelas')){
                 return view('user.absen.data_absen', [
                     'jurusan' => jurusan::where('id', $user->kelas->id_jurusan)->select('nama_jurusan', 'id')->first(),
                     'kelas' => $user->kelas
@@ -119,7 +119,7 @@ class UserViewController extends Controller
     {
         $user = User::where('id', session('id_user'))->first();
         if($user){
-            if($user->can('only class')){
+            if($user->hasRole('kelas')){
                 return view('user.absen.absensi_live', [
                     'jurusan' => jurusan::where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first(),
                     'cookies' => Cookie::get('id_mesin'),
@@ -149,7 +149,7 @@ class UserViewController extends Controller
     public function broadcast() {
         $user = User::where('id', session('id_user'))->first();
         if($user){
-            if($user->can('only class')){
+            if($user->hasRole('kelas')){
                 // dd($user->kelas);
                 return view('user.kirim_pesan', [
                     'jurusan' => jurusan::where('id_sekolah', session('id'))->where('id', $user->kelas->id_jurusan)->first(),
@@ -186,7 +186,7 @@ class UserViewController extends Controller
     public function rekapAbsen() {
         $user = User::where('id', session('id_user'))->first();
         if($user){
-            if($user->can('only class')){
+            if($user->hasRole('kelas')){
                 // $jurusan = jurusan::where('id_sekolah', Helper::getSession())->where('id', $user->kelas->id_jurusan)->select('nama_jurusan')->first();
                 // dd($jurusan);
                 return view('user.absen.rekap_absen', [
