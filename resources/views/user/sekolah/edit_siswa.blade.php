@@ -106,8 +106,9 @@
             </div>
         </div>
     </div>
-
-    <script type="text/javascript">
+            
+    @jurusan    
+        <script type="text/javascript">
         var get_id_jurusan = $('#get_jurusan option:selected').val()
         var get_id_kelas = {{ $siswa->id_kelas }}
         var data = {
@@ -116,7 +117,7 @@
         }
         $(document).ready(function() {
             $.ajax({
-                url: `{{ route('getkls') }}`,
+                url: `{{ route('get_kelas_id') }}`,
                 type: 'POST',
                 data: data,
                 headers: {
@@ -140,7 +141,7 @@
             var get_id = $('#get_jurusan option:selected').val()
             $('#get_jurusan option').removeAttr('selected');
             $.ajax({
-                url: `{{ route('getkls') }}`,
+                url: `{{ route('get_kelas_id') }}`,
                 type: 'POST',
                 data: {
                     id_jurusan: get_id
@@ -160,26 +161,25 @@
                 }
             })
         });
-        // $('#jurusan').on('change', function getKelas(){
-        // 	var data ={ id_jurusan: value }
-
-        // 		$('#jurusan').click(function(){
-        // 			$.ajax({
-        // 				url: `{{ route('getkls') }}`,
-        // 				type: 'POST',
-        // 				data: data,
-        // 				headers: {
-        // 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        // 				},
-        // 				success: function(res){
-        // 					console.log(res);
-
-        // 						$('#kelas').html(res)
-
-        // 				}
-        // 			})
-        // 		});
-
-        // });
     </script>
+    @else
+    <script type="text/javascript">
+        let get_id_kelas = {{$kelas->id}}
+        $.ajax({
+            url: `{{route('get_kelas_id')}}`,
+            type: 'POST',
+                data: {
+                    id_kelas: get_id_kelas
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },                
+                success: function(res) {
+                    console.log(res);
+                    $('#get_kelas').html(res)
+                }
+        })
+    </script>
+    @endjurusan
+
 @endsection

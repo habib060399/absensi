@@ -10,43 +10,45 @@
                             <h6 class="card-title mb-4">Full calendar</h6>
                             <div id='external-events' class='external-events'>
                                 <h6 class="mb-2 text-muted">Draggable Events</h6>
-                                @can('admin sekolah')
-                                @can('jurusan sekolah')
-                                <div class="mb-3">
-                                    <label class="form-label">Jurusan</label>
-                                    <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
-                                        <option value="" selected disabled>Pilih Jurusan</option>
-                                        @foreach ($jurusan as $j)
-                                            <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @endcan
-                                <div class="mb-3">
-                                    <label class="form-label">Kelas</label>
-                                    <select type="text" class="form-select" id="get_kelas" name="get_kelas">
-                                    </select>
-                                </div>
-                                @endcan
-                                @can('only class')
-                                @can('jurusan sekolah')
-                                <div class="mb-3">
-                                    <label class="form-label">Jurusan</label>
-                                    <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
-                                        <option value="{{$jurusan->id}}" selected>{{$jurusan->nama_jurusan}}</option>
-                                        {{-- @foreach ($jurusan as $j)
+                                @role('sekolah')
+                                    @can('jurusan')
+                                        <div class="mb-3">
+                                            <label class="form-label">Jurusan</label>
+                                            <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
+                                                <option value="" selected disabled>Pilih Jurusan</option>
+                                                @foreach ($jurusan as $j)
+                                                    <option value="{{ \App\Helpers\Helper::encryptUrl($j->id) }}">
+                                                        {{ $j->nama_jurusan }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endcan
+                                    <div class="mb-3">
+                                        <label class="form-label">Kelas</label>
+                                        <select type="text" class="form-select" id="get_kelas_1" name="get_kelas">
+                                        </select>
+                                    </div>
+                                @endrole
+                                @role('kelas')
+                                    @can('jurusan')
+                                        <div class="mb-3">
+                                            <label class="form-label">Jurusan</label>
+                                            <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
+                                                <option value="{{ \App\Helpers\Helper::encryptUrl($jurusan->id) }}" selected>
+                                                    {{ $jurusan->nama_jurusan }}</option>
+                                                {{-- @foreach ($jurusan as $j)
                                             <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
                                         @endforeach --}}
-                                    </select>
-                                </div>
-                                @endcan
-                                <div class="mb-3">
-                                    <label class="form-label">Kelas</label>
-                                    <select type="text" class="form-select" id="get_kelas" name="get_kelas">
-                                        <option value="{{ $kelas->id }}" selected>{{ $kelas->kelas }}</option>
-                                    </select>
-                                </div>
-                                @endcan
+                                            </select>
+                                        </div>
+                                    @endcan
+                                    <div class="mb-3">
+                                        <label class="form-label">Kelas</label>
+                                        <select type="text" class="form-select" id="get_kelas" name="get_kelas">
+                                            <option value="{{ $kelas->id }}" selected>{{ $kelas->kelas }}</option>
+                                        </select>
+                                    </div>
+                                @endrole
                             </div>
                         </div>
                     </div>
@@ -111,7 +113,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 id="modalTitle2" class="modal-title">Tambah Absen</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"><span class="visually-hidden">close</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"><span
+                            class="visually-hidden">close</span></button>
                 </div>
                 <div id="modalBody2" class="modal-body">
                     <form action="{{ route('input_absen') }}" method="post">
@@ -120,16 +123,16 @@
                             <label for="formGroupExampleInput" class="form-label">Nama Siswa</label>
                             <input type="text" id="id_siswa" name="id_siswa" hidden>
                             <input type="text" id="tanggal" name="tanggal" hidden>
-                                <select class="compose-multiple-select form-select" multiple id="nama" name="nama[]">
-                                    <option value="hadir">Hadir</option>
-                                </select>
+                            <select class="compose-multiple-select form-select" multiple id="nama" name="nama[]">
+                                <option value="hadir">Hadir</option>
+                            </select>
                             <div class="mt-2">
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="radioInline" id="siswa">
-                                <label class="form-check-label" for="radioInline2">
-                                    Semua Siswa
-                                </label>
-                            </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radioInline" id="siswa">
+                                    <label class="form-check-label" for="radioInline2">
+                                        Semua Siswa
+                                    </label>
+                                </div>
                             </div>
                             <div id="result" class="result"></div>
                         </div>
@@ -153,12 +156,12 @@
             </div>
         </div>
     </div>
-    @can('only class')
-    <script>
-        var get_jurusan = $('#get_jurusan option:selected').val();
-        var get_kelas = $('#get_kelas option:selected').val();
-        $( document ).ready(function() {
-        var data = {
+    @role('kelas')
+        <script type="text/javascript">
+            var get_jurusan = $('#get_jurusan option:selected').val();
+            var get_kelas = $('#get_kelas option:selected').val();
+            $(document).ready(function() {
+                var data = {
                     id_jurusan: get_jurusan,
                     id_kelas: get_kelas
                 }
@@ -171,26 +174,34 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(res) {
+                        console.log(res);
+                        
                         var data = JSON.parse(res);
                         calendarAbsen(data);
+                    },
+                    error: function(e) {
+                        console.log(r);
+
                     }
+
                 });
 
                 if ($(".compose-multiple-select").length) {
                     $(".compose-multiple-select").select2({
                         ajax: {
-                            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
                             url: `{{ route('search_nama_siswa') }}`,
                             dataType: 'json',
                             data: function(params) {
                                 return {
-                                 search: params.term,
-                                 id_sekolah: {{ session('id') }},
-                                 id_jurusan: get_jurusan,
-                                 id_kelas: get_kelas
+                                    search: params.term,
+                                    id_jurusan: get_jurusan,
+                                    id_kelas: get_kelas
                                 }
                             },
-                            processResults: function(data){
+                            processResults: function(data) {
                                 return {
                                     results: data
                                 }
@@ -200,37 +211,37 @@
                         dropdownParent: $('#createEventModal'),
                     })
                 }
-});
+            });
 
-var select = true;
+            var select = true;
 
-            $('#siswa').click(function(){
-                if(select){
+            $('#siswa').click(function() {
+                if (select) {
                     var kelas = $('#get_kelas option:selected').val()
                     var data = {
-                                id_jurusan: get_jurusan,
-                                id_kelas: kelas
-                            }
+                        id_jurusan: get_jurusan,
+                        id_kelas: kelas
+                    }
 
                     $.ajax({
-                    url: `{{ route('option_siswa') }}`,
-                    type: 'POST',
-                    data: data,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function() {
-                        show_loading()
-                    },
-                    complete: function() {
-                        hide_loading()
-                    },
-                    success: function(res) {
-                        $('#nama').html(res);
-                    }
-                });
+                        url: `{{ route('option_siswa') }}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            show_loading()
+                        },
+                        complete: function() {
+                            hide_loading()
+                        },
+                        success: function(res) {
+                            $('#nama').html(res);
+                        }
+                    });
                     select = false;
-                }else{
+                } else {
                     $('#siswa').prop('checked', false);
                     $('#nama').find(':selected').remove();
                     console.log("false");
@@ -238,10 +249,10 @@ var select = true;
                 }
 
             })
-    </script>
-    @endcan
+        </script>
+    @endrole
 
-    @can('admin sekolah')
+    @role('sekolah')
         <script type="text/javascript">
             var get_id_jurusan;
             $('#get_jurusan').on('change', function getKelas() {
@@ -265,7 +276,7 @@ var select = true;
                             hide_loading()
                         },
                         success: function(res) {
-                            $('#get_kelas').html(res)
+                            $('#get_kelas_1').html(res)
 
                         }
                     })
@@ -273,8 +284,8 @@ var select = true;
 
             });
 
-            $('#get_kelas').on('change', function() {
-                var kelas = $('#get_kelas option:selected').val()
+            $('#get_kelas_1').on('change', function() {
+                var kelas = $('#get_kelas_1 option:selected').val()
                 var data = {
                     id_jurusan: get_id_jurusan,
                     id_kelas: kelas
@@ -294,6 +305,8 @@ var select = true;
                         hide_loading()
                     },
                     success: function(res) {
+                        console.log(res);
+
                         var data = JSON.parse(res);
                         calendarAbsen(data);
                     }
@@ -302,37 +315,37 @@ var select = true;
             })
 
             var select = true;
-            $('#siswa').click(function(){
-                if(select){
-                    var kelas = $('#get_kelas option:selected').val()
+            $('#siswa').click(function() {
+                if (select) {
+                    var kelas = $('#get_kelas_1 option:selected').val()
                     var data = {
-                                id_jurusan: get_id_jurusan,
-                                id_kelas: kelas
-                            }
+                        id_jurusan: get_id_jurusan,
+                        id_kelas: kelas
+                    }                    
+                    
 
                     $.ajax({
-                    url: `{{ route('option_siswa') }}`,
-                    type: 'POST',
-                    data: data,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function() {
-                        show_loading()
-                    },
-                    complete: function() {
-                        hide_loading()
-                    },
-                    success: function(res) {
-                        $('#nama').html(res);
+                        url: `{{ route('option_siswa') }}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            show_loading()
+                        },
+                        complete: function() {
+                            hide_loading()
+                        },
+                        success: function(res) {
+                            $('#nama').html(res);
 
-                    }
-                });
+                        }
+                    });
                     select = false;
-                }else{
+                } else {
                     $('#siswa').prop('checked', false);
-                    $('#nama').find(':selected').remove();
-                    console.log("false");
+                    $('#nama').find(':selected').remove();                    
                     select = true;
                 }
 
@@ -345,26 +358,30 @@ var select = true;
             $('#get_jurusan').on('change', function getKelas() {
                 get_id_jurusan = $('#get_jurusan option:selected').val();
             })
-            $('#get_kelas').on('change', function getKelas() {
-                get_id_kelas = $('#get_kelas option:selected').val();
+            $('#get_kelas_1').on('change', function getKelas() {
+                get_id_kelas = $('#get_kelas_1 option:selected').val();
             })
 
-            $( document ).ready(function() {
+            $(document).ready(function() {
                 if ($(".compose-multiple-select").length) {
                     $(".compose-multiple-select").select2({
                         ajax: {
-                            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
                             url: `{{ route('search_nama_siswa') }}`,
                             dataType: 'json',
                             data: function(params) {
                                 return {
-                                 search: params.term,
-                                 id_sekolah: {{ session('id_sekolah') }},
-                                 id_jurusan: get_id_jurusan,
-                                 id_kelas: get_id_kelas
+                                    search: params.term,                                    
+                                    id_jurusan: get_id_jurusan,
+                                    id_kelas: get_id_kelas
                                 }
                             },
-                            processResults: function(data){
+                            processResults: function(data) {
+                                console.log(get_id_jurusan, get_id_kelas);
+                                
+                                console.log(data);
                                 return {
                                     results: data
                                 }
@@ -374,26 +391,25 @@ var select = true;
                         dropdownParent: $('#createEventModal'),
                     })
                 }
-});
+            });
         </script>
-        @endcan
+    @endrole
 
-        @jurusan
-        <script type="text/javascript">
-        </script>
-        @else
+    @jurusan
+        <script type="text/javascript"></script>
+    @else
         <script type="text/javascript">
             $.ajax({
-                url: `{{ route('get_all_kelas')}}`,
+                url: `{{ route('get_all_kelas') }}`,
                 type: 'GET',
                 success: function(res) {
                     console.log(res);
 
-                    $('#get_kelas').html(res)
+                    $('#get_kelas_1').html(res)
 
                 }
             })
         </script>
-        @endjurusan
+    @endjurusan
 
-    @endsection
+@endsection

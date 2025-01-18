@@ -21,7 +21,7 @@
                                     {{-- <input type="hidden" name="id_sekolah" id=""
                                         value="{{ \App\Helpers\Helper::encryptUrl($id_sekolah) }}"> --}}
                                     <label class="form-label">Pesan : {{$p->title}}</label>
-                                    <textarea type="text" class="form-control @error('email') is-invalid @enderror" name="broadcast-{{$p->title}}">{{$p->message}}</textarea>
+                                    <textarea style="height: 155px" type="text" class="form-control @error('email') is-invalid @enderror" name="broadcast-{{$p->title}}">{{$p->message}}</textarea>
                                 </div>
                                 @endforeach
                             </div><!-- Col -->

@@ -45,6 +45,7 @@ class AuthController extends Controller
                 return redirect()->intended('/user/home');
             } elseif ($role[0] == 'kelas') {
                 $request->session()->put('id', $kelas->id_sekolah);
+                $request->session()->put('id_sekolah', $kelas->id_sekolah);
                 $request->session()->put('id_user', $kelas->id_user);
                 $request->session()->put('id_kelas', $kelas->id);
                 $request->session()->put('nama', 'Kelas : '.$kelas->kelas);

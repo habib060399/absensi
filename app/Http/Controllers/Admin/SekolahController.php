@@ -114,10 +114,9 @@ class SekolahController extends Controller
             }
             $this->invoiceModel->save();
             $this->userModel->sekolah()->save($this->sekolahModel);
-
-            $this->userModel->givePermissionTo('admin sekolah');
+            
             if($jurusan == "true"){
-                $this->userModel->givePermissionTo('jurusan sekolah');
+                $this->userModel->givePermissionTo('jurusan');
             }
 
             switch ($getPaket->nama_paket){

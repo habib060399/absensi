@@ -7,6 +7,7 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Sekolah;
 use App\Models\User;
+use App\Enums\AuthorizationEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,27 +17,29 @@ class KelasController extends Controller
 {
 
     public function index()
-    {
-        $user = User::where('id', session('id_user'))->first();
-        if($user->hasPermissionTo('jurusan sekolah')){
+    {  
+        $array = Helper::access();
+        if(in_array($this->sekolah(), $array) && in_array($this->jurusan(), $array)){
             return view('user.sekolah.kelas', [
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
                 'kelas' => Kelas::join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')->join('users', 'kelas.id_user', '=', 'users.id')->select('kelas.*', 'jurusan.nama_jurusan', 'users.username')->where('kelas.id_sekolah', session('id_sekolah'))->get(),
                 'username' => Helper::checkUsername()
             ]);
-        }else{
+        }elseif (in_array($this->sekolah(), $array)) {
             return view('user.sekolah.kelas', [
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
                 'kelas' => Kelas::join('users', 'kelas.id_user', '=', 'users.id')->select('kelas.*', 'users.username')->where('kelas.id_sekolah', session('id_sekolah'))->get(),
                 'username' => Helper::checkUsername()
             ]);
         }
+        
+        return abort(500);
     }
 
     public function store(Request $request)
     {
         $user = User::where('id', session('id_user'))->first();
-        if($user->can('jurusan sekolah')){
+        if($user->can('jurusan')){
             $validator = Validator::make($request->all(), [
                 'jurusan' => 'required',
                 'kelas' => 'required',
@@ -49,11 +52,7 @@ class KelasController extends Controller
                 'username' => 'required|unique:users',
                 'password' => 'required'
             ]);
-        }
-
-        if($validator->fails()){
-            return redirect()->route('kelas')->with('error', 'Data Tidak Boleh Kosong');
-        }
+        }        
 
         try {
             DB::beginTransaction();
@@ -72,18 +71,30 @@ class KelasController extends Controller
             $kelas->id_jurusan = $request->input('jurusan');
             $kelas->kelas = $request->input('kelas');
             $user->kelas()->save($kelas);
-            $user->assignRole('kelas');
-            $user->givePermissionTo('only class');
+            $user->assignRole('kelas');            
 
             DB::commit();
             return redirect()->route('kelas')->with('success', 'Berhasil Menambahkan Kelas');
         }catch (\Exception $e){
+            // dd($e);
             DB::rollBack();
             return redirect()->route('kelas')->with('error', 'Data gagal disimpan');
         }
     }
 
     public function edit($id, Request $request)
+    {        
+        Helper::decryptUrl($id);
+        $kelas = Kelas::where('id', Helper::decryptUrl($id))->select('*')->first();
+
+        return view('user.sekolah.edit_kelas', [
+            'kelas' => $kelas,
+            'user' => $kelas->user,
+            'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
+        ]);
+    }
+
+    public function update($id, Request $request)
     {
         $id_kelas = Helper::decryptUrl($id);
         $get_kelas = Kelas::where('id_sekolah', Helper::getSession())->where('id', $id_kelas)->first();
@@ -91,8 +102,8 @@ class KelasController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = User::where('id', session('id_user'))->first();
-            if($user->can('jurusan sekolah')){
+            // $user = User::where('id', session('id_user'))->first();
+            if(User::checkPermission('jurusan sekolah')){
                 $get_kelas->id_jurusan = Helper::decryptUrl($request->input('jurusan'));
             }
 
@@ -112,7 +123,6 @@ class KelasController extends Controller
             DB::rollBack();
             return redirect()->route('kelas')->with('error', 'Data gagal diubah');
         }
-
     }
 
     public function delete($id)
@@ -128,26 +138,54 @@ class KelasController extends Controller
     }
 
     public function getAllKelas(Request $request)
-    {
-        // (session('id_sekolah')) ? "id_sekolah ," session('id_sekolah') :"id_user, "session('id_user')
-        $param1 = (session('id_sekolah') ? 'id_sekolah': 'id_user');
-        $param2 = (session('id_sekolah') ? session('id_sekolah') : session('id_user'));
+    {   
+        $array = Helper::access();
+        $param1 = '';
+        $param2 = '';
+        if(in_array($this->sekolah(), $array) || in_array($this->jurusan(), $array)){
+            $param1 = 'id_sekolah';
+            $param2 = session('id_sekolah');
+        }elseif (in_array($this->kelas(), $array)) {
+            $param1 = 'id_user';
+            $param2 = session('id_user');
+        }
+        
         $kelas = Kelas::where($param1, $param2)->get();
         $get_kelas = $request->id_kelas;
+        $get_jurusan = $request->id_jurusan;
         $selected = '';
 
         if($kelas){
-            echo "<option selected disabled>Pilih Kelas</option>";
+            echo "<option selected disabled>Pilih Kelas</option>";            
             foreach ($kelas as $k) {
-                if($k->id == $get_kelas || $param1 == 'id_user'){
-                    $selected = 'selected';
-                }
-                echo "<option value='$k->id' $selected> $k->kelas</option>";
-                $selected = '';
+                
+                echo "<option value='$k->id'> $k->kelas</option>";                
 
             }
         }else{
-            echo '<option selected disabled>Pilih Kelas</option>';
+            echo '<option selected disabled>Pilih Kelas</option>';            
+        }
+    }
+
+    public function getKelasById(Request $request)
+    {
+        $kelas = null;
+        $array = Helper::access();
+
+        if(in_array($this->sekolah(), $array) && in_array($this->jurusan(), $array)){            
+            $kelas = Kelas::where('id_jurusan', $request->id_jurusan)->get();
+        }elseif (in_array($this->sekolah(), $array)) {
+            $kelas = Kelas::where('id_sekolah', session('id_sekolah'))->get();
+        }
+
+        if($kelas != null){
+            echo "<option selected disabled>Pilih Kelas</option>";
+            foreach ($kelas as $k) {
+                $selected = ($k->id == $request->id_kelas) ? 'selected' : '';
+                echo "<option value='$k->id' $selected> $k->kelas</option>";
+            }
+        }else{
+            echo "Tidak ada data atau data failed";
         }
     }
 }

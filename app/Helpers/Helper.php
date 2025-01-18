@@ -99,4 +99,13 @@ class Helper
         $sekolah = Sekolah::where('id', session('id_sekolah'))->select($column)->first();              
         return $sekolah;
     }
+
+    public static function access()
+    {
+        $user = User::where('id', session('id_user'))->first();
+        $roles = $user->getRoleNames()->toArray();
+        $permissions = $user->getPermissionNames()->toArray();
+        $array_merged = array_merge($roles, $permissions);
+        return $array_merged;
+    }
 }

@@ -8,6 +8,8 @@ use App\Models\Kelas;
 use App\Models\Sekolah;
 use App\Models\Siswa;
 use App\Models\User;
+use App\Models\Guru;
+use App\Enums\AuthorizationEnum;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,21 +18,31 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        if(User::checkPermission('jurusan sekolah') && User::checkRole('sekolah')) {            
+        $array = Helper::access();
+        if(in_array($this->jurusan(), $array) && in_array($this->sekolah(), $array)) {
             return view('user.sekolah.siswa', [
                 'siswa' => Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', Helper::idSessionSekolah())->get(),
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
             ]);
-        }elseif (User::checkRole('kelas') && User::checkPermission('jurusan sekolah')) {
+        }elseif (User::checkRole('kelas') && User::checkPermission('jurusan')) {
             $kelas = Kelas::where('id_user', session('id_user'))->first();
-            $siswa = Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', session('id'))->where('siswa.id_kelas', $kelas->id)->get();            
+            $siswa = Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.*', 'jurusan.nama_jurusan', 'kelas.kelas')->where('siswa.id_sekolah', session('id'))->where('siswa.id_kelas', $kelas->id)->get();
             return view('user.sekolah.siswa', [
                 'siswa' => $siswa,
+                'kelas' => $kelas,
+                'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get(),
+                'get_jurusan' => jurusan::where('id', $kelas->id_jurusan)->first()
+            ]);
+        }elseif(User::checkRole('sekolah')){
+            // $siswa = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('kelas.id_sekolah', session('id_sekolah'))->select('siswa.*', 'kelas.kelas')->get();
+            return view('user.sekolah.siswa', [
+                'siswa' => Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('kelas.id_sekolah', session('id_sekolah'))->select('siswa.*', 'kelas.kelas')->get(),
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
             ]);
-        }else{            
+        }else{
             return view('user.sekolah.siswa', [
-                'siswa' => Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('kelas.id_user', session('id_user'))->get(),
+                'siswa' => Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('kelas.id_user', session('id_user'))->select('siswa.*', 'kelas.kelas')->get(),
+                'kelas' => Kelas::where('id_user', session('id_user'))->first(),
                 'jurusan' => jurusan::where('id_sekolah', session('id_sekolah'))->get()
             ]);
         }
@@ -41,7 +53,7 @@ class SiswaController extends Controller
         $request->validate([
             'nama_siswa' => 'required',
             'email' => 'required',
-            (Helper::checkPermission('jurusan sekolah')) ? "'jurusan_sekolah' => 'required'," : null,
+            (Helper::checkPermission('jurusan')) ? "'jurusan_sekolah' => 'required'," : "'jurusan_sekolah' => true",
 //            'jurusan_sekolah' => 'required',
             'kelas_sekolah' => 'required',
             'no_hp' => 'required',
@@ -109,6 +121,7 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::where('id', Helper::decryptUrl($id))->first();
         $kelas = Kelas::where('id', $siswa->id_kelas)->first();
+        // dd($siswa);
         return view('user.sekolah.edit_siswa',[
             'siswa' => $siswa,
             'kelas' => $kelas,
@@ -118,7 +131,7 @@ class SiswaController extends Controller
 
     public function update($id, Request $request)
     {
-        if (Helper::checkPermission('jurusan sekolah')){
+        if (Helper::checkPermission('jurusan')){
             $request->validate([
                 'nama_siswa' => 'required',
                 'email' => 'required',
@@ -183,4 +196,150 @@ class SiswaController extends Controller
 
         return redirect()->route('siswa')->with('hapus', 'asdfasd');
     }
+
+    public function getSiswaByDate(Request $request)
+    {
+        try {
+            $request->validate([
+                'id_kelas' => 'required',
+                'tgl_mulai' => 'required|date|before_or_equal:tgl_selesai',
+                'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai'
+            ]);
+
+            $array = Helper::access();
+            if((in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) && in_array($this->jurusan(), $array)){
+                $data = array();
+                $no = 1;
+                $siswa = Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('siswa.id_kelas', $request->id_kelas)->select('siswa.nama_siswa', 'siswa.rfid', 'siswa.id', 'kelas.kelas', 'jurusan.nama_jurusan')->get();
+
+                foreach ($siswa as $s) {
+                    $data[] = array(
+                        'no' => $no++,
+                        'nama_siswa' => $s->nama_siswa,
+                        'hadir' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->whereBetween('tanggal', [$request->tgl_mulai, $request->tgl_selesai])->where('status', 'hadir')->where('id_siswa', $s->id)->count('status'),
+                        'absen' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status'),
+                        'izin' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status'),
+                        'sakit' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status'),
+                        'kelas' => $s->kelas,
+                        'jurusan' => $s->nama_jurusan,
+                        'link' => array(route('editSiswa', ['id' => Helper::encryptUrl($s->id)]), route('hapus', ['id' => Helper::encryptUrl($s->id)])),
+                        'tgl' => $request->tgl_mulai
+                    );
+                }
+                return json_encode($data);
+            }elseif (in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) {
+
+                $data = array();
+                $no = 1;
+                $siswa = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('siswa.id_kelas', $request->id_kelas)->select('siswa.nama_siswa', 'siswa.rfid', 'siswa.id', 'kelas.kelas')->get();
+
+                foreach ($siswa as $s) {
+                    $data[] = array(
+                        'no' => $no++,
+                        'nama_siswa' => $s->nama_siswa,
+                        'hadir' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->whereBetween('tanggal', [$request->tgl_mulai, $request->tgl_selesai])->where('status', 'hadir')->where('id_siswa', $s->id)->count('status'),
+                        'absen' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status'),
+                        'izin' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status'),
+                        'sakit' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status'),
+                        'kelas' => $s->kelas,
+                        'link' => array(route('editSiswa', ['id' => Helper::encryptUrl($s->id)]), route('hapus', ['id' => Helper::encryptUrl($s->id)])),
+                        'tgl' => $request->tgl_mulai
+                    );
+                }
+                return json_encode($data);
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => 'kosong']);
+        }
+    }
+
+    public function findContact(Request $request)
+    {
+        $array = Helper::access();
+        $data = array();
+            if((in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) && in_array($this->jurusan(), $array)){
+                $siswa = Siswa::where('id_jurusan', Helper::decryptUrl($request->id_jurusan))->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
+                $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
+                $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
+                $serilize = serialize($sekolah->broadcast->wa_group);
+                $unserilize = unserialize($serilize);
+                $a = json_decode($unserilize);
+                $data = [
+                    'siswa' => $siswa,
+                    'guru' => $guru,
+                    'group' => $a
+                ];
+            } elseif (in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) {
+                $siswa = Siswa::where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
+                $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
+                $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
+                $serilize = serialize($sekolah->broadcast->wa_group);
+                $unserilize = unserialize($serilize);
+                $a = json_decode($unserilize);
+                $data = [
+                    'siswa' => $siswa,
+                    'guru' => $guru,
+                    'group' => $a
+                ];
+            }
+        if($data){
+            if($request->selected == "ortu"){
+                for($i = 0; $i < count($data['siswa']); $i++){
+                    if($data['siswa'][$i]['no_hp_ortu']){
+                        echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp_ortu'])." selected> Ortu ".$data['siswa'][$i]['nama']."</option>";
+                    }
+                }
+
+                if(!empty($data['guru'])){
+                    for($i = 0; $i < count($data['guru']); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                    }
+                }
+
+                if (!empty($data['group'])) {
+                    for($i = 0; $i < count($data['group']->data); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
+                    }
+                }
+            }elseif ($request->selected == "siswa") {
+                for($i = 0; $i < count($data['siswa']); $i++){
+                    if($data['siswa'][$i]['no_hp']){
+                        echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp'])." selected>".$data['siswa'][$i]['nama']."</option>";
+                    }
+                }
+
+                if(!empty($data['guru'])){
+                    for($i = 0; $i < count($data['guru']); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                    }
+                }
+
+                if (!empty($data['group'])) {
+                    for($i = 0; $i < count($data['group']->data); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
+                    }
+                }
+            }else{
+                for($i = 0; $i < count($data['siswa']); $i++){
+                    echo 'ini siswa';
+                    echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp']).">".$data['siswa'][$i]['nama']."</option>";
+                }
+
+                if(!empty($data['guru'])){
+                    for($i = 0; $i < count($data['guru']); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
+                    }
+                }
+
+                if (!empty($data['group'])) {
+                    for($i = 0; $i < count($data['group']->data); $i++){
+                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
+                    }
+                }
+            }
+        }else{
+            echo "Data Kosong";
+        }
+    }
+
 }

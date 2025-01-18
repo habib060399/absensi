@@ -8,27 +8,32 @@
                         <div class="p-3 pb-0">
                             <div class="subject">
                                 <div class="row mb-3">
+                                    @role('sekolah')
+                                    @jurusan
                                     <label class="col-md-2 col-form-label">Jurusan</label>
-                                    @can('admin sekolah')
                                     <div class="col-md-10">
                                         <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
                                             <option value="" selected disabled>Pilih Jurusan</option>
                                             @foreach ($jurusan as $j)
-                                                <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
+                                                <option value="{{ \App\Helpers\Helper::encryptUrl($j->id) }}">{{ $j->nama_jurusan }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    @endcan
-                                    @can('only class')
+                                    @endjurusan
+                                    @endrole
+                                    @role('kelas')
+                                    @jurusan
+                                    <label class="col-md-2 col-form-label">Jurusan</label>
                                     <div class="col-md-10">
                                         <select type="text" class="form-select" id="get_jurusan" name="get_jurusan">
-                                            <option value="{{$kelas->id_jurusan}}" selected>{{$jurusan->nama_jurusan}}</option>                                        
+                                            <option value="{{\App\Helpers\Helper::encryptUrl($kelas->id_jurusan)}}" selected>{{$jurusan->nama_jurusan}}</option>
                                         </select>
                                     </div>
-                                    @endcan
+                                    @endjurusan
+                                    @endrole
                                 </div>
                             </div>
-                            @can('admin sekolah')
+                            @role('sekolah')
                             <div class="subject">
                                 <div class="row mb-3">
                                     <label class="col-md-2 col-form-label">Kelas</label>
@@ -39,8 +44,8 @@
                                     </div>
                                 </div>
                             </div>
-                            @endcan
-                            @can('only class')
+                            @endrole
+                            @role('kelas')
                             <div class="subject">
                                 <div class="row mb-3">
                                     <label class="col-md-2 col-form-label">Kelas</label>
@@ -51,7 +56,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endcan                            
+                            @endrole
                             <form action="{{ route('send_bc') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="subject">
@@ -74,14 +79,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                         <div class="subject">
                             <div class="row mb-3">
                                 <label class="col-md-2 col-form-label">Schedule Tanggal</label>
                                 <div class="col-md-7">
                                     <div class="input-group date datepicker" id="datePickerExample3">
-                                        <input type="text" class="form-control" name="tgl" />
-                                        <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>                                       
+                                        <input type="text" class="form-control" name="tgl" autocomplete="off"/>
+                                        <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +96,7 @@
                                 <label class="col-md-2 col-form-label">Schedule Waktu</label>
                                 <div class="col-md-7">
                                     <div class="input-group date timepicker" id="datetimepickerExample" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerExample" name="waktu"/>
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepickerExample" name="waktu" autocomplete="off"/>
                                         <span class="input-group-text" data-target="#datetimepickerExample" data-toggle="datetimepicker"><i data-feather="clock"></i></span>
                                     </div>
                                 </div>
@@ -136,11 +141,14 @@
                     show_loading();
                 })
             </script>
-            @can('only class')
+            @role('kelas')
             <script>
                 $( document ).ready(function() {
-   
+
                 var get_id_jurusan = $('#get_jurusan option:selected').val()
+                var kelas = $('#get_kelas option:selected').val()
+                console.log(get_id_jurusan, kelas);
+
                 $('#no_ortu').on('click', function() {
                     var kelas = $('#get_kelas option:selected').val()
                     getSiswa(get_id_jurusan, kelas, "ortu")
@@ -152,91 +160,11 @@
                 })
 
                 // $('#get_kelas').on('change', function() {
-                    var kelas = $('#get_kelas option:selected').val()
                     $('#no_ortu').prop('checked', false)
                     $('#no_siswa').prop('checked', false)
                     getSiswa(get_id_jurusan, kelas)
 
                 // })
-
-                function getSiswa(id_jurusan, id_kelas, selected = null) {
-                    var data = {
-                        id_jurusan: id_jurusan,
-                        id_kelas: id_kelas,
-                        selected: selected
-                    }
-
-                    $.ajax({
-                        url: `{{ route('getSiswa') }}`,
-                        type: 'POST',
-                        data: data,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        beforeSend: function() {
-                            show_loading()
-                        },
-                        complete: function() {
-                            hide_loading()
-                        },
-                        success: function(res) {                            
-                            $('#to_siswa').html(res);
-
-                        }
-                    });
-                }
-            });
-            </script>
-            @endcan
-            @can('admin sekolah')
-            <script type="text/javascript">
-                var get_id_jurusan;
-                $('#get_jurusan').on('change', function getKelas() {
-                    get_id_jurusan = $('#get_jurusan option:selected').val()
-                    var data = {
-                        id_jurusan: get_id_jurusan
-                    }
-
-                    $('#get_jurusan').click(function() {
-                        $.ajax({
-                            url: `{{ route('getkls') }}`,
-                            type: 'POST',
-                            data: data,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            beforeSend: function() {
-                                show_loading()
-                            },
-                            complete: function() {
-                                hide_loading()
-                            },
-                            success: function(res) {                                
-                                $('#get_kelas').html(res)
-
-                            }
-                        })
-                    });
-
-                });
-
-                $('#no_ortu').on('click', function() {
-                    var kelas = $('#get_kelas option:selected').val()
-                    getSiswa(get_id_jurusan, kelas, "ortu")
-                })
-
-                $('#no_siswa').on('click', function() {
-                    var kelas = $('#get_kelas option:selected').val()
-                    getSiswa(get_id_jurusan, kelas, "siswa")
-                })
-
-                $('#get_kelas').on('change', function() {
-                    var kelas = $('#get_kelas option:selected').val()
-                    $('#no_ortu').prop('checked', false)
-                    $('#no_siswa').prop('checked', false)
-                    getSiswa(get_id_jurusan, kelas)
-
-                })
 
                 function getSiswa(id_jurusan, id_kelas, selected = null) {
                     var data = {
@@ -264,9 +192,122 @@
                         }
                     });
                 }
+            });
             </script>
-            @endcan
+            @endrole
+            @role('sekolah')
+            @jurusan
+            <script type="text/javascript">
+                var get_id_jurusan;
+                $('#get_jurusan').on('change', function getKelas() {
+                    get_id_jurusan = $('#get_jurusan option:selected').val()
+                    var data = {
+                        id_jurusan: get_id_jurusan
+                    }
+
+                    $('#get_jurusan').click(function() {
+                        $.ajax({
+                            url: `{{ route('getkls') }}`,
+                            type: 'POST',
+                            data: data,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            beforeSend: function() {
+                                show_loading()
+                            },
+                            complete: function() {
+                                hide_loading()
+                            },
+                            success: function(res) {
+                                $('#get_kelas').html(res)
+
+                            }
+                        })
+                    });
+
+                });
+
+                $('#no_ortu').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(get_id_jurusan, kelas, "ortu")
+                })
+
+                $('#no_siswa').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(get_id_jurusan, kelas, "siswa")
+                })
+
+                $('#get_kelas').on('change', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    $('#no_ortu').prop('checked', false)
+                    $('#no_siswa').prop('checked', false)
+                    getSiswa(get_id_jurusan, kelas)
+
+                })
+            </script>
+            @else
+            <script type="text/javascript">
+                $.ajax({
+                    url: `{{ route('get_all_kelas') }}`,
+                    type: 'GET',
+                    success: function(res) {
+                        console.log(res);
+
+                        $('#get_kelas').html(res)
+
+                    }
+                })
+
+                $('#no_ortu').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(null, kelas, "ortu")
+                })
+
+                $('#no_siswa').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(null, kelas, "siswa")
+                })
+
+                $('#get_kelas').on('change', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    $('#no_ortu').prop('checked', false)
+                    $('#no_siswa').prop('checked', false)
+                    getSiswa(null, kelas)
+
+                })
+            </script>
+            @endjurusan
+            @endrole
             <script>
+                function getSiswa(id_jurusan, id_kelas, selected = null) {
+                    var data = {
+                        id_jurusan: id_jurusan,
+                        id_kelas: id_kelas,
+                        selected: selected
+                    }
+
+                    $.ajax({
+                        url: `{{ route('getSiswa') }}`,
+                        type: 'POST',
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            show_loading()
+                        },
+                        complete: function() {
+                            hide_loading()
+                        },
+                        success: function(res) {
+                            console.log(res)
+                            $('#to_siswa').html(res);
+
+                        }
+                    });
+                }
+
                 $(function() {
                     'use strict'
 
