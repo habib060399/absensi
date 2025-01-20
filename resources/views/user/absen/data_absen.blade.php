@@ -175,7 +175,7 @@
                     },
                     success: function(res) {
                         console.log(res);
-                        
+
                         var data = JSON.parse(res);
                         calendarAbsen(data);
                     },
@@ -321,8 +321,8 @@
                     var data = {
                         id_jurusan: get_id_jurusan,
                         id_kelas: kelas
-                    }                    
-                    
+                    }
+
 
                     $.ajax({
                         url: `{{ route('option_siswa') }}`,
@@ -345,7 +345,7 @@
                     select = false;
                 } else {
                     $('#siswa').prop('checked', false);
-                    $('#nama').find(':selected').remove();                    
+                    $('#nama').find(':selected').remove();
                     select = true;
                 }
 
@@ -373,14 +373,15 @@
                             dataType: 'json',
                             data: function(params) {
                                 return {
-                                    search: params.term,                                    
+                                    search: params.term,
                                     id_jurusan: get_id_jurusan,
-                                    id_kelas: get_id_kelas
+                                    id_kelas: get_id_kelas,
+                                    id_user: `{{session('id_user')}}`
                                 }
                             },
                             processResults: function(data) {
                                 console.log(get_id_jurusan, get_id_kelas);
-                                
+
                                 console.log(data);
                                 return {
                                     results: data

@@ -17,7 +17,7 @@ class ApiController extends Controller
 
         $list = array();
         $key=0;
-        $array = Helper::access();
+        $array = Helper::getAccess($request->id_user);
 
         if((in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) && in_array($this->jurusan(), $array)) {
             $siswa = Siswa::where('id_jurusan', Helper::decryptUrl($request->id_jurusan))->where('id_kelas', $request->id_kelas)->where('nama_siswa', 'LIKE', '%'.$request->search.'%')->get();

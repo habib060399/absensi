@@ -96,13 +96,22 @@ class Helper
 
     public static function getSekolah($column)
     {
-        $sekolah = Sekolah::where('id', session('id_sekolah'))->select($column)->first();              
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->select($column)->first();
         return $sekolah;
     }
 
     public static function access()
     {
         $user = User::where('id', session('id_user'))->first();
+        $roles = $user->getRoleNames()->toArray();
+        $permissions = $user->getPermissionNames()->toArray();
+        $array_merged = array_merge($roles, $permissions);
+        return $array_merged;
+    }
+
+    public static function getAccess($idUser)
+    {
+        $user = User::where('id', $idUser)->first();
         $roles = $user->getRoleNames()->toArray();
         $permissions = $user->getPermissionNames()->toArray();
         $array_merged = array_merge($roles, $permissions);
