@@ -174,13 +174,11 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(res) {
-                        console.log(res);
 
                         var data = JSON.parse(res);
                         calendarAbsen(data);
                     },
                     error: function(e) {
-                        console.log(r);
 
                     }
 
@@ -244,7 +242,6 @@
                 } else {
                     $('#siswa').prop('checked', false);
                     $('#nama').find(':selected').remove();
-                    console.log("false");
                     select = true;
                 }
 
@@ -305,8 +302,6 @@
                         hide_loading()
                     },
                     success: function(res) {
-                        console.log(res);
-
                         var data = JSON.parse(res);
                         calendarAbsen(data);
                     }
@@ -376,13 +371,10 @@
                                     search: params.term,
                                     id_jurusan: get_id_jurusan,
                                     id_kelas: get_id_kelas,
-                                    id_user: `{{session('id_user')}}`
+                                    id_user: `{{\App\Helpers\Helper::encryptUrl(session('id_user'))}}`
                                 }
                             },
                             processResults: function(data) {
-                                console.log(get_id_jurusan, get_id_kelas);
-
-                                console.log(data);
                                 return {
                                     results: data
                                 }
@@ -404,7 +396,6 @@
                 url: `{{ route('get_all_kelas') }}`,
                 type: 'GET',
                 success: function(res) {
-                    console.log(res);
 
                     $('#get_kelas_1').html(res)
 

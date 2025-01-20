@@ -275,7 +275,6 @@
                                 hide_loading()
                             },
                             success: function(res) {
-                                console.log(res);
 
                                 $('#get_kelas').html(res)
 
@@ -353,12 +352,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(res) {
-                    console.log(res);
                     let response = JSON.parse(res)
 
                     if (id_jurusan != null) {
                         response.forEach(e => {
-                        console.log(e.link);
 
                         table.row.add([e.no, e.nama_siswa, e.kelas, e.jurusan,'sadf', e.hadir, e.absen, e.izin, e
                             .sakit, renderHtml(e.link)
@@ -369,7 +366,6 @@
                     feather.replace();
                     } else {
                         response.forEach(e => {
-                        console.log(e.link);
 
                         table.row.add([e.no, e.nama_siswa, e.kelas, 'sadf', e.hadir, e.absen, e.izin, e
                             .sakit, renderHtml(e.link)
@@ -398,8 +394,6 @@
                         $('.tgl_selesai').after('<div class="error invalid-feedback">' + getErrors.errors
                             .tgl_selesai + '</div>');
                     }
-
-                    console.log(getErrors.errors);
 
                 }
             })
@@ -438,7 +432,6 @@
                     reverseButtons: true,
                 })
                 .then((result) => {
-                    console.log(result);
                     if (result.isConfirmed) {
                         window.location.href = link
 
@@ -478,7 +471,6 @@
                     reverseButtons: true,
                 })
                 .then((result) => {
-                    console.log(result);
                     if (result.isConfirmed) {
                         window.location.href = getLink
 
