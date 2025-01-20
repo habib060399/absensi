@@ -98,7 +98,7 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::get('/broadcast', [UserViewController::class, 'broadcast'])->name('bc');
     Route::post('/broadcast/send', [UserController::class, 'sendBc'])->name('send_bc');
     Route::get('/home', [UserViewController::class, 'home'])->name('homeSekolah');
-    Route::post('/absen/insert', [UserController::class, 'insertAbsenManual'])->name('input_absen');
+    Route::post('/absen/insert', [AbsenController::class, 'store'])->name('input_absen');
     Route::get('/absen/edit', [UserController::class, 'editAbsen'])->name('edit_absen');
     Route::post('/absen/edit/simpan', [UserController::class, 'insertEditAbsen'])->name('simpan_edit_absen');
     Route::post('/siswa/download-template', [UserController::class, 'exportTemplateSiswa'])->name('template_siswa');
