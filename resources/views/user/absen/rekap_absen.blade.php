@@ -121,8 +121,7 @@
                         hide_loading()
                     },
                     success: function(res) {
-                        console.log(res);
-                        
+
                         $('#get_kelas').html(res)
 
                     }
@@ -168,7 +167,6 @@
         url: `{{ route('get_all_kelas') }}`,
         type: 'GET',
         success: function(res) {
-            console.log(res);
 
             $('#get_kelas').html(res)
 

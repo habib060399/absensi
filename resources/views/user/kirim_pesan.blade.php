@@ -147,7 +147,6 @@
 
                 var get_id_jurusan = $('#get_jurusan option:selected').val()
                 var kelas = $('#get_kelas option:selected').val()
-                console.log(get_id_jurusan, kelas);
 
                 $('#no_ortu').on('click', function() {
                     var kelas = $('#get_kelas option:selected').val()
@@ -252,7 +251,6 @@
                     url: `{{ route('get_all_kelas') }}`,
                     type: 'GET',
                     success: function(res) {
-                        console.log(res);
 
                         $('#get_kelas').html(res)
 
@@ -301,7 +299,6 @@
                             hide_loading()
                         },
                         success: function(res) {
-                            console.log(res)
                             $('#to_siswa').html(res);
 
                         }
