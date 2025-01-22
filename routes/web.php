@@ -115,6 +115,10 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
 });
 Route::post('user/broadcast/get-siswa', [SiswaController::class, 'findContact'])->name('getSiswa');
 // Route::post('user/siswa/get-siswa', [SiswaController::class, 'getSiswaByDate'])->name('get_siswa_by_tgl');
+Route::get('/webhook', function () {
+//    return include(app_path('Webhook/mywebhook.php'));
+    return include(app_path('Webhook/webhookWa.php'));
+});
 
 Route::get('broadcast', function() {
     $user = User::find(2);
