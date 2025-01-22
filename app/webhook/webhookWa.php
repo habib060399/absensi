@@ -6,23 +6,25 @@ header('Content-Type: application/json; charset=utf-8');
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
-$device = $data['device'];
-$id = $data['id'];
-$stateid = $data['stateid'];
-$status= $data['status'];
-$state = $data['state'];
+if(!empty($data)){
+    $device = $data['device'];
+    $id = $data['id'];
+    $stateid = $data['stateid'];
+    $status= $data['status'];
+    $state = $data['state'];
 
 //update status and state
-if(isset($id) && isset($stateid)){
-    Report::where('id', $id)->update([
-        'status' => $status,
-        'state' => $state,
-        'stateid' => $stateid
-    ]);
-}else if(isset($id) && !isset($stateid)){
-    Report::where('id', $id)->update([
-        'status' => $status
-    ]);
-}else{
-    Report::where('stateid', $stateid)->update(['state' => $state]);
+    if(isset($id) && isset($stateid)){
+        Report::where('id', $id)->update([
+            'status' => $status,
+            'state' => $state,
+            'stateid' => $stateid
+        ]);
+    }else if(isset($id) && !isset($stateid)){
+        Report::where('id', $id)->update([
+            'status' => $status
+        ]);
+    }else{
+        Report::where('stateid', $stateid)->update(['state' => $state]);
+    }
 }
