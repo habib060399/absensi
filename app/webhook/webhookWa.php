@@ -13,7 +13,6 @@ if(!empty($data)){
     $status= $data['status'];
     $state = $data['state'];
 
-//update status and state
     if(isset($id) && isset($stateid)){
         Report::where('id', $id)->update([
             'status' => $status,

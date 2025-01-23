@@ -39,18 +39,6 @@ class CurlController extends Controller
         if(isset($error_msg)){
             return $error_msg;
         }
-        $res = json_decode($responseWa,true);
-        $report = new Report();
-        foreach($res["id"] as $k=>$v){
-            $target = $res["target"][$k];
-            $status = $res["process"];
-            $report->id = $v;
-            $report->target = $target;
-            $report->message = 'sss';
-            $report->status = $status;
-            $report->save();
-        }
-
         return $responseWa;
     }
 
