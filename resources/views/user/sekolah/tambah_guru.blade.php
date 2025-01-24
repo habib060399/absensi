@@ -37,12 +37,7 @@
                             <div class="col-sm-4">
                                 <div class="mb-3">
                                     <label class="form-label">Jabatan</label>
-                                    <select class="form-select @error('jabatan') is-invalid @enderror" id="jabatan" name="jabatan">
-                                        <option value="" selected disabled>Pilih Jabatan</option>
-                                        @foreach ($jabatan as $j)
-                                            <option value="{{$j->id}}">{{$j->nama_jabatan}}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" class="form-control @error('jabatan') is-invalid @enderror" placeholder="Jabatan" name="jabatan">
                                     @error('jabatan')
                                         <div class="error invalid-feedback">{{ $message }}</div>
                                     @enderror
