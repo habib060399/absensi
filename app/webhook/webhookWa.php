@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 if(!empty($data)){
-    $device = $data['device'];
+    $device = isset($data['device']);
     $id = $data['id'];
     $stateid = $data['stateid'];
     $status= $data['status'];
