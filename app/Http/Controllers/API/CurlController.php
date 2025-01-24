@@ -34,7 +34,19 @@ class CurlController extends Controller
         if(curl_errno($curl)){
             $error_msg = curl_error($curl);
         }
+
         curl_close($curl);
+        $res = json_decode($responseWa, true);
+        foreach ($res['id'] as $k=>$v){
+            $target = $res['target'][$k];
+            $status = $res['process'];
+            Report::create([
+                'id' => $v,
+                'target' => $target,
+                'message' => $param['message'],
+                'status' => $status
+            ]);
+        }
 
         if(isset($error_msg)){
             return $error_msg;
