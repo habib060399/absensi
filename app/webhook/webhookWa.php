@@ -1,11 +1,14 @@
 <?php
 namespace App\Webhook;
+
 use App\Models\Report;
+use Illuminate\Support\Facades\Log;
 
 header('Content-Type: application/json; charset=utf-8');
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
+Log::info('ini response webhook update message whatsapp ', $data);
 if(!empty($data)){
     $device = isset($data['device']);
     $id = $data['id'];
