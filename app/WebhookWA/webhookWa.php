@@ -1,5 +1,5 @@
 <?php
-namespace App\Webhook;
+namespace App\WebhookWA;
 
 use App\Models\Report;
 use Illuminate\Support\Facades\Log;
