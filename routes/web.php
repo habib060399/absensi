@@ -117,7 +117,7 @@ Route::post('user/broadcast/get-siswa', [SiswaController::class, 'findContact'])
 // Route::post('user/siswa/get-siswa', [SiswaController::class, 'getSiswaByDate'])->name('get_siswa_by_tgl');
 Route::match(['get', 'post'],'/webhook', function () {
 //    return include(app_path('Webhook/mywebhook.php'));
-    return include(app_path('Webhook/webhookWa.php'));
+    return include(app_path('WebhookWA/webhookWa.php'));
 });
 
 Route::get('broadcast', function() {
