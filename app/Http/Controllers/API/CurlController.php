@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Sekolah;
 use App\Models\Report;
+use Illuminate\Support\Facades\Log;
 
 class CurlController extends Controller
 {
@@ -51,6 +52,7 @@ class CurlController extends Controller
         if(isset($error_msg)){
             return $error_msg;
         }
+        Log::info('ini response Whatssap'.$responseWa);
         return $responseWa;
     }
 
