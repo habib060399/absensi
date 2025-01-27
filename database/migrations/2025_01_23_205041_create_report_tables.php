@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_tables', function (Blueprint $table) {
-            $table->id();
-            $table->string('id_sekolah', 100);
-            $table->string('id_jurusan', 255);
+        Schema::create('report', function (Blueprint $table) {
+            $table->integer('id');
+            $table->string('id_sekolah', 255);
             $table->string('id_kelas', 255);
-            $table->string('nama_guru', 100);
-            $table->string('jabatan', 100);
-            $table->string('email', 100);
-            $table->string('no_wa', 100);
-            $table->string('foto', 100);
-            $table->timestamps();
+            $table->string('device', 255);
+            $table->string('target', 255);
+            $table->longText('message');
+            $table->string('stateid', 255);
+            $table->string('status', 255);
+            $table->string('state', 255);
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_tables');
+        Schema::dropIfExists('report');
     }
 };

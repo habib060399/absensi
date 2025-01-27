@@ -10,6 +10,6 @@ class Report extends Model
     use HasFactory;
 
     protected $table = 'report';
-    protected $fillable = ['id', 'device', 'target', 'message', 'stateid', 'status', 'state'];
+    protected $fillable = ['id', 'device', 'target', 'message', 'stateid', 'status', 'state', 'id_sekolah', 'id_kelas'];
     public $timestamps = false;
 }

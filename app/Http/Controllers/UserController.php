@@ -189,7 +189,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('pesan')->with('success', 'Berhasil Mengubah Pesan');
-    }    
+    }
 
     public function insertAbsenManual(Request $request){
         $curl = new CurlController();
@@ -219,7 +219,7 @@ class UserController extends Controller
                 case 'hadir':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -232,7 +232,7 @@ class UserController extends Controller
                 case 'absen':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -245,7 +245,7 @@ class UserController extends Controller
                 case 'izin':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -258,7 +258,7 @@ class UserController extends Controller
                 case 'sakit':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -311,7 +311,7 @@ class UserController extends Controller
             switch ($request->status) {
                 case 'hadir':
                 $get_siswa = Siswa::where('id', $request->id)->first();
-                $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[0]->message."\n".Carbon::now());
+                $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[0]->message."\n".Carbon::now(), $get_siswa->id_kelas);
                 Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
 
                     return response()->json([
@@ -322,7 +322,7 @@ class UserController extends Controller
                     break;
                 case 'absen':
                     $get_siswa = Siswa::where('id', $request->id)->first();
-                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[2]->message."\n".Carbon::now());
+                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[2]->message."\n".Carbon::now(), $get_siswa->id_kelas);
                     Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
 
                     return response()->json([
@@ -333,7 +333,7 @@ class UserController extends Controller
                     break;
                 case 'izin':
                     $get_siswa = Siswa::where('id', $request->id)->first();
-                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[3]->message."\n".Carbon::now());
+                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[3]->message."\n".Carbon::now(), $get_siswa->id_kelas);
                     Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
 
                     return response()->json([
@@ -344,7 +344,7 @@ class UserController extends Controller
                     break;
                 case 'sakit':
                     $get_siswa = Siswa::where('id', $request->id)->first();
-                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[1]->message."\n".Carbon::now());
+                    $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, "*INFORMASI ULANG* \n\n".$decode->data[1]->message."\n".Carbon::now(), $get_siswa->id_kelas);
                     Absensi::where('id_siswa', $request->id)->where('tanggal', $request->tanggal)->update(['status' => $request->status]);
 
                     return response()->json([
