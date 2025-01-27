@@ -27,17 +27,17 @@
                                     <th width="50px">No</th>
                                     <th>Nama Guru</th>
                                     <th>Jabatan</th>
-                                    <th>No Whatssap</th>                                    
+                                    <th>No Whatssap</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($guru as $g)                                                                    
+                                @foreach ($guru as $g)
                                     <tr>
-                                        <td>{{$loop->iteration}}</td> 
+                                        <td>{{$loop->iteration}}</td>
                                         <td>{{$g->nama_guru}}</td>
-                                        <td>{{$g->nama_jabatan}}</td>
-                                        <td>{{$g->no_wa}}</td>                                                                               
+                                        <td>{{$g->jabatan}}</td>
+                                        <td>{{$g->no_wa}}</td>
                                         <td>
                                             <a href="{{route('sh_edit_guru',['id' => \App\Helpers\Helper::encryptUrl($g->id)])}}" class="btn btn-warning btn-icon btn-xs">
                                                 <i data-feather="edit-3"></i>

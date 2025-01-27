@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class CurlController extends Controller
 {
-    public function setApiWa(array $param) {
+    public function setApiWa(array $param, $id_sekolah, $id_kelas) {
         $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('token_account_wa', 'token_api_wa')->first();
         // (!empty($sekolah->token_api_wa)) ? $sekolah->token_api_wa : " ";
         $token = $sekolah->token_api_wa;
@@ -45,7 +45,9 @@ class CurlController extends Controller
                 'id' => $v,
                 'target' => $target,
                 'message' => $param['message'],
-                'status' => $status
+                'status' => $status,
+                'id_sekolah' => $id_sekolah,
+                'id_kelas' => $id_kelas
             ]);
         }
 
@@ -56,7 +58,7 @@ class CurlController extends Controller
         return $responseWa;
     }
 
-    public function sendWaAbsenManual($no, $nama_siswa, $id_sekolah, $message)
+    public function sendWaAbsenManual($no, $nama_siswa, $id_sekolah, $message, $id_kelas)
     {
         $bc = preg_replace("/{nama}/", "$nama_siswa", $message);
         $data = array(
@@ -65,7 +67,7 @@ class CurlController extends Controller
             'countryCode' => "62"
         );
 
-        return $status = $this->setApiWa($data);
+        return $status = $this->setApiWa($data, $id_sekolah, $id_kelas);
     }
 
     public function sendPresencenWa($no, $nama_siswa, $id_sekolah)

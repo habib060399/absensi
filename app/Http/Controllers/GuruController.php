@@ -16,7 +16,7 @@ class GuruController extends Controller
 {
     public function index()
     {
-        $guru = Guru::where('guru.id_sekolah', session('id_sekolah'))->join('jabatan', 'guru.id_jabatan', '=', 'jabatan.id')->select('guru.id', 'nama_guru', 'nama_jabatan', 'no_wa')->get();
+        $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('*')->get();
         return view('user.sekolah.guru', [
             'guru' => $guru
         ]);
@@ -46,7 +46,8 @@ class GuruController extends Controller
     {
         $request->validate([
             'nama_guru' => 'required',
-            'no_wa' => 'required'
+            'no_wa' => 'required',
+            'jabatan' => 'required'
         ]);
 
         $foto = $request->file('foto');
@@ -64,13 +65,13 @@ class GuruController extends Controller
                 'id_jurusan' => json_encode($jurusan),
                 'id_kelas' => json_encode($kelas),
                 'nama_guru' => $request->input('nama_guru'),
+                'jabatan' => $request->input('jabatan'),
                 'no_wa' => $request->input('no_wa'),
-                'id_jabatan' => $request->input('jabatan'),
                 'email' => $request->input('email'),
                 'foto' => $filename
             ]);
             $foto->storePubliclyAs('foto_guru', $filename);
-            return redirect()->route('guru')->with('status', 'asdf');
+            return redirect()->route('guru')->with('success', 'Data berhasil ditambahkan');
         }else{
             Guru::create([
                 'id_sekolah' => session('id_sekolah'),
@@ -78,13 +79,12 @@ class GuruController extends Controller
                 'id_kelas' => json_encode($kelas),
                 'nama_guru' => $request->input('nama_guru'),
                 'no_wa' => $request->input('no_wa'),
-                'id_jabatan' => $request->input('jabatan'),
+                'jabatan' => $request->input('jabatan'),
                 'email' => $request->input('email'),
             ]);
 
-            return redirect()->route('guru')->with('status', 'asdf');
+            return redirect()->route('guru')->with('success', 'Data berhasil ditambahkan');
         }
-        return redirect()->route('guru')->with('error', 'Data gagal ditambahkan');                
     }
 
     public function editGuru(Request $request, $id)
@@ -164,10 +164,10 @@ class GuruController extends Controller
                 // }
                 echo "<option value='$k->id' $selected> $k->kelas</option>";
                 $selected = '';
-                
+
             }
         }else{
             echo '<option selected disabled>Pilih Kelas</option>';
-        }      
+        }
     }
 }

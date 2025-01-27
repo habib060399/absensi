@@ -15,6 +15,8 @@ use App\Http\Controllers\UserViewController;
 use App\Http\Controllers\AdminViewController;
 use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\WhatsappController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +109,9 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::get('/rekap', [UserViewController::class, 'rekapAbsen'])->name('rekap');
     Route::post('/rekap/download', [UserController::class, 'rekapAbsen'])->name('download_rekap');
     Route::post('/profile/tambah', [UserController::class, 'registerUser'])->name('tambah_user');
-    Route::get('/whatssap', [UserViewController::class, 'wa'])->name('wa');
+    Route::get('/whatssap', [WhatsappController::class, 'index'])->name('wa');
+    Route::get('/group', [WhatsappController::class, 'groupIndex'])->name('wa_group');
+    Route::post('/whatssap/hapus', [WhatsappController::class, 'destroy'])->name('delete_message');
     Route::post('/whatssap/tambah', [UserController::class, 'registerWa'])->name('wa_tambah');
     Route::get('/whatssap/update', [UserController::class, 'updateGroupWa'])->name('wa_update');
 

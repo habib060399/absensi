@@ -14,36 +14,38 @@
   <h6 class="card-title">Whatssap</h6>
   <br>
   <div>
-    <button type="button" class="btn btn-inverse-success btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i data-feather="plus"></i></button>
-    <a href="{{route('wa_update')}}" class="btn btn-inverse-warning btn-icon"><i data-feather="refresh-ccw"></i></a>
+    
   <hr>
   </div>
-<br>
+
+    <div class="text-end">
+        <button type="button" class="btn btn-danger btn-sm" id="btn-delete"><i data-feather="trash-2"></i> delete selected</button>
+    </div>
+    <br>
 <div class="table-responsive">
-<table id="dataTableExample" class="table">
+<table id="dataTable" class="table">
   <thead>
     <tr>
+        <th><input type="checkbox" id="select-checkbox" name="payment-checkbox" class="multi-checkbox"/><label for="select-checkbox"></label></th>
       <th width="50px">No</th>
-      <th>Id Group</th>
-      <th>List Group Wa</th>
-      <th>Action</th>
+      <th>Target</th>
+      <th>Message</th>
+        <th>Status</th>
+        <th>State</th>
+      <th>stateid</th>
     </tr>
   </thead>
   <tbody>
-    @foreach ($wa as $w)                       
+    @foreach ($report as $r)
     <tr>
-      <td></td>
-      <td>{{$w['id']}}</td>
-      <td>{{$w['name']}}</td>
-      <td>
-        <button type="button" data-href="" class="btn btn-warning btn-icon btn-xs edit_jurusan" data-bs-toggle="modal" data-bs-target="#modalEdit">
-          <i data-feather="edit-3"></i>
-        </button>              
-        <a class="btn btn-danger btn-icon btn-xs alert_notif" data-href="">
-          <i data-feather="trash-2"></i>
-        </a>
-      </td>
-    </tr>    
+        <td><input type="checkbox" id="select-checkbox" name="payment-checkbox" class="multi-checkbox" value="{{\App\Helpers\Helper::encryptUrl($r->id)}}"/><label for="select-checkbox"></label></td>
+      <td>{{$loop->iteration}}</td>
+      <td>{{$r['target']}}</td>
+      <td class="text-wrap" style="width: 30rem">{{$r['message']}}</td>
+        <td>{{$r['status']}}</td>
+        <td>{{$r['state']}}</td>
+      <td>{{$r['stateid']}}</td>
+    </tr>
     @endforeach
   </tbody>
 </table>
@@ -53,30 +55,70 @@
   </div>
 </div>
 
-<!-- Modal Tambah User -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="{{route('wa_tambah')}}" method="post">
-            @csrf            
-            <div class="mb-3">
-              <label class="form-label">No Whatssap</label>
-              <input type="text" class="form-control" name="no_wa">        
-            </div>            
-        </div>
-        <div class="modal-fo oter">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-      </form>
-      </div>
-      </div>
-    </div>
-    <!-- End Modal Tambah User -->
+<script>
+    let checked = false;
 
+    $('#select-checkbox').click(function (){
+        checked = !checked;
+            $('input:checkbox').prop('checked', checked);
+    })
+
+    $('#btn-delete').click(function () {
+        var inputChecked = $('#select-checkbox:checked').find();
+        var data_id = [];
+        for(let i = 0; i < inputChecked.prevObject.length; i++){
+            // console.log(inputChecked.prevObject[i].value)
+            data_id[i] = inputChecked.prevObject[i].value;
+        }
+        console.log(data_id)
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger me-2",
+            },
+            buttonsStyling: false,
+        });
+
+        swalWithBootstrapButtons
+            .fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "me-2",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: `{{route('delete_message')}}`,
+                        data: {id: data_id},
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (res){
+                            console.log(res)
+                            if (res == 200){
+                                window.location.href = `{{route('wa')}}`
+                            }
+                        }
+                    })
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        "Cancelled",
+                        "Your imaginary file is safe :)",
+                        "error"
+                    );
+                }
+            });
+    })
+
+
+</script>
 @endsection

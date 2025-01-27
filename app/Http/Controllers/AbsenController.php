@@ -50,7 +50,7 @@ class AbsenController extends Controller
                 case 'hadir':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -63,7 +63,7 @@ class AbsenController extends Controller
                 case 'absen':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -76,7 +76,7 @@ class AbsenController extends Controller
                 case 'izin':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
@@ -89,7 +89,7 @@ class AbsenController extends Controller
                 case 'sakit':
                     for($a=0; $a < count($data); $a++) {
                         $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message);
+                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message, $get_siswa->id_kelas);
                         Absensi::create([
                             'id_siswa' => $data[$a],
                             'tanggal' => $tanggal,
