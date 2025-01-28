@@ -1,10 +1,10 @@
 <h1 align="center" id="title">Absensi</h1>
 
-<p align="center"><img src="https://socialify.git.ci/habib060399/absensi/image?language=1&amp;owner=1&amp;name=1&amp;stargazers=1&amp;theme=Light" alt="project-image"></p>
+<p align="center">![image alt](https://github.com/habib060399/absensi/blob/server/Desain-tanpa-judul.png)</p>
 
 <p id="description">Aplikasi ini digunakan untuk melakukan absen siswa yang terintegrasi dengan whatsapp dan mesin yang menggunakan rfid. aplikasi ini diperuntukkan untuk jenjang sekolah smp sma dan smk dan ada fitur menarik lainnya</p>
 
-<p align="center">![image alt](https://github.com/habib060399/absensi/blob/server/Desain-tanpa-judul.png)</p>
+<p align="center"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgithub.com%2Fhabib060399%2Fabsensi" alt="shields"></p>
 
 <h2>🚀 Demo</h2>
 
