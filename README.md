@@ -1,6 +1,6 @@
 <h1 align="center" id="title">Absensi</h1>
 
-<p align="center">![image alt](https://github.com/habib060399/absensi/blob/server/Desain-tanpa-judul.png)</p>
+![image alt](https://github.com/habib060399/absensi/blob/server/Desain-tanpa-judul.png)
 
 <p id="description">Aplikasi ini digunakan untuk melakukan absen siswa yang terintegrasi dengan whatsapp dan mesin yang menggunakan rfid. aplikasi ini diperuntukkan untuk jenjang sekolah smp sma dan smk dan ada fitur menarik lainnya</p>
 
