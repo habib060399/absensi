@@ -29,7 +29,7 @@
         <li class="nav-item nav-category">Menu</li>
         @role('admin')
         <li class="nav-item">
-          <a href="{{route('sekolah')}}" class="nav-link">
+          <a href="{{route('admin_sekolah')}}" class="nav-link">
             {{-- <i class="mdi mdi-home-modern"></i> --}}
             <i class="link-icon" data-feather="speaker"></i>
             <span class="link-title">Data Sekolah</span>
@@ -135,7 +135,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="{{route('sekolah')}}" class="nav-link">
             <i class="link-icon" data-feather="user"></i>
             <span class="link-title">Sekolah</span>
           </a>

@@ -193,10 +193,12 @@
                             url: `{{ route('search_nama_siswa') }}`,
                             dataType: 'json',
                             data: function(params) {
+                                console.log(params)
                                 return {
                                     search: params.term,
                                     id_jurusan: get_jurusan,
-                                    id_kelas: get_kelas
+                                    id_kelas: get_kelas,
+                                    id_user: `{{\App\Helpers\Helper::encryptUrl(session('id_user'))}}`
                                 }
                             },
                             processResults: function(data) {
