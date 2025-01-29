@@ -116,17 +116,17 @@ class CurlController extends Controller
         return $responseWa;
     }
 
-    public function bcWa($no, $pesan, $time){
+    public function bcWa($no, $pesan, $time, $id_sekolah, $id_kelas){
         $data = array(
             'target' => $no,
             'message' => "$pesan",
             'countryCode' => "62",
             'schedule' => $time,
         );
-        return $status = $this->setApiWa($data);
+        return $status = $this->setApiWa($data, $id_sekolah, $id_kelas);
     }
 
-    public function bcWaWithFile($no, $pesan, $pathFile, $time)
+    public function bcWaWithFile($no, $pesan, $pathFile, $time, $id_sekolah, $id_kelas)
     {
         $data = array(
             'target' => $no,

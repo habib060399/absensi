@@ -16,6 +16,7 @@ use App\Http\Controllers\AdminViewController;
 use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\WhatsappController;
+use App\Http\Controllers\SekolahController as UserSekolahController;
 
 
 /*
@@ -38,7 +39,7 @@ Route::get('/live-absen', [UserViewController::class, 'liveAbsen']);
 Route::prefix('flockbase')->middleware(['auth', 'can:isAdmin'])->group(function(){
     Route::get('/home', [AdminViewController::class, 'home'])->name('homeAdmin');
     // Route::get('/absen', [ControllerView::class, 'dataAbsen'])->name('absen');
-    Route::get('/sekolah', [SekolahController::class, 'index'])->name('sekolah');
+    Route::get('/sekolah', [SekolahController::class, 'index'])->name('admin_sekolah');
     Route::get('/sekolah/wizard', [SekolahController::class, 'wizard'])->name('wizard');
     Route::get('/sekolah/tambah', [ControllerView::class, 'addSekolah'])->name('sekolah-add');
     Route::post('/tambah-sekolah', [SekolahController::class, 'store'])->name('add_sekolah');
@@ -114,8 +115,9 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::post('/whatssap/hapus', [WhatsappController::class, 'destroy'])->name('delete_message');
     Route::post('/whatssap/tambah', [UserController::class, 'registerWa'])->name('wa_tambah');
     Route::get('/whatssap/update', [UserController::class, 'updateGroupWa'])->name('wa_update');
-
     Route::post('/absensi/siswa-option', [AbsenController::class, 'siswaGetOption'])->name('option_siswa');
+
+    Route::get('sekolah', [UserSekolahController::class, 'index'])->name('sekolah');
 });
 Route::post('user/broadcast/get-siswa', [SiswaController::class, 'findContact'])->name('getSiswa');
 // Route::post('user/siswa/get-siswa', [SiswaController::class, 'getSiswaByDate'])->name('get_siswa_by_tgl');

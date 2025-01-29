@@ -492,11 +492,13 @@ class UserController extends Controller
         $wa = new CurlController();
         $get_file = $request->file('file');
         $to = $request->input('to_siswa');
+        $kelas = $request->input('get_kelas');
         $pesan = $request->input('pesan');
         $tgl = $request->input('tgl');
         $waktu = $request->input('waktu');
         $gabung = $tgl ." ".$waktu;
         $unix_time = strtotime($gabung);
+
 
         if(!empty($get_file)){
             $filename = $get_file->getClientOriginalName();
@@ -505,13 +507,13 @@ class UserController extends Controller
             $filepath = storage_path("app/public/tmp/".$filename);
             if(file_exists($filepath)){
                 for ($i=0; $i < count($to); $i++) {
-                $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath, $unix_time);
+                $wa->bcWaWithFile(Helper::decryptUrl($to[$i]), $pesan, $filepath, $unix_time, session('id_sekolah'), $kelas);
                 }
                 return redirect()->route('bc')->with('success', 'success');
             }
         }elseif(empty($get_file)){
             for ($i=0; $i < count($to); $i++) {
-            $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan, $unix_time);
+            $wa->bcWa(Helper::decryptUrl($to[$i]), $pesan, $unix_time, session('id_sekolah'), $kelas);
             }
             return redirect()->route('bc')->with('success', 'success');
         }
