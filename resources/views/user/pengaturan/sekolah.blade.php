@@ -18,31 +18,31 @@
                         <div class="col-sm-6">
                             <div class="mb-3">
                                 <label class="form-label">Nama Sekolah</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <input type="text" class="form-control" value="{{$data['nama_sekolah']}}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">NPWP</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <label class="form-label">NPSN</label>
+                                <input type="text" class="form-control" value="{{$data['npsn']}}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">No Whatssap Sistem</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <input type="text" class="form-control" value="{{$data['no_hp']}}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Jenjang Pendidikan</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <input type="text" class="form-control" value="{{$data['pendidikan']}}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <input type="text" class="form-control" value="{{$data['email']}}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Kepala Sekolah</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <input type="text" class="form-control" value="{{$data['nama_guru']}}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">No Hp/Whatsapp Kepala Sekolah</label>
-                                <input type="text" class="form-control" autocomplete="off">
+                                <input type="text" class="form-control" value="{{$data['no_wa']}}" readonly>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -52,20 +52,39 @@
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">Daftar Jurusan</label>
-                                <input type="email" class="form-control">
+                                @foreach($jurusan as $j)
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" checked>
+                                    <label class="form-check-label" for="checkDisabled">
+                                        {{$j->nama_jurusan}}
+                                    </label>
+                                </div>
+                                @endforeach
                             </div>
                             <div class="mb-3">
-                                <label for="exampleInputPassword1" class="form-label">Daftar Kelas</label>
-                                <input type="password" class="form-control">
+                                <label for="exampleInputEmail1" class="form-label">Daftar Jurusan</label>
+                                @foreach($kelas as $k)
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" checked>
+                                    <label class="form-check-label" for="checkDisabled">
+                                        {{$k->kelas}}
+                                    </label>
+                                </div>
+                                @endforeach
                             </div>
                             <div class="mb-3">
-                                <label for="exampleInputPassword1" class="form-label">Paket List</label>
-                                <input type="password" class="form-control">
+                                <label for="exampleInputEmail1" class="form-label">List Paket</label>
+                                @foreach($paket as $d)
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" id="checkDisabled" {{ ($d->status == "active") ? "disabled checked" : "disabled"}}>
+                                    <label class="form-check-label" for="checkDisabled">
+                                        {{$d->text}}
+                                    </label>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <button class="btn btn-secondary">Cancel</button>
                 </form>
             </div>
         </div>

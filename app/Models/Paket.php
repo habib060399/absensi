@@ -12,4 +12,9 @@ class Paket extends Model
     protected $table = 'paket';
     protected $fillable = ['nama_paket', 'max_user', 'active', 'price', 'detail'];
     public $timestamps = true;
+
+    public function sekolah()
+    {
+        return $this->hasMany(Sekolah::class, 'id_paket', 'id');
+    }
 }

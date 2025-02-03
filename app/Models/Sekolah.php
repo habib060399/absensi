@@ -35,4 +35,9 @@ class Sekolah extends Model
     {
         return $this->hasMany(Guru::class, 'id_sekolah', 'id');
     }
+
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class, 'id_paket', 'id');
+    }
 }
