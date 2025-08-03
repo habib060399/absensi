@@ -33,9 +33,13 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">Kelas</label>
-                                                        <select class="form-select" id="kelas_sekolah" name="kelas">
-
-                                                        </select>
+                                                        <input class="compose-multiple-select form-select" multiple="multiple" id="edit_kelas" value="{{$kelas->kelas}}">
+                                                        {{-- </select> --}}
+                                                        {{-- <select class="form-select" id="kelas_sekolah" name="kelas">
+                                                            @if($kelas)
+                                                            <option value="{{$kelas->kelas}}" selected>{{$kelas->kelas}}</option>
+                                                            @endif
+                                                        </select> --}}
                                                         @error('kelas')
                                                             <div class="error invalid-feedback">{{$message}}</div>
                                                         @enderror
@@ -80,6 +84,9 @@
                     </div>
 
                     @jurusan
+                    <script>
+                    
+                    </script>
                     <script type="text/javascript">
                         $('#jurusan_sekolah').on('change', function() {
                             var value = $('#jurusan_sekolah option:selected').val()

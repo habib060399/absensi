@@ -27,7 +27,7 @@ class Role extends Model implements RoleContract
 
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] ??= Guard::getDefaultName(static::class);
 
         parent::__construct($attributes);
 
@@ -42,7 +42,7 @@ class Role extends Model implements RoleContract
      */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] ??= Guard::getDefaultName(static::class);
 
         $params = ['name' => $attributes['name'], 'guard_name' => $attributes['guard_name']];
         if (app(PermissionRegistrar::class)->teams) {
@@ -97,7 +97,7 @@ class Role extends Model implements RoleContract
      */
     public static function findByName(string $name, ?string $guardName = null): RoleContract
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName ??= Guard::getDefaultName(static::class);
 
         $role = static::findByParam(['name' => $name, 'guard_name' => $guardName]);
 
@@ -115,9 +115,9 @@ class Role extends Model implements RoleContract
      */
     public static function findById(int|string $id, ?string $guardName = null): RoleContract
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName ??= Guard::getDefaultName(static::class);
 
-        $role = static::findByParam([(new static())->getKeyName() => $id, 'guard_name' => $guardName]);
+        $role = static::findByParam([(new static)->getKeyName() => $id, 'guard_name' => $guardName]);
 
         if (! $role) {
             throw RoleDoesNotExist::withId($id, $guardName);
@@ -133,7 +133,7 @@ class Role extends Model implements RoleContract
      */
     public static function findOrCreate(string $name, ?string $guardName = null): RoleContract
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName ??= Guard::getDefaultName(static::class);
 
         $role = static::findByParam(['name' => $name, 'guard_name' => $guardName]);
 
@@ -172,7 +172,7 @@ class Role extends Model implements RoleContract
     /**
      * Determine if the role may perform the given permission.
      *
-     * @param  string|int|Permission|\BackedEnum  $permission
+     * @param  string|int|\Spatie\Permission\Contracts\Permission|\BackedEnum  $permission
      *
      * @throws PermissionDoesNotExist|GuardDoesNotMatch
      */
@@ -185,9 +185,10 @@ class Role extends Model implements RoleContract
         $permission = $this->filterPermission($permission, $guardName);
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {
-            throw GuardDoesNotMatch::create($permission->guard_name, $guardName ?? $this->getGuardNames());
+            throw GuardDoesNotMatch::create($permission->guard_name, $guardName ? collect([$guardName]) : $this->getGuardNames());
         }
 
-        return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
+        return $this->loadMissing('permissions')->permissions
+            ->contains($permission->getKeyName(), $permission->getKey());
     }
 }

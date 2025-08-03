@@ -150,12 +150,17 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" type="submit">Add</button>
+                    <button class="btn btn-primary" type="submit" id="submit">Add</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
+        <script>
+            $('#submit').on('click', function() {
+                show_loading();
+            })
+        </script>
     @role('kelas')
         <script type="text/javascript">
             var get_jurusan = $('#get_jurusan option:selected').val();

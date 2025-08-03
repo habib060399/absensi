@@ -63,9 +63,7 @@ class PhpRedisConnector implements Connector
      */
     protected function buildClusterConnectionString(array $server)
     {
-        return $this->formatHost($server).':'.$server['port'].'?'.Arr::query(Arr::only($server, [
-            'database', 'password', 'prefix', 'read_timeout',
-        ]));
+        return $this->formatHost($server).':'.$server['port'];
     }
 
     /**
@@ -85,6 +83,22 @@ class PhpRedisConnector implements Connector
                         ? 'Please remove or rename the Redis facade alias in your "app" configuration file in order to avoid collision with the PHP Redis extension.'
                         : 'Please make sure the PHP Redis extension is installed and enabled.'
                 );
+            }
+
+            if (array_key_exists('max_retries', $config)) {
+                $client->setOption(Redis::OPT_MAX_RETRIES, $config['max_retries']);
+            }
+
+            if (array_key_exists('backoff_algorithm', $config)) {
+                $client->setOption(Redis::OPT_BACKOFF_ALGORITHM, $config['backoff_algorithm']);
+            }
+
+            if (array_key_exists('backoff_base', $config)) {
+                $client->setOption(Redis::OPT_BACKOFF_BASE, $config['backoff_base']);
+            }
+
+            if (array_key_exists('backoff_cap', $config)) {
+                $client->setOption(Redis::OPT_BACKOFF_CAP, $config['backoff_cap']);
             }
 
             $this->establishConnection($client, $config);
@@ -197,10 +211,6 @@ class PhpRedisConnector implements Connector
 
             if (! empty($options['failover'])) {
                 $client->setOption(RedisCluster::OPT_SLAVE_FAILOVER, $options['failover']);
-            }
-
-            if (! empty($options['name'])) {
-                $client->client('SETNAME', $options['name']);
             }
 
             if (array_key_exists('serializer', $options)) {

@@ -16,9 +16,10 @@ class SiswaImportWithJurusan implements ToCollection, WithHeadingRow, WithValida
     */
     var $message = null;
     var $id_sekolah = '';
-    public $id_jurusan;
+    
     public function collection(Collection $rows)
     {
+        
         $limit = Helper::getSekolah('limit_siswa');
 
         foreach ($rows as $row) {
