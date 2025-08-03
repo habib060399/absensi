@@ -174,7 +174,7 @@
                         @jurusan
                             <div class="mb-3">
                                 <label class="form-label">Nama Jurusan</label>
-                                <select class="form-select" id="jurusan_sekolah" name="jurusan_sekolah">
+                                <select class="form-select" id="jurusan_sekolah_modal" name="jurusan_sekolah">
                                     <option selected disabled>Pilih Jurusan</option>
                                     @foreach ($jurusan as $j)
                                         <option value="{{ $j->id }}">{{ $j->nama_jurusan }}</option>
@@ -252,6 +252,36 @@
     @role('sekolah')
         @jurusan
             <script type="text/javascript">
+                $('#jurusan_sekolah_modal').on('change', function() {
+                    get_id_jurusan = $('#jurusan_sekolah_modal option:selected').val()
+                    var data = {
+                        id_jurusan: get_id_jurusan
+                    }
+
+                    $('#jurusan_sekolah_modal').click(function() {
+                        $.ajax({
+                            url: `{{ route('get_kelas_id') }}`,
+                            type: 'POST',
+                            data: data,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            beforeSend: function() {
+                                show_loading()
+                            },
+                            complete: function() {
+                                hide_loading()
+                            },
+                            success: function(res) {
+
+                                $('#kelas_sekolah').html(res)
+
+                            }
+                        })
+                    });
+
+                });
+
                 var get_id_jurusan = null;
                 var get_id_kelas = null;
                 $('#jurusan_sekolah').on('change', function() {

@@ -383,7 +383,7 @@ class UserController extends Controller
         $jurusan = $request->input('jurusan');
 
         try {
-            if ($jurusan != null){
+            if ($jurusan != null){            
                 Excel::import(new SiswaImportWithJurusan, $request->file('file'));
             }else{
                 Excel::import(new SiswaImport, $request->file('file'));
@@ -582,5 +582,20 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('wa')->with('status', 'Data gagal ditambahkan');
+    }
+
+    public function editPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
+           
+        ]);
+        $user = User::where('id', session('id_user'))->first();
+        $user->update([
+            'password' => Hash::make($request->input('password'))
+        ]);
+
+        return redirect()->route('password')->with('success', 'Password berhasil diubah');
     }
 }

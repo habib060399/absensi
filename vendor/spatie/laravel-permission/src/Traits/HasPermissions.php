@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Spatie\Permission\Contracts\Permission;
 use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Contracts\Wildcard;
+use Spatie\Permission\Events\PermissionAttached;
+use Spatie\Permission\Events\PermissionDetached;
 use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Exceptions\WildcardPermissionInvalidArgument;
@@ -89,7 +91,10 @@ trait HasPermissions
             return $relation;
         }
 
-        return $relation->wherePivot(app(PermissionRegistrar::class)->teamsKey, getPermissionsTeamId());
+        $teamsKey = app(PermissionRegistrar::class)->teamsKey;
+        $relation->withPivot($teamsKey);
+
+        return $relation->wherePivot($teamsKey, getPermissionsTeamId());
     }
 
     /**
@@ -187,7 +192,7 @@ trait HasPermissions
         }
 
         if (! $permission instanceof Permission) {
-            throw new PermissionDoesNotExist();
+            throw new PermissionDoesNotExist;
         }
 
         return $permission;
@@ -231,6 +236,7 @@ trait HasPermissions
         }
 
         if ($permission instanceof Permission) {
+            $guardName = $permission->guard_name ?? $guardName;
             $permission = $permission->name;
         }
 
@@ -319,7 +325,8 @@ trait HasPermissions
     {
         $permission = $this->filterPermission($permission);
 
-        return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
+        return $this->loadMissing('permissions')->permissions
+            ->contains($permission->getKeyName(), $permission->getKey());
     }
 
     /**
@@ -344,7 +351,7 @@ trait HasPermissions
         /** @var Collection $permissions */
         $permissions = $this->permissions;
 
-        if (method_exists($this, 'roles')) {
+        if (! is_a($this, Permission::class)) {
             $permissions = $permissions->merge($this->getPermissionsViaRoles());
         }
 
@@ -352,7 +359,7 @@ trait HasPermissions
     }
 
     /**
-     * Returns permissions ids as array keys
+     * Returns array of permissions ids
      *
      * @param  string|int|array|Permission|Collection|\BackedEnum  $permissions
      */
@@ -400,20 +407,26 @@ trait HasPermissions
             $model->unsetRelation('permissions');
         } else {
             $class = \get_class($model);
+            $saved = false;
 
             $class::saved(
-                function ($object) use ($permissions, $model, $teamPivot) {
-                    if ($model->getKey() != $object->getKey()) {
+                function ($object) use ($permissions, $model, $teamPivot, &$saved) {
+                    if ($saved || $model->getKey() != $object->getKey()) {
                         return;
                     }
                     $model->permissions()->attach($permissions, $teamPivot);
                     $model->unsetRelation('permissions');
+                    $saved = true;
                 }
             );
         }
 
         if (is_a($this, Role::class)) {
             $this->forgetCachedPermissions();
+        }
+
+        if (config('permission.events_enabled')) {
+            event(new PermissionAttached($this->getModel(), $permissions));
         }
 
         $this->forgetWildcardPermissionIndex();
@@ -453,10 +466,16 @@ trait HasPermissions
      */
     public function revokePermissionTo($permission)
     {
-        $this->permissions()->detach($this->getStoredPermission($permission));
+        $storedPermission = $this->getStoredPermission($permission);
+
+        $this->permissions()->detach($storedPermission);
 
         if (is_a($this, Role::class)) {
             $this->forgetCachedPermissions();
+        }
+
+        if (config('permission.events_enabled')) {
+            event(new PermissionDetached($this->getModel(), $storedPermission));
         }
 
         $this->forgetWildcardPermissionIndex();

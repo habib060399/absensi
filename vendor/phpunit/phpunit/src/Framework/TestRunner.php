@@ -11,7 +11,6 @@ namespace PHPUnit\Framework;
 
 use const PHP_EOL;
 use function assert;
-use function class_exists;
 use function defined;
 use function error_clear_last;
 use function extension_loaded;
@@ -23,6 +22,7 @@ use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
 use function var_export;
+use function xdebug_is_debugger_active;
 use AssertionError;
 use PHPUnit\Event;
 use PHPUnit\Event\NoPreviousThrowableException;
@@ -37,7 +37,7 @@ use PHPUnit\Util\GlobalState;
 use PHPUnit\Util\PHP\AbstractPhpProcess;
 use ReflectionClass;
 use SebastianBergmann\CodeCoverage\Exception as OriginalCodeCoverageException;
-use SebastianBergmann\CodeCoverage\StaticAnalysisCacheNotConfiguredException;
+use SebastianBergmann\CodeCoverage\InvalidArgumentException;
 use SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException;
 use SebastianBergmann\Invoker\Invoker;
 use SebastianBergmann\Invoker\TimeoutException;
@@ -45,6 +45,8 @@ use SebastianBergmann\Template\Template;
 use Throwable;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestRunner
@@ -59,8 +61,8 @@ final class TestRunner
 
     /**
      * @throws \PHPUnit\Runner\Exception
-     * @throws \SebastianBergmann\CodeCoverage\InvalidArgumentException
      * @throws CodeCoverageException
+     * @throws InvalidArgumentException
      * @throws MoreThanOneDataSetFromDataProviderException
      * @throws UnintentionallyCoveredCodeException
      */
@@ -172,6 +174,8 @@ final class TestRunner
                         $test->valueObjectForEvents(),
                         $cce->getMessage(),
                     );
+
+                    $append = false;
                 }
             }
 
@@ -229,7 +233,7 @@ final class TestRunner
             Event\Facade::emitter()->testConsideredRisky(
                 $test->valueObjectForEvents(),
                 sprintf(
-                    'This test printed output: %s',
+                    'Test code or tested code printed unexpected output: %s',
                     $test->output(),
                 ),
             );
@@ -251,7 +255,6 @@ final class TestRunner
      * @throws MoreThanOneDataSetFromDataProviderException
      * @throws NoPreviousThrowableException
      * @throws ProcessIsolationException
-     * @throws StaticAnalysisCacheNotConfiguredException
      */
     public function runInSeparateProcess(TestCase $test, bool $runEntireClass, bool $preserveGlobalState): void
     {
@@ -356,22 +359,22 @@ final class TestRunner
      */
     private function hasCoverageMetadata(string $className, string $methodName): bool
     {
-        $metadata = MetadataRegistry::parser()->forClassAndMethod($className, $methodName);
+        foreach (MetadataRegistry::parser()->forClassAndMethod($className, $methodName) as $metadata) {
+            if ($metadata->isCovers()) {
+                return true;
+            }
 
-        if ($metadata->isCovers()->isNotEmpty()) {
-            return true;
-        }
+            if ($metadata->isCoversClass()) {
+                return true;
+            }
 
-        if ($metadata->isCoversClass()->isNotEmpty()) {
-            return true;
-        }
+            if ($metadata->isCoversFunction()) {
+                return true;
+            }
 
-        if ($metadata->isCoversFunction()->isNotEmpty()) {
-            return true;
-        }
-
-        if ($metadata->isCoversNothing()->isNotEmpty()) {
-            return true;
+            if ($metadata->isCoversNothing()) {
+                return true;
+            }
         }
 
         return false;
@@ -380,12 +383,6 @@ final class TestRunner
     private function canTimeLimitBeEnforced(): bool
     {
         if ($this->timeLimitCanBeEnforced !== null) {
-            return $this->timeLimitCanBeEnforced;
-        }
-
-        if (!class_exists(Invoker::class)) {
-            $this->timeLimitCanBeEnforced = false;
-
             return $this->timeLimitCanBeEnforced;
         }
 
@@ -417,12 +414,13 @@ final class TestRunner
     private function runTestWithTimeout(TestCase $test): bool
     {
         $_timeout = $this->configuration->defaultTimeLimit();
+        $testSize = $test->size();
 
-        if ($test->size()->isSmall()) {
+        if ($testSize->isSmall()) {
             $_timeout = $this->configuration->timeoutForSmallTests();
-        } elseif ($test->size()->isMedium()) {
+        } elseif ($testSize->isMedium()) {
             $_timeout = $this->configuration->timeoutForMediumTests();
-        } elseif ($test->size()->isLarge()) {
+        } elseif ($testSize->isLarge()) {
             $_timeout = $this->configuration->timeoutForLargeTests();
         }
 
@@ -451,7 +449,7 @@ final class TestRunner
     {
         $path = tempnam(sys_get_temp_dir(), 'phpunit_');
 
-        if (!$path) {
+        if ($path === false) {
             throw new ProcessIsolationException;
         }
 

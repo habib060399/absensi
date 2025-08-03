@@ -13,7 +13,7 @@ class Guard
      * Return a collection of guard names suitable for the $model,
      * as indicated by the presence of a $guard_name property or a guardName() method on the model.
      *
-     * @param  string|Model  $model model class object or name
+     * @param  string|Model  $model  model class object or name
      */
     public static function getNames($model): Collection
     {
@@ -39,6 +39,22 @@ class Guard
     }
 
     /**
+     * Get the model class associated with a given provider.
+     */
+    protected static function getProviderModel(string $provider): ?string
+    {
+        // Get the provider configuration
+        $providerConfig = config("auth.providers.{$provider}");
+
+        // Handle LDAP provider or standard Eloquent provider
+        if (isset($providerConfig['driver']) && $providerConfig['driver'] === 'ldap') {
+            return $providerConfig['database']['model'] ?? null;
+        }
+
+        return $providerConfig['model'] ?? null;
+    }
+
+    /**
      * Get list of relevant guards for the $class model based on config(auth) settings.
      *
      * Lookup flow:
@@ -50,15 +66,36 @@ class Guard
     protected static function getConfigAuthGuards(string $class): Collection
     {
         return collect(config('auth.guards'))
-            ->map(fn ($guard) => isset($guard['provider']) ? config("auth.providers.{$guard['provider']}.model") : null)
+            ->map(function ($guard) {
+                if (! isset($guard['provider'])) {
+                    return null;
+                }
+
+                return static::getProviderModel($guard['provider']);
+            })
             ->filter(fn ($model) => $class === $model)
             ->keys();
     }
 
     /**
+     * Get the model associated with a given guard name.
+     */
+    public static function getModelForGuard(string $guard): ?string
+    {
+        // Get the provider configuration for the given guard
+        $provider = config("auth.guards.{$guard}.provider");
+
+        if (! $provider) {
+            return null;
+        }
+
+        return static::getProviderModel($provider);
+    }
+
+    /**
      * Lookup a guard name relevant for the $class model and the current user.
      *
-     * @param  string|Model  $class model class object or name
+     * @param  string|Model  $class  model class object or name
      * @return string guard name
      */
     public static function getDefaultName($class): string

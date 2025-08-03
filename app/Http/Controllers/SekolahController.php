@@ -6,6 +6,7 @@ use App\Models\Kelas;
 use App\Models\Sekolah;
 use App\Models\Guru;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SekolahController extends Controller
 {
@@ -27,5 +28,24 @@ class SekolahController extends Controller
             'kelas' => $kelas,
             'paket' => $paket_json->data,
         ]);
+    }
+
+    public function setTahunAjaran(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'awal_ajaran' => 'required|date|before_or_equal:akhir_ajaran',
+            'akhir_ajaran' => 'required|date'
+         ]);
+        
+         if($validator->fails()){
+            $errors = $validator->errors();
+            $error = "";
+            foreach($errors->all() as $e){
+                $error .= $e;
+            }
+        return redirect()->route('sekolah')->with('error', $error);        
+         }
+
+        return redirect()->route('sekolah');    
     }
 }

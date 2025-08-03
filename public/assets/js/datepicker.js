@@ -41,6 +41,32 @@ $(function () {
             autoclose: true,
         });
     }
+    if ($("#awal_ajaran").length) {
+        var date = new Date();
+        var today = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+        $("#awal_ajaran").datepicker({
+            format: "mm/dd/yyyy",
+            todayHighlight: true,
+            autoclose: true,
+        });
+    }
+    if ($("#akhir_ajaran").length) {
+        var date = new Date();
+        var today = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+        $("#akhir_ajaran").datepicker({
+            format: "mm/dd/yyyy",
+            todayHighlight: true,
+            autoclose: true,
+        });
+    }
 });
 
 $('#datePickerMulai').datepicker({    

@@ -217,6 +217,26 @@ class UserViewController extends Controller
 
     public function profile1()
     {
-        return view('user.profile');
+        $data[] = array();
+        $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
+        $guru = $sekolah->guru()->select('nama_guru', 'jabatan', 'email as email_kepsek', 'no_wa')->first();
+        $jurusan = $sekolah->jurusan()->select('nama_jurusan')->get();
+        $kelas = Kelas::where('id_sekolah', $sekolah->id)->select('kelas')->get();
+        $data = array_merge($sekolah->toArray(), $guru->toArray());
+        $paket = $sekolah->paket()->first();
+        $serialize = serialize($paket->detail);
+        $paket_json = json_decode(unserialize($serialize));
+        
+        return view('user.profile', [
+            'data' => $data,
+            'jurusan' => $jurusan,
+            'kelas' => $kelas,
+            'paket' => $paket_json->data,
+        ]);
+    }
+
+    public function editPassword()
+    {
+        return view('user.pengaturan.edit_password');
     }
 }

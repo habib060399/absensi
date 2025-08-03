@@ -117,7 +117,11 @@ Route::prefix('user')->middleware(['auth', 'check:isSekolah,isKelas', 'check.act
     Route::get('/whatssap/update', [UserController::class, 'updateGroupWa'])->name('wa_update');
     Route::post('/absensi/siswa-option', [AbsenController::class, 'siswaGetOption'])->name('option_siswa');
 
+
     Route::get('sekolah', [UserSekolahController::class, 'index'])->name('sekolah');
+    Route::post('tahun-ajaran', [UserSekolahController::class, 'setTahunAjaran'])->name('tahun_ajaran');
+    Route::get('password', [UserViewController::class, 'editPassword'])->name('password');
+    Route::post('password/edit-password', [UserController::class, 'editPassword'])->name('edit_password');
 });
 Route::post('user/broadcast/get-siswa', [SiswaController::class, 'findContact'])->name('getSiswa');
 // Route::post('user/siswa/get-siswa', [SiswaController::class, 'getSiswaByDate'])->name('get_siswa_by_tgl');

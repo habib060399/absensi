@@ -27,14 +27,18 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/fullcalendar/main.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}"> --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}"> --}}    
     <link rel="stylesheet" href="{{ asset('assets/vendors/simplemde/simplemde.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/prismjs/themes/prism.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" />
     <link rel="stylesheet" href="{{asset('assets/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('assets/vendors/jquery-steps/jquery.steps.css')}}">
     <!-- End plugin css for this page -->
+    @if (in_array(request()->path(),['user/rekap', 'user/absensi', 'user/live-absen', 'user/broadcast']) || request()->is('user/kelas/*/edit'))
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    @endif
+    @if (in_array(request()->path(), ['user/rekap', 'user/siswa', 'user/broadcast', 'user/sekolah']))
+        <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" />
+    @endif
 
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/feather-font/css/iconfont.css') }}">
@@ -54,7 +58,7 @@
 <!--    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>-->
     <script>
         let get_siswa = null;
-        var url = "{{ url('/') }}";        
+        var url = "{{ url('/') }}";
     </script>
 </head>
 
@@ -65,7 +69,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        @include('sidebar')
+        @include('sidebar')        
         <div class="page-wrapper">
 
             <!-- partial:../../partials/_navbar.html -->
@@ -173,17 +177,11 @@
                                         </a>
                                     </li>
                                     <li class="dropdown-item py-2">
-                                        <a href="javascript:;" class="text-body ms-0">
+                                        <a href="{{route('password')}}" class="text-body ms-0">
                                             <i class="me-2 icon-md" data-feather="edit"></i>
-                                            <span>Edit Profile</span>
+                                            <span>Edit Password</span>
                                         </a>
-                                    </li>
-                                    <li class="dropdown-item py-2">
-                                        <a href="javascript:;" class="text-body ms-0">
-                                            <i class="me-2 icon-md" data-feather="repeat"></i>
-                                            <span>Switch User</span>
-                                        </a>
-                                    </li>
+                                    </li>                                    
                                     <li class="dropdown-item py-2">
                                         <a href="{{ url('/logout') }}" class="text-body ms-0">
                                             <i class="me-2 icon-md" data-feather="log-out"></i>
@@ -217,9 +215,17 @@
     <script src="{{ asset('assets/vendors/core/core.js') }}"></script>
     <!-- endinject -->
 
+    @if (in_array(request()->path(),['user/rekap', 'user/absensi', 'user/live-absen', 'user/broadcast']) || request()->is('user/kelas/*/edit'))
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @endif
+    @if (in_array(request()->path(), ['user/rekap', 'user/siswa', 'user/broadcast', 'user/sekolah']))
+        <script src="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+        <script src="{{ asset('assets/js/datepicker.js') }}"></script>
+        <script src="{{ asset('assets/js/timepicker.js') }}"></script>
+    @endif
+
     <!-- Plugin js for this page -->
     {{-- <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/vendors/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/fullcalendar/main.min.js') }}"></script>
@@ -228,7 +234,6 @@
     <script src="{{ asset('assets/vendors/simplemde/simplemde.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/prismjs/prism.js') }}"></script>
     <script src="{{ asset('assets/vendors/clipboard/clipboard.min.js') }}"></script>
-    <script src="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{asset('assets/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js')}}"></script>
     <script src="{{asset('assets/vendors/jquery-steps/jquery.steps.min.js')}}"></script>
     <!-- End plugin js for this page -->
@@ -245,8 +250,6 @@
     <script src="{{ asset('assets/js/data-table.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/sweet-alert.js') }}"></script> --}}
     <script src="{{ asset('assets/js/spinner.js') }}"></script>
-    <script src="{{ asset('assets/js/datepicker.js') }}"></script>    
-    <script src="{{ asset('assets/js/timepicker.js') }}"></script>
     @if (session('success'))
         <script>
             $(document).ready(() => {
@@ -296,6 +299,7 @@
                 console.log(e.welcome);
                 document.write("<h1>" + e.welcome + "</h1>")
             }); --}}
+
 
 </body>
 

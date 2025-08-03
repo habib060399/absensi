@@ -1,20 +1,18 @@
-<p align="center"><img src="/art/socialcard.png" alt="Social Card of Laravel Permission"></p>
+<div align="left">
+    <a href="https://spatie.be/open-source?utm_source=github&utm_medium=banner&utm_campaign=laravel-permission">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://spatie.be/packages/header/laravel-permission/html/dark.webp">
+        <img alt="Logo for laravel-permission" src="https://spatie.be/packages/header/laravel-permission/html/light.webp">
+      </picture>
+    </a>
 
-# Associate users with permissions and roles
-
-### Sponsor
-
-<table>
-   <tr>
-      <td><img src="https://user-images.githubusercontent.com/6287961/92889815-d64c3d80-f416-11ea-894a-b4de7e8f7eef.png"></td>
-      <td>If you want to quickly add authentication and authorization to Laravel projects, feel free to check Auth0's Laravel SDK and free plan at <a href="https://auth0.com/developers?utm_source=GHsponsor&utm_medium=GHsponsor&utm_campaign=laravel-permission&utm_content=auth">https://auth0.com/developers</a>.</td>
-   </tr>
-</table>
-
+<h1>Associate users with permissions and roles</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/laravel-permission/run-tests-L8.yml?branch=main&label=Tests)](https://github.com/spatie/laravel-permission/actions?query=workflow%3ATests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-permission.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-permission)
+    
+</div>
 
 ## Documentation, Installation, and Usage Instructions
 
@@ -87,7 +85,7 @@ can be found [in this repo on GitHub](https://github.com/laracasts/laravel-5-rol
 
 Special thanks to [Alex Vanderbist](https://github.com/AlexVanderbist) who greatly helped with `v2`, and to [Chris Brown](https://github.com/drbyte) for his longtime support  helping us maintain the package.
 
-And a special thanks to [Caneco](https://twitter.com/caneco) for the logo ✨
+Special thanks to [Caneco](https://twitter.com/caneco) for the original logo.
 
 ## Alternatives
 
