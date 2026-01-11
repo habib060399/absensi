@@ -7,9 +7,10 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Validation\Rule;
 use App\Models\Siswa;
 
-class SiswaImportWithJurusan implements ToCollection, WithHeadingRow, WithValidation
+class SiswaImportWithJurusan implements ToCollection, WithHeadingRow, withValidation
 {
     /**
     * @param Collection $collection
@@ -20,13 +21,12 @@ class SiswaImportWithJurusan implements ToCollection, WithHeadingRow, WithValida
     public function collection(Collection $rows)
     {
         
-        $limit = Helper::getSekolah('limit_siswa');
-
+        $limit = Helper::getSekolah('limit_siswa');        
         foreach ($rows as $row) {
                 if(Siswa::checkLimit((int) $limit->limit_siswa, ['id_sekolah' => $row['id_sekolah']])){
                     $this->message= "Data Siswa sudah mencapai batas limit";
                     return redirect()->route("siswa")->with("error", "Data Siswa sudah mencapai limit !");
-                }else{
+                }else{                    
                     Siswa::create([
                         'id_sekolah' => $row['id_sekolah'],
                         'id_jurusan' => $row['jurusan'],
@@ -37,8 +37,8 @@ class SiswaImportWithJurusan implements ToCollection, WithHeadingRow, WithValida
                         'no_hp_ortu' => $row['no_hp_orangtua']
                     ]);
                 }
-        }
-        return redirect()->route("siswa")->with("success", "Data Siswa berhasil ditambahkan");
+        }        
+        // return redirect()->route("siswa")->with("success", "Data Siswa berhasil ditambahkan");
     }
 
     public function rules(): array

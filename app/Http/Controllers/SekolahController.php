@@ -17,6 +17,7 @@ class SekolahController extends Controller
         $guru = $sekolah->guru()->select('nama_guru', 'jabatan', 'email as email_kepsek', 'no_wa')->first();
         $jurusan = $sekolah->jurusan()->select('nama_jurusan')->get();
         $kelas = Kelas::where('id_sekolah', $sekolah->id)->select('kelas')->get();
+        $tahun_ajaran = Sekolah::where('id', session('id_sekolah'))->select('th_ajaran_awal', 'th_ajaran_akhir')->first();
         $data = array_merge($sekolah->toArray(), $guru->toArray());
         $paket = $sekolah->paket()->first();
         $serialize = serialize($paket->detail);
@@ -27,6 +28,7 @@ class SekolahController extends Controller
             'jurusan' => $jurusan,
             'kelas' => $kelas,
             'paket' => $paket_json->data,
+            'tahun_ajaran' => $tahun_ajaran
         ]);
     }
 
@@ -46,6 +48,10 @@ class SekolahController extends Controller
         return redirect()->route('sekolah')->with('error', $error);        
          }
 
-        return redirect()->route('sekolah');    
+        Sekolah::where('id', session('id_sekolah'))->update([            
+            'th_ajaran_awal' => $request->input('awal_ajaran'),
+            'th_ajaran_akhir' => $request->input('akhir_ajaran')
+        ]);
+        return redirect()->route('sekolah')->with('success', 'Data berhasil ditambahkan');    
     }
 }

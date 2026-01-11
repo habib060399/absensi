@@ -53,11 +53,11 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('tahun_ajaran') }}" method="post">
-                        @csrf
+                        @csrf                        
                         <label class="form-label">Awal Tanggal</label>
                         <div class="input-group date datepicker" id="awal_ajaran">
                             <input type="text" class="form-control @error('awal_ajaran') is-invalid @enderror"
-                                name="awal_ajaran" />
+                                name="awal_ajaran" value="{{($tahun_ajaran) ? $tahun_ajaran->th_ajaran_awal : ' ' }}"/>
                             <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
                             @error('awal_ajaran')
                                 <div class="error invalid-feedback">{{ $message }}</div>
@@ -66,7 +66,7 @@
                         <label class="form-label">Akhir Tanggal</label>
                         <div class="input-group date datepicker" id="akhir_ajaran">
                             <input type="text" class="form-control @error('akhir_ajaran') is-invalid @enderror"
-                                name="akhir_ajaran" />
+                                name="akhir_ajaran" value="{{($tahun_ajaran) ? $tahun_ajaran->th_ajaran_akhir : ' ' }}"/>
                             <span class="input-group-text input-group-addon"><i data-feather="calendar"></i></span>
                             @error('akhir_ajaran')
                                 <div class="error invalid-feedback">{{ $message }}</div>
@@ -95,8 +95,10 @@
                             @csrf
                             <label class="form-label">Pilih Kelas</label>
                             <select class="form-select" name="">                        
-                                <option value="">==Pilih Kelas==</option>                                
-                                <option value="">{{$kelas->kelas}}</option>                                
+                                <option value="">==Pilih Kelas==</option> 
+                                @foreach($kelas as $k)
+                                <option value="">{{$k->kelas}}</option>                                
+                                @endforeach                                                               
                             </select>
                             @error('nama_siswa')
                                 <div class="error invalid-feedback">{{ $message }}</div>

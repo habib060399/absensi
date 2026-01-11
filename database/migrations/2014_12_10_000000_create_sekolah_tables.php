@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('pendidikan', 100);
             $table->string('npsn', 100);
             $table->string('limit_siswa', 100)->nullable(true);
+            $table->string('th_ajaran_awal', 100)->nullable(true);
+            $table->string('th_ajaran_akhir', 100)->nullable(true);
             $table->timestamps();
             $table->foreign('id_user')->on('users')->references('id')->onDelete('cascade');
             $table->foreign('id_wa')->on('broadcast')->references('id')->onDelete('cascade');

@@ -389,8 +389,9 @@ class UserController extends Controller
                 Excel::import(new SiswaImport, $request->file('file'));
             }
 
-            return back();
+            return redirect()->route("siswa")->with("success", "Data Siswa berhasil ditambahkan");
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            dd($e->failures());
             return back()->with('error', $e->getMessage());
         }
 
