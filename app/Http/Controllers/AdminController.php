@@ -204,7 +204,7 @@ class AdminController extends Controller
         $paket = $request->input('paket');
         $token_akun_wa = $request->input('token_akun_wa');
 
-        dd($sekolah->user()->first()->expiry_date, $addMonthDate, $interval, $expired_new);
+        dd($sekolah->user()->first()->expiry_date, $addMonthDate, $interval, $expired_new); 
 
         switch ($paket) {
             case 'bronze':

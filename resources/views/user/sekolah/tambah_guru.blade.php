@@ -133,7 +133,7 @@
             for (let i = 0; i < selectedData.length; i++) {
                 if(selectedData[i].selected){
                     var id = selectedData[i].id;
-                    console.log(id);
+                    //console.log(id);//
 
                     $.ajax({
                             url: `{{ route('getkls2') }}`,
@@ -155,7 +155,7 @@
                             }
                         })
                         html.splice(-1,selectedData.length)
-                        console.log(html);
+                        //console.log(html);//
                 }
             }
         })

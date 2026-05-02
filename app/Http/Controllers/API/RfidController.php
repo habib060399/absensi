@@ -111,6 +111,58 @@ class RfidController extends Controller
         }
     }
 
+    public function store2(Request $request)
+    {
+        $time_now = date("h:i:s");
+        $date_now = date("Y-m-d");
+        $message  = $request->message;
+        $token    = $request->token_wa;
+        $id_mesin = $request->id_mesin;
+
+        $get_siswa = Siswa::where('rfid', $request->rfid_tag)->first();
+        if($get_siswa){
+            $get_absen = Absensi::where('id_siswa', $get_siswa->id)->where('tanggal', $date_now)->first();
+            if($get_absen){
+                return response()->json([
+                    'message' => 'Anda Sudah Melakukan Absen',
+                    'status' => 200
+                ]);
+            }else{                
+                $Wa = $this->curl->sendPresencenWa2($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $message, $token);
+                // $respon = json_decode($Wa);
+                // broadcast(new SendPresence($get_siswa->nama_siswa, $date_now, $time_now, $get_siswa->id_kelas, $get_siswa->id_sekolah, $get_siswa->foto));
+
+                // Absensi::create([
+                //     'id_siswa' => $get_siswa->id,
+                //     'tanggal' => $date_now,
+                //     'waktu' => $time_now,
+                //     'status' => 'hadir'
+                // ]);
+
+                // if($respon->status) {
+                //     return response()->json([
+                //         'message' => "Pesan berhasil dikirim",
+                //         'message2' => "Absensi Berhasil",
+                //         'name' => $get_siswa->nama_siswa,
+                //         'status' => 200
+                //     ]);
+                // } else {
+                //     return response()->json([
+                //         'message' => "Gagal Mengirim Pesan".$respon->reason,
+                //         'status' => 200,
+                //         'name' => $get_siswa->nama_siswa,
+                //     ]);
+                // }
+
+            }
+        }else{
+            return response()->json([
+                'message' => "RFID belum terdaftar",
+                'status' => 400
+            ]);
+        }
+    }
+
     public function scan(Request $request)
     {
         $get_id_perangkat = Mesin::where('id_mesin', $request->id_mesin)->first();

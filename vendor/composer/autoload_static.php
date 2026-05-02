@@ -128,6 +128,7 @@ class ComposerStaticInitcfd15786b4fd4180fb631ee30a6ce319
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'PhpMqtt\\Client\\' => 15,
         ),
         'N' => 
         array (
@@ -135,6 +136,7 @@ class ComposerStaticInitcfd15786b4fd4180fb631ee30a6ce319
         ),
         'M' => 
         array (
+            'MyCLabs\\Enum\\' => 13,
             'Monolog\\' => 8,
             'Mockery\\' => 8,
             'Matrix\\' => 7,
@@ -445,9 +447,17 @@ class ComposerStaticInitcfd15786b4fd4180fb631ee30a6ce319
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
+        'PhpMqtt\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-mqtt/client/src',
+        ),
         'NunoMaduro\\Collision\\' => 
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
+        ),
+        'MyCLabs\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'Monolog\\' => 
         array (
@@ -4373,6 +4383,8 @@ class ComposerStaticInitcfd15786b4fd4180fb631ee30a6ce319
         'Monolog\\Test\\MonologTestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/MonologTestCase.php',
         'Monolog\\Test\\TestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/TestCase.php',
         'Monolog\\Utils' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Utils.php',
+        'MyCLabs\\Enum\\Enum' => __DIR__ . '/..' . '/myclabs/php-enum/src/Enum.php',
+        'MyCLabs\\Enum\\PHPUnit\\Comparator' => __DIR__ . '/..' . '/myclabs/php-enum/src/PHPUnit/Comparator.php',
         'Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\DeprecatedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\DirectoryNotFoundException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -5433,6 +5445,39 @@ class ComposerStaticInitcfd15786b4fd4180fb631ee30a6ce319
         'PharIo\\Version\\VersionConstraintParser' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintParser.php',
         'PharIo\\Version\\VersionConstraintValue' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintValue.php',
         'PharIo\\Version\\VersionNumber' => __DIR__ . '/..' . '/phar-io/version/src/VersionNumber.php',
+        'PhpMqtt\\Client\\Concerns\\GeneratesRandomClientIds' => __DIR__ . '/..' . '/php-mqtt/client/src/Concerns/GeneratesRandomClientIds.php',
+        'PhpMqtt\\Client\\Concerns\\OffersHooks' => __DIR__ . '/..' . '/php-mqtt/client/src/Concerns/OffersHooks.php',
+        'PhpMqtt\\Client\\Concerns\\TranscodesData' => __DIR__ . '/..' . '/php-mqtt/client/src/Concerns/TranscodesData.php',
+        'PhpMqtt\\Client\\Concerns\\ValidatesConfiguration' => __DIR__ . '/..' . '/php-mqtt/client/src/Concerns/ValidatesConfiguration.php',
+        'PhpMqtt\\Client\\Concerns\\WorksWithBuffers' => __DIR__ . '/..' . '/php-mqtt/client/src/Concerns/WorksWithBuffers.php',
+        'PhpMqtt\\Client\\ConnectionSettings' => __DIR__ . '/..' . '/php-mqtt/client/src/ConnectionSettings.php',
+        'PhpMqtt\\Client\\Contracts\\MessageProcessor' => __DIR__ . '/..' . '/php-mqtt/client/src/Contracts/MessageProcessor.php',
+        'PhpMqtt\\Client\\Contracts\\MqttClient' => __DIR__ . '/..' . '/php-mqtt/client/src/Contracts/MqttClient.php',
+        'PhpMqtt\\Client\\Contracts\\Repository' => __DIR__ . '/..' . '/php-mqtt/client/src/Contracts/Repository.php',
+        'PhpMqtt\\Client\\Exceptions\\ClientNotConnectedToBrokerException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/ClientNotConnectedToBrokerException.php',
+        'PhpMqtt\\Client\\Exceptions\\ConfigurationInvalidException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/ConfigurationInvalidException.php',
+        'PhpMqtt\\Client\\Exceptions\\ConnectingToBrokerFailedException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/ConnectingToBrokerFailedException.php',
+        'PhpMqtt\\Client\\Exceptions\\DataTransferException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/DataTransferException.php',
+        'PhpMqtt\\Client\\Exceptions\\InvalidMessageException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/InvalidMessageException.php',
+        'PhpMqtt\\Client\\Exceptions\\MqttClientException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/MqttClientException.php',
+        'PhpMqtt\\Client\\Exceptions\\PendingMessageAlreadyExistsException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/PendingMessageAlreadyExistsException.php',
+        'PhpMqtt\\Client\\Exceptions\\PendingMessageNotFoundException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/PendingMessageNotFoundException.php',
+        'PhpMqtt\\Client\\Exceptions\\ProtocolNotSupportedException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/ProtocolNotSupportedException.php',
+        'PhpMqtt\\Client\\Exceptions\\ProtocolViolationException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/ProtocolViolationException.php',
+        'PhpMqtt\\Client\\Exceptions\\RepositoryException' => __DIR__ . '/..' . '/php-mqtt/client/src/Exceptions/RepositoryException.php',
+        'PhpMqtt\\Client\\Logger' => __DIR__ . '/..' . '/php-mqtt/client/src/Logger.php',
+        'PhpMqtt\\Client\\Message' => __DIR__ . '/..' . '/php-mqtt/client/src/Message.php',
+        'PhpMqtt\\Client\\MessageProcessors\\BaseMessageProcessor' => __DIR__ . '/..' . '/php-mqtt/client/src/MessageProcessors/BaseMessageProcessor.php',
+        'PhpMqtt\\Client\\MessageProcessors\\Mqtt311MessageProcessor' => __DIR__ . '/..' . '/php-mqtt/client/src/MessageProcessors/Mqtt311MessageProcessor.php',
+        'PhpMqtt\\Client\\MessageProcessors\\Mqtt31MessageProcessor' => __DIR__ . '/..' . '/php-mqtt/client/src/MessageProcessors/Mqtt31MessageProcessor.php',
+        'PhpMqtt\\Client\\MessageType' => __DIR__ . '/..' . '/php-mqtt/client/src/MessageType.php',
+        'PhpMqtt\\Client\\MqttClient' => __DIR__ . '/..' . '/php-mqtt/client/src/MqttClient.php',
+        'PhpMqtt\\Client\\PendingMessage' => __DIR__ . '/..' . '/php-mqtt/client/src/PendingMessage.php',
+        'PhpMqtt\\Client\\PublishedMessage' => __DIR__ . '/..' . '/php-mqtt/client/src/PublishedMessage.php',
+        'PhpMqtt\\Client\\Repositories\\MemoryRepository' => __DIR__ . '/..' . '/php-mqtt/client/src/Repositories/MemoryRepository.php',
+        'PhpMqtt\\Client\\SubscribeRequest' => __DIR__ . '/..' . '/php-mqtt/client/src/SubscribeRequest.php',
+        'PhpMqtt\\Client\\Subscription' => __DIR__ . '/..' . '/php-mqtt/client/src/Subscription.php',
+        'PhpMqtt\\Client\\UnsubscribeRequest' => __DIR__ . '/..' . '/php-mqtt/client/src/UnsubscribeRequest.php',
         'PhpOffice\\PhpSpreadsheet\\Calculation\\ArrayEnabled' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/ArrayEnabled.php',
         'PhpOffice\\PhpSpreadsheet\\Calculation\\BinaryComparison' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/BinaryComparison.php',
         'PhpOffice\\PhpSpreadsheet\\Calculation\\Calculation' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Calculation.php',
@@ -7130,7 +7175,7 @@ class ComposerStaticInitcfd15786b4fd4180fb631ee30a6ce319
         'Spatie\\Permission\\Traits\\HasRoles' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Traits/HasRoles.php',
         'Spatie\\Permission\\Traits\\RefreshesPermissionCache' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Traits/RefreshesPermissionCache.php',
         'Spatie\\Permission\\WildcardPermission' => __DIR__ . '/..' . '/spatie/laravel-permission/src/WildcardPermission.php',
-        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'Svg\\CssLength' => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg/CssLength.php',
         'Svg\\DefaultStyle' => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg/DefaultStyle.php',
         'Svg\\Document' => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg/Document.php',

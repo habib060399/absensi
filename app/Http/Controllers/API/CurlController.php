@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class CurlController extends Controller
 {
     public function setApiWa(array $param, $id_sekolah, $id_kelas) {
-        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('token_account_wa', 'token_api_wa')->first();
+        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('sekolah.token_account_wa', 'sekolah.token_api_wa')->first();
         // (!empty($sekolah->token_api_wa)) ? $sekolah->token_api_wa : " ";
         $token = $sekolah->token_api_wa;
 
@@ -71,17 +71,54 @@ class CurlController extends Controller
         return $status = $this->setApiWa($data, $id_sekolah, $id_kelas);
     }
 
-    public function sendPresencenWa($no, $nama_siswa, $id_sekolah)
+    public function sendPresencenWa($no, $nama_siswa, $id_mesin)
     {
-        $sekolah = Sekolah::where('id', $id_sekolah)->first();
-        $teks = $sekolah->broadcast()->first()->template_bc;
-        $json = serialize($teks);
-        $unserialize = unserialize($json);
-        $decode = json_decode($unserialize);
+        $sekolah = Sekolah::where('id_mesin', $id_mesin)->first();
+        $decode = json_decode($sekolah->broadcast()->first()->template_bc, true);
 
-        $bc = preg_replace("/{nama}/", "$nama_siswa", $decode->data[0]->message);
-        $token = $sekolah->broadcast()->first()->token_api_wa;
+        $bc = preg_replace("/{nama}/", "$nama_siswa", $decode['data'][0]['message']);
+        $token = $sekolah->token_api_wa;
 
+        $curl = curl_init();
+        $data = array(
+            'target' => $no,
+            'message' => "$bc",
+            'countryCode' => "62"
+        );
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: $token"
+            )
+        ));
+
+        $responseWa = curl_exec($curl);
+        if(curl_errno($curl)){
+            $error_msg = curl_error($curl);
+        }
+        curl_close($curl);
+
+        if(isset($error_msg)){
+            echo $error_msg;
+        }
+
+        echo $responseWa;
+    }
+
+    public function sendPresencenWa2($no, $nama_siswa, $message, $token)
+    {
+        $bc = preg_replace("/{nama}/", "$nama_siswa", $message);
+        
         $curl = curl_init();
         $data = array(
             'target' => $no,
@@ -141,7 +178,7 @@ class CurlController extends Controller
 
     public static function getDevice()
     {
-        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('token_account_wa', 'token_api_wa')->first();
+        $sekolah = Sekolah::where('sekolah.id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->join('broadcast', 'sekolah.id_wa', '=', 'broadcast.id')->select('sekolah.token_account_wa', 'sekolah.token_api_wa')->first();
         $token = $sekolah->token_account_wa;
         $curl = curl_init();
 

@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('assets/vendors/jquery-steps/jquery.steps.css')}}">
     <!-- End plugin css for this page -->
-    @if (in_array(request()->path(),['user/rekap', 'user/absensi', 'user/live-absen', 'user/broadcast']) || request()->is('user/kelas/*/edit'))
+    @if (in_array(request()->path(),['user/rekap', 'user/absensi', 'user/live-absen', 'user/broadcast', 'user/guru/tambah']) || request()->is('user/kelas/*/edit'))
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @endif
     @if (in_array(request()->path(), ['user/rekap', 'user/siswa', 'user/broadcast', 'user/sekolah']))
@@ -215,7 +215,7 @@
     <script src="{{ asset('assets/vendors/core/core.js') }}"></script>
     <!-- endinject -->
 
-    @if (in_array(request()->path(),['user/rekap', 'user/absensi', 'user/live-absen', 'user/broadcast']) || request()->is('user/kelas/*/edit'))
+    @if (in_array(request()->path(),['user/rekap', 'user/absensi', 'user/live-absen', 'user/broadcast', 'user/guru/tambah']) || request()->is('user/kelas/*/edit'))
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @endif
     @if (in_array(request()->path(), ['user/rekap', 'user/siswa', 'user/broadcast', 'user/sekolah']))
@@ -244,7 +244,7 @@
     <!-- endinject -->
 
     <!-- Custom js for this page -->
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
     <script src="{{asset('assets/js/wizard.js')}}"></script>
     <script src="{{ asset('assets/js/absen-calendar.js') }}"></script>
     <script src="{{ asset('assets/js/data-table.js') }}"></script>

@@ -70,7 +70,7 @@ class SekolahController extends Controller
         $jurusan = $request->input('check_jurusan');
         $totalPrice = 0;
         $getPaket = Paket::where('id', $paket)->select('*')->first();
-        $activePeriod = Carbon::now()->addMonths($getPaket->active);
+        $activePeriod = Carbon::now()->addMonths(intval($getPaket->active));
 
         try {
             DB::beginTransaction();
@@ -164,12 +164,11 @@ class SekolahController extends Controller
     public function update ($id, Request $request)
     {
         $sekolah = Sekolah::where('id', Helper::decryptUrl($id))->first();
+        $id_user_kelas = Kelas::where('id_sekolah', Helper::decryptUrl($id))->select('id_user')->get();
         $username = $request->input('username');
         $password = $request->input('password');
         $token_api_wa = $request->input('token_api_wa');
         $token_akun_wa = $request->input('token_akun_wa');
-
-//        dd($jurusan);
 
 //        Sekolah::where('id', Helper::decryptUrl($id))->update([
 //            'nama_sekolah' => $request->input('nama_sekolah'),
@@ -179,7 +178,13 @@ class SekolahController extends Controller
 //        ]);
 
          $user = User::where('id', $sekolah->id_user)->first();
-         dd($user);
+         foreach($id_user_kelas as $user){
+            User::where('id', Helper::decryptUrl($id))->update([
+                'expiry_date' => null
+            ]);
+         }
+         dd(count($id_user_kelas));
+                    
 
     }
 

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('email', 100);
             $table->string('no_hp', 100);
             $table->string('pendidikan', 100);
+            $table->string('token_account_wa', 100)->nullable(true);
+            $table->string('token_api_wa', 100)->nullable(true);                       
             $table->string('npsn', 100);
             $table->string('limit_siswa', 100)->nullable(true);
             $table->timestamps();

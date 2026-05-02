@@ -27,6 +27,7 @@ Route::post('/scan-device', [RfidController::class, 'scan'])->name('scan');
 Route::get('search/name', [ApiController::class, 'searchNamaSiswa'])->name('search_nama_siswa');
 Route::post('wa/group', [CurlController::class, 'getGroupWa']);
 Route::post('wa/group/update', [CurlController::class, 'updateGroupWa'])->name('update_group_wa');
+Route::post('/absensi-test', [RfidController::class, 'store2']);
 Route::middleware('istoken')->group(function(){
     Route::post('/absensi', [RfidController::class, 'store']);
     

@@ -15,7 +15,7 @@ class AbsenController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'tanggal' => 'required|date|before:tomorrow'
+            'tanggal' => 'required|date|before:tomorrow',
         ]);
 
         if($validator->fails()){
@@ -29,84 +29,51 @@ class AbsenController extends Controller
         $id_siswa = $request->input('nama');
         $status = $request->input('status_kehadiran');
         $tanggal = $request->input('tanggal');
-        $data = array();
 
-        for ($i=0; $i < count($id_siswa); $i++) {
-            $get_absen = Absensi::where('id_siswa', $id_siswa[$i])->where('tanggal', $tanggal)->first();
-            if(!$get_absen) {
-                $data[$i] = $id_siswa[$i];
-            }
-
+        if(empty($id_siswa)){
+            return redirect()->route('absen')->with('error', 'Siswa Wajib Diisi!');
         }
+        $existing = Absensi::whereIn('id_siswa', $id_siswa)->where('tanggal', $tanggal)->pluck('id_siswa')->toArray();
+        $data = array_diff($id_siswa, $existing);
 
-        if($data != null){
-            $sekolah = Sekolah::where('id', (session('id_sekolah')) ? session('id_sekolah') : session('id'))->first();
-            $teks = $sekolah->broadcast()->first()->template_bc;
-            $json = serialize($teks);
-            $unserialize = unserialize($json);
-            $decode = json_decode($unserialize);
-
-            switch ($status) {
-                case 'hadir':
-                    for($a=0; $a < count($data); $a++) {
-                        $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[0]->message, $get_siswa->id_kelas);
-                        Absensi::create([
-                            'id_siswa' => $data[$a],
-                            'tanggal' => $tanggal,
-                            'waktu' => $time_now,
-                            'status' => $status
-                        ]);
-                    }
-                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
-                    break;
-                case 'absen':
-                    for($a=0; $a < count($data); $a++) {
-                        $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[2]->message, $get_siswa->id_kelas);
-                        Absensi::create([
-                            'id_siswa' => $data[$a],
-                            'tanggal' => $tanggal,
-                            'waktu' => $time_now,
-                            'status' => $status
-                        ]);
-                    }
-                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
-                    break;
-                case 'izin':
-                    for($a=0; $a < count($data); $a++) {
-                        $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[3]->message, $get_siswa->id_kelas);
-                        Absensi::create([
-                            'id_siswa' => $data[$a],
-                            'tanggal' => $tanggal,
-                            'waktu' => $time_now,
-                            'status' => $status
-                        ]);
-                    }
-                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
-                    break;
-                case 'sakit':
-                    for($a=0; $a < count($data); $a++) {
-                        $get_siswa = Siswa::where('id', $data[$a])->first();
-                        $curl->sendWaAbsenManual($get_siswa->no_hp_ortu, $get_siswa->nama_siswa, $get_siswa->id_sekolah, $decode->data[1]->message, $get_siswa->id_kelas);
-                        Absensi::create([
-                            'id_siswa' => $data[$a],
-                            'tanggal' => $tanggal,
-                            'waktu' => $time_now,
-                            'status' => $status
-                        ]);
-                    }
-                    return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
-                    break;
-                default:
-                    return redirect()->route('absen')->with('error', 'status tidak boleh kosong');
-                    break;
-            }
-
-        }
-
+        if (empty($data)) {
         return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
+        }
+
+        $siswas = Siswa::whereIn('id', $data)->get()->keyBy('id');
+
+        $sekolah = Sekolah::find(session('id_sekolah') ?? session('id'));
+        $decode = json_decode($sekolah->broadcast()->first()->template_bc);
+
+        $messageIndex = ['hadir' => 0, 'sakit' => 1, 'absen' => 2, 'izin' => 3];
+
+        if (!isset($messageIndex[$status])) {
+        return redirect()->route('absen')->with('error', 'status tidak valid');
+        }
+
+        $curl = new CurlController();
+
+        foreach($data as $id){
+            $siswa = $siswas[$id];
+
+            $curl->sendWaAbsenManual(
+                $siswa->no_hp_ortu,
+                $siswa->nama_siswa,
+                $siswa->id_sekolah,
+                $decode->data[$messageIndex[$status]]->message,
+                $siswa->id_kelas
+            );
+
+            Absensi::create([
+            'id_siswa' => $id,
+            'tanggal' => $tanggal,
+            'waktu' => $time_now,
+            'status' => $status
+             ]);
+        }
+
+        return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
+        // return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
     }
     function siswaGetOption(Request $request){
         $array = Helper::access();

@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => 'dev-local',
-        'version' => 'dev-local',
-        'reference' => '98ab4050bda7c1feee5bf7e6ef48de3acd798942',
+        'pretty_version' => 'dev-server',
+        'version' => 'dev-server',
+        'reference' => '23d6164675bb23869a6a0a936e155d74ff70f0ba',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -449,9 +449,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'dev-local',
-            'version' => 'dev-local',
-            'reference' => '98ab4050bda7c1feee5bf7e6ef48de3acd798942',
+            'pretty_version' => 'dev-server',
+            'version' => 'dev-server',
+            'reference' => '23d6164675bb23869a6a0a936e155d74ff70f0ba',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -652,6 +652,15 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'myclabs/php-enum' => array(
+            'pretty_version' => '1.8.5',
+            'version' => '1.8.5.0',
+            'reference' => 'e7be26966b7398204a234f8673fdad5ac6277802',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../myclabs/php-enum',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'nesbot/carbon' => array(
             'pretty_version' => '3.10.2',
             'version' => '3.10.2.0',
@@ -732,6 +741,15 @@
             'install_path' => __DIR__ . '/../phar-io/version',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'php-mqtt/client' => array(
+            'pretty_version' => 'v2.3.2',
+            'version' => '2.3.2.0',
+            'reference' => '97df2f592599f72fb7975eb504333a8df3841ea9',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-mqtt/client',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'phpoffice/phpspreadsheet' => array(
             'pretty_version' => '1.29.12',
