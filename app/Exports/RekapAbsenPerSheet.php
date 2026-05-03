@@ -49,29 +49,38 @@ class RekapAbsenPerSheet implements FromArray, WithTitle, WithHeadings, WithStyl
             AfterSheet::class => function($event){
                 $lastColumn = Coordinate::stringFromColumnIndex($this->tanggal + 1);                
                 $nextColumn = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($lastColumn)+1);
-                $lastRow = count($this->b) + 2;
+                $lastRow = count($this->b) + 3;
                 $columnHadir = Coordinate::stringFromColumnIndex($this->tanggal + 2);
-                // dd($columnHadir);
+                $columnIzin = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($nextColumn)+1);
+                $columnSakit = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($nextColumn)+2);
+                // dd("{$lastColumn}1:{$columnSakit}2");               
 
                 $event->sheet->mergeCells("A1:A3");
                 $event->sheet->mergeCells("B1:{$lastColumn}1");
                 $event->sheet->mergeCells("B2:{$lastColumn}2");
+                $event->sheet->mergeCells("{$columnHadir}1:{$columnSakit}2");
                 $event->sheet->setCellValue("A1", "NAMA SISWA");
                 $event->sheet->setCellValue("B1", $this->bulan);
                 $event->sheet->setCellValue("B2", "Tanggal");
                 $event->sheet->setCellValue($nextColumn."1", "Total");
                 $event->sheet->setCellValue(Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($nextColumn))."3", "Hadir");
-                $event->sheet->setCellValue(Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($nextColumn)+1)."3", "Izin");
-                $event->sheet->setCellValue(Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($nextColumn)+2)."3", "Sakit");                
+                $event->sheet->setCellValue($columnIzin."3", "Izin");
+                $event->sheet->setCellValue($columnSakit."3", "Sakit");
 
                 for ($row = 4; $row <= $lastRow; $row++){
                     $event->sheet->setCellValue(
                         "{$columnHadir}{$row}","=COUNTIF(B{$row}:{$lastColumn}{$row}, \"hadir\")"
                     );
+                    $event->sheet->setCellValue(
+                        "{$columnIzin}{$row}","=COUNTIF(B{$row}:{$lastColumn}{$row}, \"izin\")"
+                    );
+                    $event->sheet->setCellValue(
+                        "{$columnSakit}{$row}","=COUNTIF(B{$row}:{$lastColumn}{$row}, \"sakit\")"
+                    );
                 }
 
                 // border semua 
-                $event->sheet->getStyle("A1:{$lastColumn}{$lastRow}")->applyFromArray([
+                $event->sheet->getStyle("A1:{$columnSakit}{$lastRow}")->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => 'thin',
@@ -80,7 +89,7 @@ class RekapAbsenPerSheet implements FromArray, WithTitle, WithHeadings, WithStyl
                 ]);
 
                 // Header style
-                $event->sheet->getStyle("A1:{$lastColumn}3")->applyFromArray([
+                $event->sheet->getStyle("A1:{$columnSakit}3")->applyFromArray([
                     'font' => [
                         'bold' => true,
                         'color' => ['argb' => 'FFFFFFF'],

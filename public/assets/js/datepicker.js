@@ -9,7 +9,9 @@ $(function () {
             date.getDate()
         );
         $("#datePickerExample").datepicker({
-            format: "mm/dd/yyyy",
+            format: "mm/yyyy",
+            startView: "months",
+            minViewMode: "months",
             todayHighlight: true,
             autoclose: true,
         });
@@ -23,7 +25,9 @@ $(function () {
             date.getDate()
         );
         $("#datePickerExample2").datepicker({
-            format: "mm/dd/yyyy",
+            format: "mm/yyyy",
+            startView: "months",
+            minViewMode: "months",
             todayHighlight: true,
             autoclose: true,
         });
