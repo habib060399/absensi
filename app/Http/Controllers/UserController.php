@@ -400,8 +400,8 @@ class UserController extends Controller
         $request->validate([
 //            'get_jurusan' => 'required',
             'get_kelas' => 'required',
-            'tgl_mulai' => 'required|date|before_or_equal:tgl_selesai',
-            'tgl_selesai' => 'required|date|after_or_equal:tgl_mulai'
+            'tgl_mulai' => 'required|date_format:Y-m|before_or_equal:tgl_selesai',
+            'tgl_selesai' => 'required|date_format:Y-m|after_or_equal:tgl_mulai'
         ]);
 
         $rekap = new RekapAbsen($request->input('get_jurusan'), $request->input('get_kelas'), $request->input('tgl_mulai'), $request->input('tgl_selesai'));
