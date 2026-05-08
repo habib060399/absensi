@@ -116,6 +116,12 @@
                                     Semua Siswa
                                 </label>
                             </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="radioInline" id="no_guru">
+                                <label class="form-check-label" for="radioInline2">
+                                    Semua Guru
+                                </label>
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
@@ -265,6 +271,11 @@
                 $('#no_siswa').on('click', function() {
                     var kelas = $('#get_kelas option:selected').val()
                     getSiswa(null, kelas, "siswa")
+                })
+
+                $('#no_guru').on('click', function() {
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(null, null, "guru")
                 })
 
                 $('#get_kelas').on('change', function() {
