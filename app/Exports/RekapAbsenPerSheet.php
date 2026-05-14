@@ -105,7 +105,8 @@ class RekapAbsenPerSheet implements FromArray, WithTitle, WithHeadings, WithStyl
                 ]);
 
                 // auto size kolom
-                foreach (range('A', $lastColumn) as $col){
+                foreach ($event->sheet->getColumnIterator() as $column){
+                    $col = $column->getColumnIndex();
                     $event->sheet->getColumnDimension($col)->setAutoSize(true);
                 }
             }
