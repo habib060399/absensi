@@ -243,6 +243,12 @@
                     getSiswa(get_id_jurusan, kelas, "siswa")
                 })
 
+                $('#no_guru').on('click', function() {
+                    console.log("guru");
+                    var kelas = $('#get_kelas option:selected').val()
+                    getSiswa(null, null, "guru")
+                })
+
                 $('#get_kelas').on('change', function() {
                     var kelas = $('#get_kelas option:selected').val()
                     $('#no_ortu').prop('checked', false)
@@ -274,6 +280,7 @@
                 })
 
                 $('#no_guru').on('click', function() {
+                    console.log("guru");
                     var kelas = $('#get_kelas option:selected').val()
                     getSiswa(null, null, "guru")
                 })
@@ -282,6 +289,7 @@
                     var kelas = $('#get_kelas option:selected').val()
                     $('#no_ortu').prop('checked', false)
                     $('#no_siswa').prop('checked', false)
+                    $('#no_guru').prop('checked', false)
                     getSiswa(null, kelas)
 
                 })
@@ -310,7 +318,20 @@
                             hide_loading()
                         },
                         success: function(res) {
-                            $('#to_siswa').html(res);
+                            // $('#to_siswa').html(res);
+
+                            $('#to_siswa').empty();
+
+                            $.each(res, function(index, item) {
+                                console.log(item)
+
+                            $('#to_siswa').append(`
+                                <option value="${item.value}" ${selected ? "selected" : ""}>
+                                    ${item.label}
+                                </option>
+                            `);
+
+                            });
 
                         }
                     });

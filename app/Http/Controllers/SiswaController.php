@@ -254,92 +254,92 @@ class SiswaController extends Controller
     }
 
     public function findContact(Request $request)
-    {
-        $array = Helper::access();
-        $data = array();
-            if((in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) && in_array($this->jurusan(), $array)){
-                $siswa = Siswa::where('id_jurusan', Helper::decryptUrl($request->id_jurusan))->where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
-                $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
-                $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
-                $serilize = serialize($sekolah->broadcast->wa_group);
-                $unserilize = unserialize($serilize);
-                $a = json_decode($unserilize);
-                $data = [
-                    'siswa' => $siswa,
-                    'guru' => $guru,
-                    'group' => $a
-                ];
-            } elseif (in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) {
-                $siswa = Siswa::where('id_kelas', $request->id_kelas)->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get()->toArray();
-                $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get()->toArray();
-                $sekolah = Sekolah::where('id', session('id_sekolah'))->first();
-                $serilize = serialize($sekolah->broadcast->wa_group);
-                $unserilize = unserialize($serilize);
-                $a = json_decode($unserilize);
-                $data = [
-                    'siswa' => $siswa,
-                    'guru' => $guru,
-                    'group' => $a
-                ];
-            }
-        if($data){
-            if($request->selected == "ortu"){
-                for($i = 0; $i < count($data['siswa']); $i++){
-                    if($data['siswa'][$i]['no_hp_ortu']){
-                        echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp_ortu'])." selected> Ortu ".$data['siswa'][$i]['nama']."</option>";
-                    }
-                }
+{
+    $access = Helper::access();
 
-                if(!empty($data['guru'])){
-                    for($i = 0; $i < count($data['guru']); $i++){
-                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
-                    }
-                }
+    $query = Siswa::query();
 
-                if (!empty($data['group'])) {
-                    for($i = 0; $i < count($data['group']->data); $i++){
-                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
-                    }
-                }
-            }elseif ($request->selected == "siswa") {
-                for($i = 0; $i < count($data['siswa']); $i++){
-                    if($data['siswa'][$i]['no_hp']){
-                        echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp'])." selected>".$data['siswa'][$i]['nama']."</option>";
-                    }
-                }
+    // Filter jurusan
+    if ((in_array($this->sekolah(), $access) || in_array($this->kelas(), $access)) && in_array($this->jurusan(), $access)) {
+        $query->where(
+            'id_jurusan',
+            Helper::decryptUrl($request->id_jurusan)
+        );
+    }
 
-                if(!empty($data['guru'])){
-                    for($i = 0; $i < count($data['guru']); $i++){
-                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
-                    }
-                }
+    // Filter kelas
+    if (in_array($this->sekolah(), $access) || in_array($this->kelas(), $access)) {
+        $query->where('id_kelas', $request->id_kelas);
+    }
 
-                if (!empty($data['group'])) {
-                    for($i = 0; $i < count($data['group']->data); $i++){
-                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
-                    }
-                }
-            }else{
-                for($i = 0; $i < count($data['siswa']); $i++){
-                    echo 'ini siswa';
-                    echo "<option value=".Helper::encryptUrl($data['siswa'][$i]['no_hp']).">".$data['siswa'][$i]['nama']."</option>";
-                }
+    $siswa = $query->select('nama_siswa AS nama', 'no_hp', 'no_hp_ortu')->get();
 
-                if(!empty($data['guru'])){
-                    for($i = 0; $i < count($data['guru']); $i++){
-                        echo "<option value=".Helper::encryptUrl($data['guru'][$i]['no_hp']).">".$data['guru'][$i]['nama']."</option>";
-                    }
-                }
+    $guru = Guru::where('id_sekolah', session('id_sekolah'))->select('nama_guru AS nama', 'no_wa AS no_hp')->get();
 
-                if (!empty($data['group'])) {
-                    for($i = 0; $i < count($data['group']->data); $i++){
-                        echo "<option value=".Helper::encryptUrl($data['group']->data[$i]->id).">".$data['group']->data[$i]->name."</option>";
-                    }
+    $sekolah = Sekolah::find(session('id_sekolah'));
+
+    $groups = [];
+
+    if ($sekolah?->broadcast?->wa_group) {
+        $groups = json_decode($sekolah->broadcast->wa_group);
+    }
+
+    $options = [];
+    
+         switch ($request->selected) {
+            case 'ortu':
+                foreach ($siswa as $item) {
+                    $options[] = [
+                        'label' => "Ortu " . $item->nama,
+                        'value' => Helper::encryptUrl($item->no_hp_ortu)
+                    ];
+                }                
+                break;
+            case 'siswa':
+                foreach ($siswa as $item) {
+                    $options[] = [
+                        'label' => $item->nama,
+                        'value' => Helper::encryptUrl($item->no_hp)
+                    ];
+                }                
+                break;
+            case 'guru':                
+                foreach ($guru as $item) {
+                    $options[] = [
+                        'label' => $item->nama,
+                        'value' => Helper::encryptUrl($item->no_hp)
+                    ];
+                 }
+                break;
+            default:
+                foreach ($guru as $item) {
+                    $options[] = [
+                        'label' => $item->nama,
+                        'value' => Helper::encryptUrl($item->no_hp)
+                    ];
+                 }
+                foreach ($siswa as $item) {
+                    $options[] = [
+                        'label' => $item->nama,
+                        'value' => Helper::encryptUrl($item->no_hp)
+                    ];
                 }
-            }
-        }else{
-            echo "Data Kosong";
+                break;
+        }
+
+    // Group
+    if (!empty($groups->data)) {
+
+        foreach ($groups->data as $group) {
+
+            $options[] = [
+                'label' => $group->name,
+                'value' => Helper::encryptUrl($group->id)
+            ];
         }
     }
+
+    return response()->json($options);
+}
 
 }
