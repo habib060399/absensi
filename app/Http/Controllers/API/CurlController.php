@@ -56,7 +56,7 @@ class CurlController extends Controller
             return $error_msg;
         }
         Log::info('ini response Whatssap'.$responseWa);
-        return $responseWa;
+        // return $responseWa;
     }
 
     public function sendWaAbsenManual($no, $nama_siswa, $id_sekolah, $message, $id_kelas)
@@ -68,7 +68,7 @@ class CurlController extends Controller
             'countryCode' => "62"
         );
 
-        return $status = $this->setApiWa($data, $id_sekolah, $id_kelas);
+        $this->setApiWa($data, $id_sekolah, $id_kelas);
     }
 
     public function sendPresencenWa($no, $nama_siswa, $id_mesin)
@@ -161,7 +161,7 @@ class CurlController extends Controller
             'countryCode' => "62",
             'schedule' => $time,
         );
-        return $status = $this->setApiWa($data, $id_sekolah, $id_kelas);
+        $this->setApiWa($data, $id_sekolah, $id_kelas);
     }
 
     public function bcWaWithFile($no, $pesan, $pathFile, $time, $id_sekolah, $id_kelas)
@@ -173,7 +173,7 @@ class CurlController extends Controller
             'file' => new \CURLFile("$pathFile"),
             'schedule' => $time,
         );
-        return $status = $this->setApiWa($data);
+        $this->setApiWa($data);
     }
 
     public static function getDevice()

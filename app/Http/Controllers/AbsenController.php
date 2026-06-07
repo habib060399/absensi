@@ -52,6 +52,7 @@ class AbsenController extends Controller
         }
 
         $curl = new CurlController();
+        $insertData = [];
 
         foreach($data as $id){
             $siswa = $siswas[$id];
@@ -64,16 +65,16 @@ class AbsenController extends Controller
                 $siswa->id_kelas
             );
 
-            Absensi::create([
-            'id_siswa' => $id,
-            'tanggal' => $tanggal,
-            'waktu' => $time_now,
-            'status' => $status
-             ]);
+            $insertData[] = [
+                'id_siswa' => $id,
+                'tanggal' => $tanggal,
+                'waktu' => $time_now,
+                'status' => $status
+            ];        
         }
+        Absensi::insert($insertData);
 
         return redirect()->route('absen')->with('success', 'Data berhasil ditambahkan');
-        // return redirect()->route('absen')->with('error', 'Absen sudah terisi!');
     }
     function siswaGetOption(Request $request){
         $array = Helper::access();
