@@ -78,7 +78,7 @@ INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`, `status`) VALUES
 CREATE TABLE `broadcast` (
   `id` bigint(20) NOT NULL,
   `wa_group` text DEFAULT NULL,
-  `template_bc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"data":[{"title":"hadir","message":null},{"title":"sakit","message":null},{"title":"absen","message":null},{"title":"izin","message":null}]}' CHECK (json_valid(`template_bc`)),
+  `template_bc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `token_account_wa` varchar(255) DEFAULT NULL,
   `token_api_wa` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
