@@ -52,7 +52,7 @@ def send_wa(id_mesin, name, phone):
 def validation_absen(data):
         conn = get_db_connection()
         with conn.cursor(buffered=True, dictionary=True) as cursor:
-            cursor.execute("SELECT nama_siswa, no_hp_ortu FROM siswa WHERE rfid = %s", (data["rfid"],))
+            cursor.execute("SELECT id, nama_siswa, no_hp_ortu FROM siswa WHERE rfid = %s", (data["rfid"],))
             # cursor.execute("SELECT absensi.*, siswa.nama_siswa, siswa.no_hp_ortu FROM absensi JOIN siswa ON absensi.id_siswa = siswa.id WHERE absensi.id_siswa = %s", (data["rfid"],))
             student = cursor.fetchone()
             date_now = date.today()

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 16 Jun 2026 pada 00.57
+-- Waktu pembuatan: 21 Jun 2026 pada 04.25
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.4.7
 
@@ -79,7 +79,7 @@ INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`, `status`) VALUES
 CREATE TABLE `broadcast` (
   `id` bigint(20) NOT NULL,
   `wa_group` text DEFAULT NULL,
-  `template_bc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"data":[{"title":"hadir","message":null},{"title":"sakit","message":null},{"title":"absen","message":null},{"title":"izin","message":null}]}' CHECK (json_valid(`template_bc`)),
+  `template_bc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `token_account_wa` varchar(255) DEFAULT NULL,
   `token_api_wa` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -504,7 +504,7 @@ CREATE TABLE `sekolah` (
 
 INSERT INTO `sekolah` (`id`, `id_user`, `id_wa`, `id_paket`, `id_mesin`, `secret`, `id_slug_user`, `token_account_wa`, `token_api_wa`, `nama_sekolah`, `email`, `no_hp`, `pendidikan`, `npsn`, `limit_siswa`, `pesan_wa`, `created_at`, `updated_at`) VALUES
 (112233, 1, 1, 1, '12345ff', 'NQZ2aKE6IrwTwNld', 'PAB12', '6NqoS5Dro54s6mYHSLszsjHKhGygf4Jknv5hpUd', 'atayMoT2W1pZUZ2AXAZe', 'SMK SWASTA PAB 12', 'smkpab12@gmail.com', '233453453', 'SMK', '122434', '100', '{\"data\":[{\"title\":\"hadir\",\"message\":\"Salam\\r\\n\\r\\nBapak\\/Ibu Orangtua siswa\\r\\n\\r\\n{nama} Telah hadir di sekolah SMK PAB 12 SAENTIS\\r\\n\\r\\n==============================\\r\\n\\r\\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini\"},{\"title\":\"sakit\",\"message\":null},{\"title\":\"absen\",\"message\":null},{\"title\":\"izin\",\"message\":null}]}', NULL, NULL),
-(280326100206, 280326100206, 280326100206, 1, '2', '', 'PAB10', NULL, NULL, 'SMK SWASTA PAB 10', 'meryaalvanda@gmail.com', '890879777', 'SMA', '122434', '100', '', NULL, NULL);
+(280326100206, 280326100206, 280326100206, 1, '2', '', 'PAB10', NULL, NULL, 'SMK SWASTA PAB 10', 'meryaalvanda@gmail.com', '890879777', 'SMA', '122434', '100', '{\"data\":[{\"title\":\"hadir\",\"message\":\"Salam\\r\\n\\r\\nBapak\\/Ibu Orangtua siswa\\r\\n\\r\\n{nama} Telah hadir di sekolah SMK PAB 12 SAENTIS\\r\\n\\r\\n==============================\\r\\n\\r\\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini\"},{\"title\":\"sakit\",\"message\":null},{\"title\":\"absen\",\"message\":null},{\"title\":\"izin\",\"message\":null}]}', NULL, NULL);
 
 -- --------------------------------------------------------
 
