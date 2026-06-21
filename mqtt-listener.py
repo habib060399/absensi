@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import mysql.connector
+import os
 import json
 import threading
 import requests
@@ -8,6 +9,7 @@ import hmac
 import hashlib
 from datetime import date, datetime
 from queue import Queue
+from dotenv import load_doenv
 
 BROKER = "192.168.100.61"
 PORT = 1883
@@ -18,10 +20,10 @@ valid = False
 def get_db_connection():
 
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="absensi"
+        host= os.getenv("DB_HOST"),
+        user=os.getenv("DB_USERNAME"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_DATABASE")
     )
 
 def send_wa(id_mesin, name, phone):
@@ -97,7 +99,7 @@ def validation_signature(id_mesin, signature, data):
     
 def on_connect(client, userdata, flags, reason_code, properties=None):
     print("Connected")
-    client.subscribe(TOPIC)
+    client.subscribe(os.getenv("TOPIC"))
 
 def on_message(client, userdata, msg):
     payload = msg.payload.decode()
@@ -119,7 +121,7 @@ def main():
     client.on_connect = on_connect
     client.on_message = on_message   
 
-    client.connect_async(BROKER, PORT)
+    client.connect_async(os.getenv("BROKER"), os.getenv("PORT_MQTT"))
 
     try:
         threading.Thread(target=process_queue, daemon=True).start()
