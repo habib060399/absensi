@@ -51,24 +51,25 @@ def send_wa(id_mesin, name, phone):
 
 def validation_absen(data):
         conn = get_db_connection()
+        date_now = date.today().strftime("%Y-%m-%d")
+        time = datetime.now().time().strftime("%H:%M:%S")
         with conn.cursor(buffered=True, dictionary=True) as cursor:
             cursor.execute("SELECT id, nama_siswa, no_hp_ortu FROM siswa WHERE rfid = %s", (data["rfid"],))
             # cursor.execute("SELECT absensi.*, siswa.nama_siswa, siswa.no_hp_ortu FROM absensi JOIN siswa ON absensi.id_siswa = siswa.id WHERE absensi.id_siswa = %s", (data["rfid"],))
             student = cursor.fetchone()
-            date_now = date.today()
-            time = datetime.now().time().strftime("%H:%M:%S")
-            print(student)
 
             if student:
                 cursor.execute("SELECT * FROM absensi WHERE id_siswa = %s AND tanggal = %s", (student["id"],date_now,))
-                date_before = cursor.fetchone()        
+                date_before = cursor.fetchone()
+                print(student["id"])
+                print(date_now)
                 if date_before:
                     print("anda sudah melakukan absen")
                 else:
                     send_wa(data["id_mesin"],student["nama_siswa"],student["no_hp_ortu"])
-                    cursor.execute("INSERT INTO absensi (id_siswa, tanggal, waktu, status) VALUES (%s, %s, %s, %s)", (data["rfid"], date_now,time,"hadir",))
+                    cursor.execute("INSERT INTO absensi (id_siswa, tanggal, waktu, status) VALUES (%s, %s, %s, %s)", (student["id"], date_now,time,"hadir",))
                     conn.commit()
-                    print("sedang proses absen")
+                    print("absensi berhasil")
             else:
                 print("siswa tidak terdaftar") 
 
