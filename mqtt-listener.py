@@ -119,7 +119,7 @@ def main():
     client.on_connect = on_connect
     client.on_message = on_message   
 
-    client.connect_async(os.getenv("BROKER"), os.getenv("PORT_MQTT"))
+    client.connect_async(os.getenv("BROKER"), int(os.getenv("PORT_MQTT")))
 
     try:
         threading.Thread(target=process_queue, daemon=True).start()
