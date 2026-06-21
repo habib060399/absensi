@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 10 Apr 2026 pada 12.55
+-- Waktu pembuatan: 16 Jun 2026 pada 00.57
 -- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Versi PHP: 8.4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `absensi`
+-- Basis data: `absensi`
 --
 
 -- --------------------------------------------------------
@@ -40,34 +40,35 @@ CREATE TABLE `absensi` (
 --
 
 INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`, `status`) VALUES
-(2, '1kEmyFoa6a', '2026-04-04', '11:18:31', 'hadir'),
-(3, '20XiU2916w', '2026-04-04', '11:18:31', 'hadir'),
-(4, 'a0o3XdxoLy', '2026-04-04', '11:18:31', 'hadir'),
-(5, 'al08WqDmPj', '2026-04-04', '11:18:31', 'hadir'),
-(6, 'bh7bdSAT9a', '2026-04-04', '11:18:31', 'hadir'),
-(7, 'crVplqjDuq', '2026-04-04', '11:18:31', 'hadir'),
-(8, 'eL7zlyHUky', '2026-04-04', '11:18:31', 'hadir'),
-(9, 'eLAmF6AsgU', '2026-04-04', '11:18:31', 'hadir'),
-(10, 'f7srRdb6vA', '2026-04-04', '11:18:31', 'hadir'),
-(11, 'GKSQFcCd6E', '2026-04-04', '11:18:31', 'hadir'),
-(12, 'h7tePkDkRz', '2026-04-04', '11:18:31', 'hadir'),
-(13, 'hbkzFcTSkQ', '2026-04-04', '11:18:31', 'hadir'),
-(14, 'hnTKoKfGd6', '2026-04-04', '11:18:31', 'hadir'),
-(15, 'Irn7It5QWi', '2026-04-04', '11:18:31', 'hadir'),
-(16, 'ITXTtufdGw', '2026-04-04', '11:18:31', 'hadir'),
-(17, 'jcgYmletfA', '2026-04-04', '11:18:31', 'hadir'),
-(18, 'luQ4QXRqk1', '2026-04-04', '11:18:31', 'hadir'),
-(19, 'NnZAbL5bPG', '2026-04-04', '11:18:31', 'hadir'),
-(20, 'NT4Oxac0qv', '2026-04-04', '11:18:31', 'hadir'),
-(21, 'Q3K7TXktYC', '2026-04-04', '11:18:31', 'hadir'),
-(22, 'qgSAgwtC1A', '2026-04-04', '11:18:31', 'hadir'),
-(23, 'rvcBF9VFuO', '2026-04-04', '11:18:31', 'hadir'),
-(24, 'S8O2dKDcri', '2026-04-04', '11:18:31', 'hadir'),
-(25, 'sS0GhHQa7q', '2026-04-04', '11:18:31', 'hadir'),
-(26, 'UvMXc9Vgnf', '2026-04-04', '11:18:31', 'hadir'),
-(27, 'uwyQPWoDx7', '2026-04-04', '11:18:31', 'hadir'),
-(28, 'YBwF41TLdd', '2026-04-04', '11:18:31', 'hadir'),
-(29, 'zWXs5ciMf8', '2026-04-04', '11:18:31', 'hadir');
+(1, '1kEmyFoa6a', '2026-06-07', '09:00:38', 'hadir'),
+(2, '20XiU2916w', '2026-06-07', '09:00:38', 'hadir'),
+(3, 'a0o3XdxoLy', '2026-06-07', '09:00:38', 'hadir'),
+(4, 'al08WqDmPj', '2026-06-07', '09:00:38', 'hadir'),
+(5, 'bh7bdSAT9a', '2026-06-07', '09:00:38', 'hadir'),
+(6, 'crVplqjDuq', '2026-06-07', '09:00:38', 'hadir'),
+(7, 'eL7zlyHUky', '2026-06-07', '09:00:38', 'hadir'),
+(8, 'eLAmF6AsgU', '2026-06-07', '09:00:38', 'hadir'),
+(9, 'f7srRdb6vA', '2026-06-07', '09:00:38', 'hadir'),
+(10, 'GKSQFcCd6E', '2026-06-07', '09:00:38', 'hadir'),
+(11, 'h7tePkDkRz', '2026-06-07', '09:00:38', 'hadir'),
+(12, 'hbkzFcTSkQ', '2026-06-07', '09:00:38', 'hadir'),
+(13, 'hnTKoKfGd6', '2026-06-07', '09:00:38', 'hadir'),
+(14, 'Irn7It5QWi', '2026-06-07', '09:00:38', 'hadir'),
+(15, 'ITXTtufdGw', '2026-06-07', '09:00:38', 'hadir'),
+(16, 'jcgYmletfA', '2026-06-07', '09:00:38', 'hadir'),
+(17, 'luQ4QXRqk1', '2026-06-07', '09:00:38', 'hadir'),
+(18, 'NnZAbL5bPG', '2026-06-07', '09:00:38', 'hadir'),
+(19, 'NT4Oxac0qv', '2026-06-07', '09:00:38', 'hadir'),
+(20, 'Q3K7TXktYC', '2026-06-07', '09:00:38', 'hadir'),
+(21, 'qgSAgwtC1A', '2026-06-07', '09:00:38', 'hadir'),
+(22, 'rvcBF9VFuO', '2026-06-07', '09:00:38', 'hadir'),
+(23, 'S8O2dKDcri', '2026-06-07', '09:00:38', 'hadir'),
+(24, 'sS0GhHQa7q', '2026-06-07', '09:00:38', 'hadir'),
+(25, 'UvMXc9Vgnf', '2026-06-07', '09:00:38', 'hadir'),
+(26, 'uwyQPWoDx7', '2026-06-07', '09:00:38', 'hadir'),
+(27, 'YBwF41TLdd', '2026-06-07', '09:00:38', 'hadir'),
+(28, 'zWXs5ciMf8', '2026-06-07', '09:00:38', 'hadir'),
+(29, '1kEmyFoa6a', '2026-06-11', '2026-06-11 12:30:09.348087', 'hadir');
 
 -- --------------------------------------------------------
 
@@ -78,7 +79,7 @@ INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`, `status`) VALUES
 CREATE TABLE `broadcast` (
   `id` bigint(20) NOT NULL,
   `wa_group` text DEFAULT NULL,
-  `template_bc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `template_bc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"data":[{"title":"hadir","message":null},{"title":"sakit","message":null},{"title":"absen","message":null},{"title":"izin","message":null}]}' CHECK (json_valid(`template_bc`)),
   `token_account_wa` varchar(255) DEFAULT NULL,
   `token_api_wa` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -421,7 +422,12 @@ CREATE TABLE `report` (
 --
 
 INSERT INTO `report` (`id`, `id_sekolah`, `id_kelas`, `device`, `target`, `message`, `stateid`, `status`, `state`) VALUES
-(150254853, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL);
+(150254853, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL),
+(160836569, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL),
+(160837004, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL),
+(160841234, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL),
+(160875373, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL),
+(160876142, '112233', '1', NULL, '6282169376803', 'Salam\r\n\r\nBapak/Ibu Orangtua siswa\r\n\r\nAraceli Little Telah hadir di sekolah SMK PAB 12 SAENTIS\r\n\r\n==============================\r\n\r\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini', NULL, 'pending', NULL);
 
 -- --------------------------------------------------------
 
@@ -477,6 +483,7 @@ CREATE TABLE `sekolah` (
   `id_wa` bigint(20) DEFAULT NULL,
   `id_paket` bigint(20) DEFAULT NULL,
   `id_mesin` varchar(17) NOT NULL,
+  `secret` varchar(100) DEFAULT NULL,
   `id_slug_user` varchar(50) NOT NULL,
   `token_account_wa` varchar(100) DEFAULT NULL,
   `token_api_wa` varchar(100) DEFAULT NULL,
@@ -486,6 +493,7 @@ CREATE TABLE `sekolah` (
   `pendidikan` varchar(100) NOT NULL,
   `npsn` varchar(100) NOT NULL,
   `limit_siswa` varchar(100) DEFAULT NULL,
+  `pesan_wa` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`pesan_wa`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -494,9 +502,9 @@ CREATE TABLE `sekolah` (
 -- Dumping data untuk tabel `sekolah`
 --
 
-INSERT INTO `sekolah` (`id`, `id_user`, `id_wa`, `id_paket`, `id_mesin`, `id_slug_user`, `token_account_wa`, `token_api_wa`, `nama_sekolah`, `email`, `no_hp`, `pendidikan`, `npsn`, `limit_siswa`, `created_at`, `updated_at`) VALUES
-(112233, 1, 1, 1, '1', 'PAB12', '6NqoS5Dro54s6mYHSLszsjHKhGygf4Jknv5hpUd', 'atayMoT2W1pZUZ2AXAZe', 'SMK SWASTA PAB 12', 'smkpab12@gmail.com', '233453453', 'SMK', '122434', '100', NULL, NULL),
-(280326100206, 280326100206, 280326100206, 1, '2', 'PAB10', NULL, NULL, 'SMK SWASTA PAB 10', 'meryaalvanda@gmail.com', '890879777', 'SMA', '122434', '100', NULL, NULL);
+INSERT INTO `sekolah` (`id`, `id_user`, `id_wa`, `id_paket`, `id_mesin`, `secret`, `id_slug_user`, `token_account_wa`, `token_api_wa`, `nama_sekolah`, `email`, `no_hp`, `pendidikan`, `npsn`, `limit_siswa`, `pesan_wa`, `created_at`, `updated_at`) VALUES
+(112233, 1, 1, 1, '12345ff', 'NQZ2aKE6IrwTwNld', 'PAB12', '6NqoS5Dro54s6mYHSLszsjHKhGygf4Jknv5hpUd', 'atayMoT2W1pZUZ2AXAZe', 'SMK SWASTA PAB 12', 'smkpab12@gmail.com', '233453453', 'SMK', '122434', '100', '{\"data\":[{\"title\":\"hadir\",\"message\":\"Salam\\r\\n\\r\\nBapak\\/Ibu Orangtua siswa\\r\\n\\r\\n{nama} Telah hadir di sekolah SMK PAB 12 SAENTIS\\r\\n\\r\\n==============================\\r\\n\\r\\nNote : Pesan ini adalah pesan sistem tidak perlu membalas pesan ini\"},{\"title\":\"sakit\",\"message\":null},{\"title\":\"absen\",\"message\":null},{\"title\":\"izin\",\"message\":null}]}', NULL, NULL),
+(280326100206, 280326100206, 280326100206, 1, '2', '', 'PAB10', NULL, NULL, 'SMK SWASTA PAB 10', 'meryaalvanda@gmail.com', '890879777', 'SMA', '122434', '100', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -595,14 +603,15 @@ CREATE TABLE `websockets_statistics_entries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Indexes for dumped tables
+-- Indeks untuk tabel yang dibuang
 --
 
 --
 -- Indeks untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_tanggal` (`tanggal`);
 
 --
 -- Indeks untuk tabel `broadcast`
