@@ -9,11 +9,9 @@ import hmac
 import hashlib
 from datetime import date, datetime
 from queue import Queue
-from dotenv import load_doenv
+from dotenv import load_dotenv
 
-BROKER = "192.168.100.61"
-PORT = 1883
-TOPIC = "absensi/rfid"
+load_dotenv()
 queue = Queue()
 valid = False
 
