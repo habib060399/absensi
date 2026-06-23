@@ -33,8 +33,8 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
             if($sekolah){
-                $get_mesin = Mesin::where('id', $sekolah->id_mesin)->first();
-                Cookie::queue(Cookie::make('id_mesin', $get_mesin->id_mesin));
+                // $get_mesin = Mesin::where('id', $sekolah->id_mesin)->first();
+                // Cookie::queue(Cookie::make('id_mesin', $get_mesin->id_mesin));
 
                 $request->session()->put('pendidikan', $sekolah->pendidikan);
                 $request->session()->put('id_user', $get_user->id);

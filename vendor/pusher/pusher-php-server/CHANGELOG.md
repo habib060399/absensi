@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.8
+
+* [Fixed] Fix PSR-3 logger context type in webhook error handling (null → [])
+* [Fixed] Add unit tests covering webhook logger context paths
+* [Changed] Remove paragonie/sodium_compat dependency (redundant since PHP 7.2+)
+
 ## 7.2.6
 
 * Bump supported versions to include PHP8.2, 8.3

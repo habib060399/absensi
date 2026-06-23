@@ -121,29 +121,28 @@
             if (currentKelas >= 0) {
                 window.location.reload();
             }
-            currentKelas = kelas;
-
-            Echo.channel(`live-presence`)
-                .listen('SendPresence', (e) => {
-                    console.log('hallo ini event');
-                    console.log(e);
-                    if (e.id_kelas == kelas && `{{ $cookies }}` == e.id_mesin) {
-                        console.log(e);
-                        element.insertAdjacentHTML("beforeBegin", `
+            currentKelas = kelas;            
+            
+            var sekolah = @json(session('id_sekolah'));
+            var jurusan = $('#get_jurusan option:selected').val();
+            Echo.channel(`Presence.${sekolah}.${jurusan}.${kelas}`)
+            .listen('SendPresence', (e) => {
+            console.log('Absen masuk:', e);
+            element.insertAdjacentHTML("afterbegin", `
             <div class="example" id="example">
                 <div class="d-flex align-items-start">
-                    <img src="{{ asset('storage/foto/${e.foto}') }}" class="wd-100 wd-sm-200 me-3" alt="...">
-                    <div class="data" id="data">
-                        <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
-                        <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
-                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
-                    </div>
-                </div>
-            </div>
+                    <img src="{{ asset('storage/${e.foto}') }}" class="wd-100 wd-sm-200 me-3" alt="...">                     
+                     <div class="data" id="data">
+                         <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name}</h5>
+                         <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h5>
+                         <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h5>
+                     </div>
+                 </div>
+             </div>
             `);
-                    }
 
-                });
+        });
+        
         });
     </script>
     @endrole
@@ -158,27 +157,28 @@
             }
             currentKelas = kelas;
 
-        Echo.channel(`live-presence`)
-                .listen('SendPresence', (e) => {
-                    console.log('hallo ini event');
-                    console.log(e);
-                    if (e.id_kelas == kelas && `{{ $cookies }}` == e.id_mesin) {
-                        console.log(e);
-                        element.insertAdjacentHTML("beforeBegin", `
-            <div class="example" id="example">
-                <div class="d-flex align-items-start">
-                    <img src="{{ asset('storage/foto/${e.foto}') }}" class="wd-100 wd-sm-200 me-3" alt="...">
-                    <div class="data" id="data">
-                        <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
-                        <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
-                        <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
-                    </div>
-                </div>
-            </div>
-            `);
-                    }
+        // Echo.channel(`live-presence`)
+        //         .listen('SendPresence', (e) => {
+        //             console.log('hallo ini event');
+        //             console.log(e);
+        //             if (e.id_kelas == kelas && `{{ $cookies }}` == e.id_mesin) {
+        //                 console.log(e);
+        //                 element.insertAdjacentHTML("beforeBegin", `
+        //     <div class="example" id="example">
+        //         <div class="d-flex align-items-start">
+        //             <img src="{{ asset('storage/foto/${e.foto}') }}" class="wd-100 wd-sm-200 me-3" alt="...">
+        //             <div class="data" id="data">
+        //                 <h5 class="mb-2 name_student" id="name_student">Nama Siswa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.name_student}</h5>
+        //                 <h5 class="mb-2" id="date">Tanggal Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.date}</h5>
+        //                 <h5 class="mb-2" id="time">Waktu Absen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${e.time}</h5>
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `);
+        //             }
 
-                });
+        //         });
+    
     </script>
     @endrole
 @endsection

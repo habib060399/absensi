@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\RfidController;
 use App\Http\Controllers\API\ApiController;
 use App\Http\Controllers\API\CurlController;
+use App\Events\SendPresence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
@@ -28,7 +29,12 @@ Route::get('search/name', [ApiController::class, 'searchNamaSiswa'])->name('sear
 Route::post('wa/group', [CurlController::class, 'getGroupWa']);
 Route::post('wa/group/update', [CurlController::class, 'updateGroupWa'])->name('update_group_wa');
 Route::post('/absensi-test', [RfidController::class, 'store2']);
-Route::middleware('istoken')->group(function(){
-    Route::post('/absensi', [RfidController::class, 'store']);
+// Route::middleware('istoken')->group(function(){
+//     Route::post('/absensi', [RfidController::class, 'store']);
     
+// });
+Route::post('/absensi', function(Request $request){
+    \Log::info('SEND PRESENCE', $request->all());
+    broadcast(new SendPresence($request->all()));
+    return response()->json(["status" => "oke"]);
 });

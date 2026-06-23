@@ -168,6 +168,7 @@ class SiswaController extends Controller
                 'id_kelas' => $request->input('kelas'),
                 'no_hp' => $request->input('no_hp'),
                 'no_hp_ortu' => $request->input('no_hp_ortu'),
+                'rfid' => $request->input('rfid'),
                 'foto' => $filename
             ]);
             $foto->storePubliclyAs('foto', $filename);
@@ -180,7 +181,8 @@ class SiswaController extends Controller
                 'id_jurusan' => $request->input('jurusan'),
                 'id_kelas' => $request->input('kelas'),
                 'no_hp' => $request->input('no_hp'),
-                'no_hp_ortu' => $request->input('no_hp_ortu')
+                'no_hp_ortu' => $request->input('no_hp_ortu'),
+                'rfid' => $request->input('rfid'),
             ]);
 
             return redirect()->route('siswa')->with('success', 'Berhasil Mengubah Data Siswa');

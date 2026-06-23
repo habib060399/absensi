@@ -76,7 +76,7 @@
                             <div class="col-sm-6">
                                 <div class="mb-3">
                                     <label class="form-label">RFID Tag</label>
-                                    <input type="text" class="form-control @error('rfid') is-invalid @enderror" autocomplete="off" name="rfid" id="rfid" readonly>
+                                    <input type="text" class="form-control @error('rfid') is-invalid @enderror" autocomplete="off" value="{{ $siswa->rfid }}" name="rfid" id="rfid">
                                     @error('rfid')
                                         <div class="error invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -89,7 +89,7 @@
                                     <label class="form-label">Foto</label>
                                         @if ($siswa->foto)
                                                 <div class="card">
-                                                    <img src="{{asset('storage/foto/'.$siswa->foto)}}" class="card-img-top" alt="..."/>
+                                                    <img src="{{asset('storage/'.$siswa->foto)}}" class="card-img-top" alt="..."/>
                                                 </div>
                                                 <br>
                                                 @endif

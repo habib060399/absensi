@@ -10,31 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use App\Models\Jurusan;
+use App\Models\Kelas;
 use App\Models\Sekolah;
-use App\Models\Mesin;
 
 class SendPresence implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $name_student;
-    public $date;
-    public $time;
-    public $id_kelas;
-    public $id_mesin;
-    public $foto;
+    public $data;
 
-    public function __construct($name_student, $date, $time, $id_kelas, $id_sekolah, $foto)
+    public function __construct($data)
     {
-        $sekolah = Sekolah::where('id', $id_sekolah)->first();
-        $mesin = Mesin::where('id', $sekolah->id_mesin)->first();
-
-        $this->name_student = $name_student;
-        $this->date = $date;
-        $this->time = $time;
-        $this->id_kelas = $id_kelas;
-        $this->id_mesin = $mesin->id_mesin;
-        $this->foto = $foto;
+        $this->data = $data;
     }
 
     /**
@@ -42,10 +30,22 @@ class SendPresence implements ShouldBroadcastNow
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn()
     {
+        return new Channel(
+            'Presence.'.$this->data["id_sekolah"] . '.' . $this->data["id_jurusan"] . '.' . $this->data["id_kelas"]
+        );
+    }
+
+    public function broadcastWith()
+    {
+        // $jurusan = Jurusan::where("id", $this->data["id_jurusan"])->first();
+        // $kelas = Kelas::where("id", $this->data["id_kelas"])->first();
         return [
-            new Channel('live-presence'),
+            'name' => $this->data['nama_siswa'],
+            'foto' => $this->data['foto']
+            // 'jurusan' => $jurusan->nama_jurusan,
+            // 'kelas' => $kelas->kelas
         ];
     }
 }
