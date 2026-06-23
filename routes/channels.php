@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
-
 Broadcast::channel('Presence.{sekolah}.{jurusan}.{kelas}', function ($user, $sekolah, $jurusan, $kelas) {
     return true;
 });

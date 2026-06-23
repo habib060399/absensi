@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 21 Jun 2026 pada 04.25
+-- Waktu pembuatan: 23 Jun 2026 pada 10.42
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.4.7
 
@@ -34,41 +34,6 @@ CREATE TABLE `absensi` (
   `waktu` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `absensi`
---
-
-INSERT INTO `absensi` (`id`, `id_siswa`, `tanggal`, `waktu`, `status`) VALUES
-(1, '1kEmyFoa6a', '2026-06-07', '09:00:38', 'hadir'),
-(2, '20XiU2916w', '2026-06-07', '09:00:38', 'hadir'),
-(3, 'a0o3XdxoLy', '2026-06-07', '09:00:38', 'hadir'),
-(4, 'al08WqDmPj', '2026-06-07', '09:00:38', 'hadir'),
-(5, 'bh7bdSAT9a', '2026-06-07', '09:00:38', 'hadir'),
-(6, 'crVplqjDuq', '2026-06-07', '09:00:38', 'hadir'),
-(7, 'eL7zlyHUky', '2026-06-07', '09:00:38', 'hadir'),
-(8, 'eLAmF6AsgU', '2026-06-07', '09:00:38', 'hadir'),
-(9, 'f7srRdb6vA', '2026-06-07', '09:00:38', 'hadir'),
-(10, 'GKSQFcCd6E', '2026-06-07', '09:00:38', 'hadir'),
-(11, 'h7tePkDkRz', '2026-06-07', '09:00:38', 'hadir'),
-(12, 'hbkzFcTSkQ', '2026-06-07', '09:00:38', 'hadir'),
-(13, 'hnTKoKfGd6', '2026-06-07', '09:00:38', 'hadir'),
-(14, 'Irn7It5QWi', '2026-06-07', '09:00:38', 'hadir'),
-(15, 'ITXTtufdGw', '2026-06-07', '09:00:38', 'hadir'),
-(16, 'jcgYmletfA', '2026-06-07', '09:00:38', 'hadir'),
-(17, 'luQ4QXRqk1', '2026-06-07', '09:00:38', 'hadir'),
-(18, 'NnZAbL5bPG', '2026-06-07', '09:00:38', 'hadir'),
-(19, 'NT4Oxac0qv', '2026-06-07', '09:00:38', 'hadir'),
-(20, 'Q3K7TXktYC', '2026-06-07', '09:00:38', 'hadir'),
-(21, 'qgSAgwtC1A', '2026-06-07', '09:00:38', 'hadir'),
-(22, 'rvcBF9VFuO', '2026-06-07', '09:00:38', 'hadir'),
-(23, 'S8O2dKDcri', '2026-06-07', '09:00:38', 'hadir'),
-(24, 'sS0GhHQa7q', '2026-06-07', '09:00:38', 'hadir'),
-(25, 'UvMXc9Vgnf', '2026-06-07', '09:00:38', 'hadir'),
-(26, 'uwyQPWoDx7', '2026-06-07', '09:00:38', 'hadir'),
-(27, 'YBwF41TLdd', '2026-06-07', '09:00:38', 'hadir'),
-(28, 'zWXs5ciMf8', '2026-06-07', '09:00:38', 'hadir'),
-(29, '1kEmyFoa6a', '2026-06-11', '2026-06-11 12:30:09.348087', 'hadir');
 
 -- --------------------------------------------------------
 
@@ -532,8 +497,8 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`id`, `id_sekolah`, `id_jurusan`, `id_kelas`, `nama_siswa`, `email`, `foto`, `rfid`, `no_hp`, `no_hp_ortu`, `created_at`, `updated_at`) VALUES
-('1kEmyFoa6a', '112233', '8900', '1', 'Araceli Little', 'conroy.chasity@gmail.com', NULL, '25455', '082169376803', '082169376803', '2026-03-28 00:43:54', '2026-03-28 00:43:54'),
-('20XiU2916w', '112233', '8900', '1', 'Mrs. Lori Goodwin', 'nkiehn@lehner.com', NULL, '95334', '29472', '37453', '2026-03-28 00:43:54', '2026-03-28 00:43:54'),
+('1kEmyFoa6a', '112233', '8900', '1', 'Araceli Little', 'conroy.chasity@gmail.com', '20260623064927.png', 'C5:7A:0B:8E', '082169376803', '082169376803', '2026-03-28 00:43:54', '2026-06-22 23:49:27'),
+('20XiU2916w', '112233', '8900', '1', 'Mrs. Lori Goodwin', 'nkiehn@lehner.com', NULL, '73:67:2E:F8', '29472', '37453', '2026-03-28 00:43:54', '2026-06-21 11:24:55'),
 ('a0o3XdxoLy', '112233', '8900', '1', 'Miss Juanita Prohaska', 'cstokes@pfeffer.org', NULL, '76477', '22870', '21203', '2026-03-28 00:43:54', '2026-03-28 00:43:54'),
 ('al08WqDmPj', '112233', '8900', '1', 'Arch Mayert', 'julianne37@stark.com', NULL, '91893', '88751', '70089', '2026-03-28 00:43:54', '2026-03-28 00:43:54'),
 ('bh7bdSAT9a', '112233', '8900', '1', 'Dedrick Lubowitz', 'kimberly.lowe@keebler.com', NULL, '94822', '12191', '51328', '2026-03-28 00:43:54', '2026-03-28 00:43:54'),
@@ -611,7 +576,7 @@ CREATE TABLE `websockets_statistics_entries` (
 --
 ALTER TABLE `absensi`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_tanggal` (`tanggal`);
+  ADD UNIQUE KEY `unique_absen` (`id_siswa`,`tanggal`);
 
 --
 -- Indeks untuk tabel `broadcast`
@@ -762,7 +727,7 @@ ALTER TABLE `websockets_statistics_entries`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
