@@ -9,10 +9,12 @@ use App\Models\Sekolah;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Models\Guru;
+use App\Models\Absensi;
 use App\Enums\AuthorizationEnum;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class SiswaController extends Controller
 {
@@ -211,24 +213,45 @@ class SiswaController extends Controller
             $array = Helper::access();
             if((in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) && in_array($this->jurusan(), $array)){
                 $data = array();
+                $dataRekap = array();
                 $no = 1;
-                $siswa = Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->where('siswa.id_kelas', $request->id_kelas)->select('siswa.nama_siswa', 'siswa.rfid', 'siswa.id', 'kelas.kelas', 'jurusan.nama_jurusan')->get();
+                $siswa = Siswa::join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')->select('siswa.nama_siswa', 'siswa.rfid', 'siswa.id', 'kelas.kelas', 'jurusan.nama_jurusan',)->where('siswa.id_kelas', $request->id_kelas)->get();
+                $rekap = Absensi::select(
+                    'id_siswa',                    
+                    DB::raw("SUM(CASE WHEN status = 'hadir' THEN 1 ELSE 0 END) as hadir"),
+                    DB::raw("SUM(CASE WHEN status = 'izin' THEN 1 ELSE 0 END) as izin"),
+                    DB::raw("SUM(CASE WHEN status = 'absen' THEN 1 ELSE 0 END) as absen"),
+                    DB::raw("SUM(CASE WHEN status = 'sakit' THEN 1 ELSE 0 END) as sakit"),
+                    )->where(
+                    'id_sekolah', '=', session('id_sekolah')
+                    )->whereBetween('tanggal', [$request->tgl_mulai, $request->tgl_selesai])->groupBy('id_siswa')->get();
+
+                foreach ($rekap as $r) {
+                    $dataRekap[$r->id_siswa] = [
+                        'id_siswa' => $r->id_siswa,
+                        'hadir' => $r->hadir,
+                        'izin' => $r->izin,
+                        'absen' => $r->absen,
+                        'sakit' => $r->sakit
+                    ];
+                }
 
                 foreach ($siswa as $s) {
                     $data[] = array(
                         'no' => $no++,
                         'nama_siswa' => $s->nama_siswa,
-                        'hadir' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->whereBetween('tanggal', [$request->tgl_mulai, $request->tgl_selesai])->where('status', 'hadir')->where('id_siswa', $s->id)->count('status'),
-                        'absen' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'absen')->where('id_siswa', $s->id)->count('status'),
-                        'izin' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'izin')->where('id_siswa', $s->id)->count('status'),
-                        'sakit' => $s->join('absensi', 'siswa.id', '=', 'absensi.id_siswa')->where('status', 'sakit')->where('id_siswa', $s->id)->count('status'),
+                        'hadir' => $dataRekap[$s->id]['hadir'] ?? 0,
+                        'absen' => $dataRekap[$s->id]['absen'] ?? 0,
+                        'izin' => $dataRekap[$s->id]['izin'] ?? 0,
+                        'sakit' => $dataRekap[$s->id]['sakit'] ?? 0,
                         'kelas' => $s->kelas,
                         'jurusan' => $s->nama_jurusan,
                         'link' => array(route('editSiswa', ['id' => Helper::encryptUrl($s->id)]), route('hapus', ['id' => Helper::encryptUrl($s->id)])),
                         'tgl' => $request->tgl_mulai
-                    );
-                }
+                    );                    
+                }              
                 return json_encode($data);
+
             }elseif (in_array($this->sekolah(), $array) || in_array($this->kelas(), $array)) {
 
                 $data = array();

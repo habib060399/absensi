@@ -94,8 +94,8 @@ def validation_absen(data):
                 student = cursor.fetchone()
 
                 if student:                  
-                    # cursor.execute("INSERT INTO absensi (id_siswa, tanggal, waktu, status) VALUES (%s, %s, %s, %s)", (student["id"], date_now,time,"hadir",))
-                    # conn.commit()
+                    cursor.execute("INSERT INTO absensi (id_siswa, tanggal, waktu, status, id_sekolah) VALUES (%s, %s, %s, %s, %s)", (student["id"], date_now,time,"hadir",student['id_sekolah'],))
+                    conn.commit()
 
                     payload_wa = {
                             "id_mesin" : data["id_mesin"],
@@ -114,8 +114,8 @@ def validation_absen(data):
                     wa_q.put(payload_wa)
                     broadcast_q.put(payload_broadcast)
 
-                        # send_wa(data["id_mesin"],student["nama_siswa"],student["no_hp_ortu"])
-                        # broadcast(student["nama_siswa"], student["id_sekolah"], student["id_jurusan"], student["id_kelas"], student["foto"])
+                    send_wa(data["id_mesin"],student["nama_siswa"],student["no_hp_ortu"])
+                    broadcast(student["nama_siswa"], student["id_sekolah"], student["id_jurusan"], student["id_kelas"], student["foto"])
                     print("absensi berhasil")
                 else:
                     print("siswa tidak terdaftar")
@@ -189,7 +189,7 @@ def process_queue():
 def proccess_queue_wa():
     while True:
         data = wa_q.get()
-        # send_wa(data["id_mesin"], data["nama_siswa"], data["no_hp_ortu"])
+        send_wa(data["id_mesin"], data["nama_siswa"], data["no_hp_ortu"])
         wa_q.task_done()
 
 def proccess_queue_broadcast():

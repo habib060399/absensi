@@ -67,6 +67,7 @@ class AbsenController extends Controller
 
             $insertData[] = [
                 'id_siswa' => $id,
+                'id_sekolah' => session('id_sekolah'),
                 'tanggal' => $tanggal,
                 'waktu' => $time_now,
                 'status' => $status

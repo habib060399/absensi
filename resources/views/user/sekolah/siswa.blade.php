@@ -381,12 +381,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function(res) {
+                success: function(res) {                    
                     let response = JSON.parse(res)
 
                     if (id_jurusan != null) {
-                        response.forEach(e => {
-
+                        response.forEach(e => {                           
                         table.row.add([e.no, e.nama_siswa, e.kelas, e.jurusan,'sadf', e.hadir, e.absen, e.izin, e
                             .sakit, renderHtml(e.link)
                         ])
